@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+
+
 UCLASS()
 class EDR_API AEDRPlayerCharacter : public AEDRCharacter
 {
@@ -16,19 +19,25 @@ class EDR_API AEDRPlayerCharacter : public AEDRCharacter
 
 public:
 
+	AEDRPlayerCharacter();
+
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSecond) override;
 
+	//데미지 받기
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+	//데미지 주기
+	void ApplyDamage();
 
-//Get
+
 public:
-
+	//Get
 
 	UFUNCTION(BlueprintPure, category = "Player")
 	float GetHP() { return HP; }
 
-//Set
-public:
+	//Set
 
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void SetHP(float NewHP);
@@ -38,5 +47,9 @@ private:
 
 	UPROPERTY()
 	float HP;
+
+	UPROPERTY()
+	float Damage;
+
 	
 };
