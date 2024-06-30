@@ -26,9 +26,9 @@ public:
 
 	//데미지 받기
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-	
 	//데미지 주기
 	void ApplyDamage();
+	FDamageEvent DamageEvent();
 
 
 public:
@@ -42,6 +42,14 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void SetHP(float NewHP);
 
+	
+
+protected:
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class USphereComponent> CollectionSphere;
+
+
 
 private:
 
@@ -53,3 +61,6 @@ private:
 
 	
 };
+
+
+

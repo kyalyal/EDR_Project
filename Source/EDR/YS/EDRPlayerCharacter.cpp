@@ -3,10 +3,17 @@
 
 #include "EDRPlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/SphereComponent.h"
+#include "Engine/DamageEvents.h"
+
 
 AEDRPlayerCharacter::AEDRPlayerCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
+
+    CollectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("COLLECTIONSPHERE"));
+    CollectionSphere->SetupAttachment(RootComponent);
+    CollectionSphere->SetSphereRadius(100);
 
 }
 
@@ -18,28 +25,50 @@ void AEDRPlayerCharacter::BeginPlay()
 void AEDRPlayerCharacter::Tick(float DeltaSecond)
 {
     Super::Tick(DeltaSecond);
+
+    ApplyDamage();
+
 }
 
-float AEDRPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float AEDRPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) 
 {
-    Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-    return 0;
+    
+
+    GEngine->AddOnScreenDebugMessage(-1, 0.5, FColor::Green,TEXT("sssssssss"));
+
+    return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
+
 
 void AEDRPlayerCharacter::ApplyDamage()
 {
-    TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
     TArray<AActor*> IgnoreActors;
     TArray<AActor*> OutActors;
 
-    ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
     IgnoreActors.Add(this);
 
-    //추후 수정
-    if (OutActors[0])
+    CollectionSphere->GetOverlappingActors(OutActors);
+
+
+    if (OutActors.Num())
     {
-        UGameplayStatics::ApplyDamage(OutActors[0], Damage, GetController(), nullptr, NULL);
+        for (int32 i =0; i<OutActors.Num(); i++)
+        {
+            if (IgnoreActors.Contains(OutActors[i])) continue;
+
+            OutActors[i]->TakeDamage(Damage,DamageEvent(), GetInstigatorController(), this);
+        }
     }
+}
+
+FDamageEvent AEDRPlayerCharacter::DamageEvent()
+{
+    TSubclassOf<UDamageType> DamageTypeClass = UDamageType::StaticClass();
+    
+    FDamageEvent DamageEvent;
+    DamageEvent.DamageTypeClass = DamageTypeClass;
+    
+    return DamageEvent;
 }
 
 void AEDRPlayerCharacter::SetHP(float NewHP)
