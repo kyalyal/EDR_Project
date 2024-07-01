@@ -11,6 +11,10 @@ AEDRWeaponBase::AEDRWeaponBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
+    WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPONMESH"));
+
+
     AttackCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("ATTACKCOLLECTION"));
     AttackCollision->SetupAttachment(RootComponent);
     AttackCollision->SetBoxExtent(FVector(100.f,100.f,100.f));

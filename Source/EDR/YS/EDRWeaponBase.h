@@ -48,11 +48,14 @@ public:
 
 protected:
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
+	TObjectPtr<UStaticMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditAnywhere, category = "Weapon")
 	TObjectPtr<class UBoxComponent> AttackCollision;
 
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
 	float Damage;
 
 	

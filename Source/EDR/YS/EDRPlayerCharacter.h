@@ -46,9 +46,9 @@ public:
 
 
 
-private:
+protected:
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float HP;
 
 	
