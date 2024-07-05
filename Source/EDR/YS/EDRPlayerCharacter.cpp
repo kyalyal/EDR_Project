@@ -19,8 +19,6 @@ void AEDRPlayerCharacter::BeginPlay()
 void AEDRPlayerCharacter::Tick(float DeltaSecond)
 {
     Super::Tick(DeltaSecond);
-
-
 }
 
 

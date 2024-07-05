@@ -13,7 +13,14 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
-//DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+
+UENUM(BlueprintType)
+enum class EControlMode : uint8
+{
+	None,
+	BossMode
+};
+
 
 UCLASS(config=Game)
 class AEDRCharacter : public ACharacter
@@ -46,6 +53,8 @@ class AEDRCharacter : public ACharacter
 
 public:
 	AEDRCharacter();
+
+	virtual void Tick(float DeltaSecond) override;
 	
 
 protected:
@@ -62,7 +71,8 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	// To add mapping context
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
+
 
 	//데미지 받기
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
@@ -96,11 +106,13 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void SetHP(float NewHP);
 
+	void UpdateHP(float NewHP);
+
+
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void SetIsRolling(bool Roll);
 
-
-	void UpdateHP(float NewHP);
+	void SetControlMode(EControlMode NewControlMode);
 
 
 protected:
@@ -108,10 +120,10 @@ protected:
 	//고유 함수---------------------------------------------------
 
 	void Rolling();
+	void TargetLock(AActor* TargetActor);
 
 
-
-	//변수--------------------------------------------------------
+	//고유 변수--------------------------------------------------------
 
 protected:
 
@@ -119,13 +131,24 @@ protected:
 	float HP;
 
 
+	//컨트롤
+	EControlMode CurrentControlMode = EControlMode::None;
+
+
 	// 애니메이션
 	UPROPERTY(EditAnywhere, category = "Animation")
 	TObjectPtr<UAnimMontage> RollingMontage;
 	TObjectPtr<UAnimInstance> EDRAnimInstance;
 
-private:
 
+	//구르기
 	bool bIsRolling;
+
+	
+	//
+	UPROPERTY()
+	TObjectPtr<AActor>TargetLockActor;
+	
+
 };
 
