@@ -64,10 +64,68 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	//데미지 받기
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+
 public:
+
+
+	
+
+
+public:
+	//Get--------------------------------------------------
+
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+
+	UFUNCTION(BlueprintPure, category = "Player")
+	float GetHP() { return HP; }
+
+	UFUNCTION(BlueprintPure, category = "Player")
+	bool GetIsRolling() { return bIsRolling; }
+
+
+	//Set--------------------------------------------------
+
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void SetHP(float NewHP);
+
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void SetIsRolling(bool Roll);
+
+
+	void UpdateHP(float NewHP);
+
+
+protected:
+
+	//고유 함수---------------------------------------------------
+
+	void Rolling();
+
+
+
+	//변수--------------------------------------------------------
+
+protected:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float HP;
+
+
+	// 애니메이션
+	UPROPERTY(EditAnywhere, category = "Animation")
+	TObjectPtr<UAnimMontage> RollingMontage;
+	TObjectPtr<UAnimInstance> EDRAnimInstance;
+
+private:
+
+	bool bIsRolling;
 };
 

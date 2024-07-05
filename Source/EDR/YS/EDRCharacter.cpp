@@ -50,15 +50,30 @@ AEDRCharacter::AEDRCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	/*static ConstructorHelpers::FObjectFinder<UAnimInstance> AM(TEXT("Game/YS/Animation/GKnight/Roll/GKnight_RollForward_Root_Montage.GKnight_RollForward_Root_Montage'"));
+	if (AM.Succeeded())
+	{
+		RollingMontage = AM.Object;
+	}*/
 }
 
 void AEDRCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	EDRAnimInstance = GetMesh()->GetAnimInstance();
 }
+
+float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	UpdateHP(DamageAmount);
+
+
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -78,7 +93,7 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AEDRCharacter::Rolling);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
@@ -126,5 +141,30 @@ void AEDRCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+
+void AEDRCharacter::SetHP(float NewHP)
+{
+	HP = NewHP; 
+}
+
+void AEDRCharacter::SetIsRolling(bool Roll)
+{
+	bIsRolling = Roll;
+}
+
+void AEDRCharacter::UpdateHP(float NewHP)
+{
+	HP += NewHP;
+}
+
+void AEDRCharacter::Rolling()
+{
+
+	if (IsValid(RollingMontage)&& IsValid(EDRAnimInstance) && !bIsRolling)
+	{
+		EDRAnimInstance->Montage_Play(RollingMontage);
 	}
 }
