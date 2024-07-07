@@ -53,9 +53,9 @@ AEDRCharacter::AEDRCharacter()
 
 
 	//컨트롤 모드
-	CurrentControlMode = EControlMode::None;
+	CurrentControlMode = EControlMode::BossMode;
 
-
+	TargetLockCameraInterpSpeed = 1.f;
 	
 }
 
@@ -83,7 +83,7 @@ void AEDRCharacter::Tick(float DeltaSecond)
 
 		if (IsValid(TargetLockActor))
 		{
-			TargetLock(TargetLockActor);
+			TargetLock(TargetLockActor, DeltaSecond);
 		}
 		else
 		{
@@ -105,13 +105,40 @@ float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
+float AEDRCharacter::CalculateDirection(const FVector& Velocity, const FRotator& BaseRotation)
+{
+	if (!Velocity.IsNearlyZero())
+	{
+		const FMatrix RotMatrix = FRotationMatrix(BaseRotation);
+		const FVector ForwardVector = RotMatrix.GetScaledAxis(EAxis::X);
+		const FVector RightVector = RotMatrix.GetScaledAxis(EAxis::Y);
+		const FVector NormalizedVel = Velocity.GetSafeNormal2D();
+
+		// 벡터 내적
+		const float ForwardCosAngle = static_cast<float>(FVector::DotProduct(ForwardVector, NormalizedVel));
+		// 알파를 얻고 변환
+		float ForwardDeltaDegree = FMath::RadiansToDegrees(FMath::Acos(ForwardCosAngle));
+
+		// 오른쪽 벡터가 위치에 따라 뒤집기
+		const float RightCosAngle = static_cast<float>(FVector::DotProduct(RightVector, NormalizedVel));
+		if (RightCosAngle < 0.f)
+		{
+			ForwardDeltaDegree *= -1.f;
+		}
+
+		return ForwardDeltaDegree;
+	}
+
+	return 0.f;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
-// Input
+// 입력
 
 void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	// Add Input Mapping Context
+	// 입력 매핑
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -120,7 +147,7 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		}
 	}
 	
-	// Set up action bindings
+	// 바인딩
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
@@ -217,19 +244,22 @@ void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
 void AEDRCharacter::Rolling()
 {
 
-	if (IsValid(RollingMontage)&& IsValid(EDRAnimInstance) && !bIsRolling)
-	{
-		EDRAnimInstance->Montage_Play(RollingMontage);
-	}
+	if (!IsValid(EDRAnimInstance)) return;
+
+	bIsRolling = true;
+	
 }
 
-void AEDRCharacter::TargetLock(AActor* TargetActor)
+void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 {
 	FRotator TargetLookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActor->GetActorLocation());
 	
+
 	//카메라 고정
-	GetController()->SetControlRotation(TargetLookRotation);
-	
+	FRotator LookCameraRotation = UKismetMathLibrary::RInterpTo(GetControlRotation(), TargetLookRotation, DeltaTime, TargetLockCameraInterpSpeed);
+	GetController()->SetControlRotation(LookCameraRotation);
+
+
 	//액터 고정
 	SetActorRotation(TargetLookRotation);
 

@@ -81,6 +81,7 @@ protected:
 public:
 
 
+	float CalculateDirection(const FVector& Velocity, const FRotator& BaseRotation);
 	
 
 
@@ -120,7 +121,7 @@ protected:
 	//고유 함수---------------------------------------------------
 
 	void Rolling();
-	void TargetLock(AActor* TargetActor);
+	void TargetLock(AActor* TargetActor, float DeltaTime);
 
 
 	//고유 변수--------------------------------------------------------
@@ -131,13 +132,12 @@ protected:
 	float HP;
 
 
-	//컨트롤
+	//컨트롤 Edit모드는 테스트 시에만 사용
+	UPROPERTY(EditAnywhere, category = "Player")
 	EControlMode CurrentControlMode;
 
 
 	// 애니메이션
-	UPROPERTY(EditAnywhere, category = "Animation")
-	TObjectPtr<UAnimMontage> RollingMontage;
 	TObjectPtr<UAnimInstance> EDRAnimInstance;
 
 
@@ -146,8 +146,10 @@ protected:
 
 	
 	//EditAnywhere는 테스트시에만 사용
-	UPROPERTY(EditAnywhere, category= "BossMode")
+	UPROPERTY(EditAnywhere, category= "Player")
 	TObjectPtr<AActor>TargetLockActor;
+
+	float TargetLockCameraInterpSpeed;
 	
 
 };
