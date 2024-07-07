@@ -52,11 +52,11 @@ AEDRCharacter::AEDRCharacter()
 	FollowCamera->bUsePawnControlRotation = false; 
 
 
-	/*static ConstructorHelpers::FObjectFinder<UAnimInstance> AM(TEXT("Game/YS/Animation/GKnight/Roll/GKnight_RollForward_Root_Montage.GKnight_RollForward_Root_Montage'"));
-	if (AM.Succeeded())
-	{
-		RollingMontage = AM.Object;
-	}*/
+	//컨트롤 모드
+	CurrentControlMode = EControlMode::None;
+
+
+	
 }
 
 void AEDRCharacter::BeginPlay()
@@ -85,6 +85,11 @@ void AEDRCharacter::Tick(float DeltaSecond)
 		{
 			TargetLock(TargetLockActor);
 		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Yellow, TEXT("EDRCharacter Tick - NoneLockTarget."));
+		}
+
 		break;
 
 	}
@@ -193,9 +198,17 @@ void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
 	switch (CurrentControlMode)
 	{
 	case EControlMode::None:
+
+		//카메라 회전에 따른 움직임 제어
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
 		break;
 		
 	case EControlMode::BossMode:
+
+		//카메라 회전에 따른 움직임 제어
+		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+
 		break;
 	}
 }
@@ -213,6 +226,11 @@ void AEDRCharacter::Rolling()
 void AEDRCharacter::TargetLock(AActor* TargetActor)
 {
 	FRotator TargetLookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActor->GetActorLocation());
+	
+	//카메라 고정
 	GetController()->SetControlRotation(TargetLookRotation);
+	
+	//액터 고정
+	SetActorRotation(TargetLookRotation);
 
 }

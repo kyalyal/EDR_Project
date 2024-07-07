@@ -132,7 +132,7 @@ protected:
 
 
 	//컨트롤
-	EControlMode CurrentControlMode = EControlMode::None;
+	EControlMode CurrentControlMode;
 
 
 	// 애니메이션
@@ -145,8 +145,8 @@ protected:
 	bool bIsRolling;
 
 	
-	//
-	UPROPERTY()
+	//EditAnywhere는 테스트시에만 사용
+	UPROPERTY(EditAnywhere, category= "BossMode")
 	TObjectPtr<AActor>TargetLockActor;
 	
 
