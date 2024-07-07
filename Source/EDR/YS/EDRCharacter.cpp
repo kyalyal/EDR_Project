@@ -99,7 +99,7 @@ void AEDRCharacter::Tick(float DeltaSecond)
 
 float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	UpdateHP(DamageAmount);
+	UpdateHP(-DamageAmount);
 
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
