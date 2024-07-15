@@ -4,6 +4,7 @@
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
@@ -11,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "EDRPlayerInterface.h"
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -56,6 +58,12 @@ AEDRCharacter::AEDRCharacter()
 	CurrentControlMode = EControlMode::BossMode;
 
 	TargetLockCameraInterpSpeed = 1.f;
+
+
+	//테스트용 스피어 컴포넌트
+	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERECOLLISION"));
+	SphereCollision->SetSphereRadius(500);
+	SphereCollision->SetupAttachment(RootComponent);
 	
 }
 
@@ -94,7 +102,19 @@ void AEDRCharacter::Tick(float DeltaSecond)
 
 	}
 
+
+	//Sphere Collision Test
+	TArray<AActor*> OverlapActor;
+	SphereCollision->GetOverlappingActors(OverlapActor);
 	
+	for (AActor* i : OverlapActor)
+	{
+		IEDRPlayerInterface* PlayerInterface = Cast<IEDRPlayerInterface>(i);
+		if (PlayerInterface)
+		{
+			PlayerInterface->PlayerInteract();
+		}
+	}
 }
 
 float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -105,32 +125,7 @@ float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
-float AEDRCharacter::CalculateDirection(const FVector& Velocity, const FRotator& BaseRotation)
-{
-	if (!Velocity.IsNearlyZero())
-	{
-		const FMatrix RotMatrix = FRotationMatrix(BaseRotation);
-		const FVector ForwardVector = RotMatrix.GetScaledAxis(EAxis::X);
-		const FVector RightVector = RotMatrix.GetScaledAxis(EAxis::Y);
-		const FVector NormalizedVel = Velocity.GetSafeNormal2D();
 
-		// 벡터 내적
-		const float ForwardCosAngle = static_cast<float>(FVector::DotProduct(ForwardVector, NormalizedVel));
-		// 알파를 얻고 변환
-		float ForwardDeltaDegree = FMath::RadiansToDegrees(FMath::Acos(ForwardCosAngle));
-
-		// 오른쪽 벡터가 위치에 따라 뒤집기
-		const float RightCosAngle = static_cast<float>(FVector::DotProduct(RightVector, NormalizedVel));
-		if (RightCosAngle < 0.f)
-		{
-			ForwardDeltaDegree *= -1.f;
-		}
-
-		return ForwardDeltaDegree;
-	}
-
-	return 0.f;
-}
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -205,12 +200,12 @@ void AEDRCharacter::Look(const FInputActionValue& Value)
 
 void AEDRCharacter::SetHP(float NewHP)
 {
-	HP = NewHP; 
+	CharacterInfo.HP = NewHP; 
 }
 
 void AEDRCharacter::UpdateHP(float NewHP)
 {
-	HP += NewHP;
+	CharacterInfo.HP += NewHP;
 }
 
 void AEDRCharacter::SetIsRolling(bool Roll)
@@ -238,6 +233,11 @@ void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
 
 		break;
 	}
+}
+
+void AEDRCharacter::SetCharacterInfo(FCharacterAbility NewCharacterInfo)
+{
+	CharacterInfo = NewCharacterInfo;
 }
 
 

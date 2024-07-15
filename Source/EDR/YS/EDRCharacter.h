@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "EDRCharacterStruct.h"
 #include "EDRCharacter.generated.h"
 
 class USpringArmComponent;
@@ -51,6 +52,7 @@ class AEDRCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+
 public:
 	AEDRCharacter();
 
@@ -78,11 +80,6 @@ protected:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 
-public:
-
-
-	float CalculateDirection(const FVector& Velocity, const FRotator& BaseRotation);
-	
 
 
 public:
@@ -96,10 +93,13 @@ public:
 
 
 	UFUNCTION(BlueprintPure, category = "Player")
-	float GetHP() { return HP; }
+	float GetHP() { return CharacterInfo.HP; }
 
 	UFUNCTION(BlueprintPure, category = "Player")
 	bool GetIsRolling() { return bIsRolling; }
+
+	UFUNCTION(BlueprintPure, category = "Player")
+	FCharacterAbility GetCharacterInfo() { return CharacterInfo; }
 
 
 	//Set--------------------------------------------------
@@ -116,6 +116,9 @@ public:
 	void SetControlMode(EControlMode NewControlMode);
 
 
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void SetCharacterInfo(FCharacterAbility NewCharacterInfo);
+
 protected:
 
 	//고유 함수---------------------------------------------------
@@ -128,8 +131,10 @@ protected:
 
 protected:
 
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float HP;
+	FCharacterAbility CharacterInfo;
+
 
 
 	//컨트롤 Edit모드는 테스트 시에만 사용
@@ -152,5 +157,8 @@ protected:
 	float TargetLockCameraInterpSpeed;
 	
 
+	//테스트용 컴포넌트
+	UPROPERTY()
+	TObjectPtr<class USphereComponent> SphereCollision;
 };
 
