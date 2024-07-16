@@ -23,6 +23,15 @@ AEDRCharacter::AEDRCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	
+	//Interact 키 생성
+	static ConstructorHelpers::FObjectFinder<UInputAction>IA_Interact(TEXT("/Game/ThirdPerson/Input/Actions/IA_Interact.IA_Interact"));
+	if (IA_Interact.Succeeded())
+	{
+		InteractAction = IA_Interact.Object;
+	}
+
+
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
 	
@@ -103,18 +112,20 @@ void AEDRCharacter::Tick(float DeltaSecond)
 	}
 
 
-	//Sphere Collision Test
-	TArray<AActor*> OverlapActor;
-	SphereCollision->GetOverlappingActors(OverlapActor);
 	
-	for (AActor* i : OverlapActor)
+}
+
+void AEDRCharacter::PlayerDeath()
+{
+	if (OnDeath.IsBound())
 	{
-		IEDRPlayerInterface* PlayerInterface = Cast<IEDRPlayerInterface>(i);
-		if (PlayerInterface)
-		{
-			PlayerInterface->PlayerInteract();
-		}
+		OnDeath.Broadcast();
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, TEXT("EDRCharacter::PlayerDeath() - IsBound Fail."));
+	}
+
 }
 
 float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -154,6 +165,9 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AEDRCharacter::Look);
+
+		//Interaction
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AEDRCharacter::Interaction);
 	}
 	else
 	{
@@ -240,6 +254,24 @@ void AEDRCharacter::SetCharacterInfo(FCharacterAbility NewCharacterInfo)
 	CharacterInfo = NewCharacterInfo;
 }
 
+
+void AEDRCharacter::Interaction()
+{
+	//Sphere Collision Test
+	TArray<AActor*> OverlapActor;
+	SphereCollision->GetOverlappingActors(OverlapActor);
+
+	for (AActor* i : OverlapActor)
+	{
+		IEDRPlayerInterface* PlayerInterface = Cast<IEDRPlayerInterface>(i);
+		if (PlayerInterface)
+		{
+			PlayerInterface->PlayerInteract();
+		}
+	}
+
+	PlayerDeath();
+}
 
 void AEDRCharacter::Rolling()
 {

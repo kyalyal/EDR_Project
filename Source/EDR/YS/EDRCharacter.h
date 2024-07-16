@@ -23,6 +23,9 @@ enum class EControlMode : uint8
 };
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeathDelegate);
+
+
 UCLASS(config=Game)
 class AEDRCharacter : public ACharacter
 {
@@ -52,12 +55,20 @@ class AEDRCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	//Interact 버튼
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
 
 public:
 	AEDRCharacter();
 
 	virtual void Tick(float DeltaSecond) override;
 	
+	UPROPERTY(BlueprintAssignable,BlueprintCallable, Category = "Event")
+	FDeathDelegate OnDeath;
+
+	UFUNCTION()
+	void PlayerDeath();
 
 protected:
 
@@ -95,8 +106,10 @@ public:
 	UFUNCTION(BlueprintPure, category = "Player")
 	float GetHP() { return CharacterInfo.HP; }
 
+
 	UFUNCTION(BlueprintPure, category = "Player")
 	bool GetIsRolling() { return bIsRolling; }
+
 
 	UFUNCTION(BlueprintPure, category = "Player")
 	FCharacterAbility GetCharacterInfo() { return CharacterInfo; }
@@ -123,11 +136,18 @@ protected:
 
 	//고유 함수---------------------------------------------------
 
+	void Interaction();
+
 	void Rolling();
+
 	void TargetLock(AActor* TargetActor, float DeltaTime);
 
 
 	//고유 변수--------------------------------------------------------
+
+
+public:
+	
 
 protected:
 

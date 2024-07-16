@@ -28,4 +28,9 @@ public:
 
 	virtual void PlayerInteract() override;
 
+
+	TObjectPtr<class AEDRCharacter> PlayerCharacter;
+
+	UFUNCTION()
+	void PlayerDie();
 };
