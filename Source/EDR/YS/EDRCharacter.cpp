@@ -132,6 +132,11 @@ float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 {
 	UpdateHP(-DamageAmount);
 
+	if (CharacterInfo.HP <= 0)
+	{
+		PlayerDeath();
+		CharacterInfo.HP = 0;
+	}
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
@@ -270,7 +275,6 @@ void AEDRCharacter::Interaction()
 		}
 	}
 
-	PlayerDeath();
 }
 
 void AEDRCharacter::Rolling()
