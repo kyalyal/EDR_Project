@@ -3,6 +3,7 @@
 #include "Components/BoxComponent.h"
 #include "EDRWeaponBase.h"
 #include "Engine/DamageEvents.h"
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values
@@ -13,11 +14,21 @@ AEDRWeaponBase::AEDRWeaponBase()
 
 
     WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPONMESH"));
+    WeaponMesh->SetupAttachment(RootComponent);
+
+
+    LineTraceStart = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACESTART"));
+    LineTraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACEEND"));
+    LineTraceStart->SetupAttachment(RootComponent);
+    LineTraceEnd->SetupAttachment(RootComponent);
 
 
     AttackCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("ATTACKCOLLECTION"));
     AttackCollision->SetupAttachment(RootComponent);
     AttackCollision->SetBoxExtent(FVector(100.f,100.f,100.f));
+
+    
+    LineTraceEnd->AddLocalOffset(FVector(100.f, 0.f, 0.f));
 }
 
 // Called when the game starts or when spawned
@@ -25,6 +36,7 @@ void AEDRWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+    StartAttack();
 }
 
 // Called every frame
@@ -68,5 +80,35 @@ FDamageEvent AEDRWeaponBase::DamageEvent()
     DamageEvent.DamageTypeClass = DamageTypeClass;
 
     return DamageEvent;
+}
+
+void AEDRWeaponBase::StartAttack()
+{
+    GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, this, &AEDRWeaponBase::StartAttack, AttackDelayTime, true);
+
+    
+    FHitResult HitResult;
+    GetWorld()->LineTraceSingleByObjectType(HitResult,
+        LineTraceStart->GetComponentLocation(),
+        LineTraceEnd->GetComponentLocation(),
+        FCollisionObjectQueryParams::AllDynamicObjects,
+        FCollisionQueryParams::DefaultQueryParam
+        );
+
+    DrawDebugLine(
+        GetWorld(),
+        LineTraceStart->GetComponentLocation(),
+        LineTraceEnd->GetComponentLocation(),
+        FColor(255, 0, 0),
+        false,
+        0.f,
+        0.f,
+        10.f
+    );
+}
+
+void AEDRWeaponBase::StopAttack()
+{
+    GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
 }
 

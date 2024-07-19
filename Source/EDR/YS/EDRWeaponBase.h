@@ -46,15 +46,35 @@ public:
 	FDamageEvent DamageEvent();
 
 
+	void StartAttack();
+	void StopAttack();
+
 protected:
 
+
+	//스태틱 메시
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
 	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
+	//콜리전
 	UPROPERTY(EditAnywhere, category = "Weapon")
 	TObjectPtr<class UBoxComponent> AttackCollision;
 
 
+	//공격 트레이스
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
+	TObjectPtr<USceneComponent> LineTraceStart;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = "Weapon")
+	TObjectPtr<USceneComponent> LineTraceEnd;
+
+
+	FTimerHandle AttackTimerHandle;
+
+	float AttackDelayTime = 0.001f;
+
+
+	//데미지
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
 	float Damage;
 
