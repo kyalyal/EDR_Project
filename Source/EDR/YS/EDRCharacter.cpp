@@ -31,6 +31,13 @@ AEDRCharacter::AEDRCharacter()
 		InteractAction = IA_Interact.Object;
 	}
 
+	//Attack 키 생성
+	static ConstructorHelpers::FObjectFinder<UInputAction>IA_Attack(TEXT("/Game/ThirdPerson/Input/Actions/IA_Attack.IA_Attack"));
+	if (IA_Attack.Succeeded())
+	{
+		AttackAction = IA_Attack.Object;
+	}
+
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
@@ -173,6 +180,10 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		//Interaction
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AEDRCharacter::Interaction);
+
+		//Attack
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AEDRCharacter::Attack);
+
 	}
 	else
 	{
@@ -284,6 +295,13 @@ void AEDRCharacter::Rolling()
 
 	bIsRolling = true;
 	
+}
+
+void AEDRCharacter::Attack()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Attack Success"));
+
+	EDRAnimInstance->Montage_Play(ComboAttack);
 }
 
 void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)

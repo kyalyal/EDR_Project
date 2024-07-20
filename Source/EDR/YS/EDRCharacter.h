@@ -59,6 +59,9 @@ class AEDRCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AttackAction;
+
 public:
 	AEDRCharacter();
 
@@ -140,6 +143,8 @@ protected:
 
 	void Rolling();
 
+	void Attack();
+
 	void TargetLock(AActor* TargetActor, float DeltaTime);
 
 
@@ -170,7 +175,12 @@ protected:
 	bool bIsRolling;
 
 	
-	//EditAnywhere는 테스트시에만 사용
+	//공격 몽타주
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	TObjectPtr<UAnimMontage> ComboAttack;
+
+
+	// 타겟 카메라 (EditAnywhere는 테스트시에만 사용)
 	UPROPERTY(EditAnywhere, category= "Player")
 	TObjectPtr<AActor>TargetLockActor;
 
