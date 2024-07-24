@@ -241,6 +241,15 @@ void AEDRCharacter::UpdateHP(float NewHP)
 void AEDRCharacter::SetIsRolling(bool Roll)
 {
 	bIsRolling = Roll;
+
+	if (bIsRolling)
+	{
+		SetControlState(EControlState::Rolling);
+	}
+	else
+	{
+		SetControlState(EControlState::None);
+	}
 }
 
 void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
@@ -261,6 +270,27 @@ void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
 		//카메라 회전에 따른 움직임 제어
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
 
+		break;
+	}
+}
+
+void AEDRCharacter::SetControlState(EControlState NewControlState)
+{
+	CurrentControlState = NewControlState;
+
+	switch (CurrentControlState)
+	{
+	case EControlState::None:
+		break;
+
+	case EControlState::Attack:
+		break;
+
+	case EControlState::Rolling:
+		ResetState();
+		break;
+
+	default:
 		break;
 	}
 }
@@ -301,7 +331,7 @@ void AEDRCharacter::Attack()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Attack Success"));
 
-	EDRAnimInstance->Montage_Play(ComboAttack);
+	EDRAnimInstance->Montage_Play(ComboAttackMontage);
 }
 
 void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
@@ -317,4 +347,9 @@ void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 	//액터 고정
 	SetActorRotation(TargetLookRotation);
 
+}
+
+void AEDRCharacter::ResetState()
+{
+	ComboAttackMontage = InitAttackMontage;
 }

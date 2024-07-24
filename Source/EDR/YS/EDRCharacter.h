@@ -22,6 +22,14 @@ enum class EControlMode : uint8
 	BossMode
 };
 
+UENUM(BlueprintType)
+enum class EControlState : uint8
+{
+	None,
+	Attack,
+	Rolling
+};
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeathDelegate);
 
@@ -117,6 +125,12 @@ public:
 	UFUNCTION(BlueprintPure, category = "Player")
 	FCharacterAbility GetCharacterInfo() { return CharacterInfo; }
 
+	UFUNCTION(BlueprintPure, category = "Player")
+	EControlState GetControlState() { return CurrentControlState; }
+
+	UFUNCTION(BlueprintPure, category = "Player")
+	EControlMode GetControlMode() { return CurrentControlMode; }
+
 
 	//Set--------------------------------------------------
 
@@ -130,6 +144,8 @@ public:
 	void SetIsRolling(bool Roll);
 
 	void SetControlMode(EControlMode NewControlMode);
+
+	void SetControlState(EControlState NewControlState);
 
 
 	UFUNCTION(BlueprintCallable, category = "Player")
@@ -146,6 +162,8 @@ protected:
 	void Attack();
 
 	void TargetLock(AActor* TargetActor, float DeltaTime);
+
+	void ResetState();
 
 
 	//고유 변수--------------------------------------------------------
@@ -167,6 +185,12 @@ protected:
 	EControlMode CurrentControlMode;
 
 
+	//행동 상태
+	UPROPERTY(EditAnywhere, category = "Player")
+	EControlState CurrentControlState;
+
+
+
 	// 애니메이션
 	TObjectPtr<UAnimInstance> EDRAnimInstance;
 
@@ -177,7 +201,10 @@ protected:
 	
 	//공격 몽타주
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
-	TObjectPtr<UAnimMontage> ComboAttack;
+	TObjectPtr<UAnimMontage> ComboAttackMontage;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, category = "Player")
+	TObjectPtr<UAnimMontage> InitAttackMontage;
 
 
 	// 타겟 카메라 (EditAnywhere는 테스트시에만 사용)
