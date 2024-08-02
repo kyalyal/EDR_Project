@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "EDRInteractItem.h"
 #include "Kismet/GameplayStatics.h"
 #include "EDR/YS/EDRCharacter.h"
-#include "EDRInteractItem.h"
+
 
 // Sets default values
 AEDRInteractItem::AEDRInteractItem()
