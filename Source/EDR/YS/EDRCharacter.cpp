@@ -38,6 +38,12 @@ AEDRCharacter::AEDRCharacter()
 		AttackAction = IA_Attack.Object;
 	}
 
+	//Rolling 키 생성
+	static ConstructorHelpers::FObjectFinder<UInputAction>IA_Rolling(TEXT("/Game/ThirdPerson/Input/Actions/IA_Rolling.IA_Rolling"));
+	if (IA_Attack.Succeeded())
+	{
+		RollingAction = IA_Rolling.Object;
+	}
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
@@ -169,7 +175,7 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AEDRCharacter::Rolling);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AEDRCharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
@@ -183,6 +189,10 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		//Attack
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AEDRCharacter::Attack);
+
+		//Rolling
+		EnhancedInputComponent->BindAction(RollingAction, ETriggerEvent::Started, this, &AEDRCharacter::Rolling);
+
 
 	}
 	else
