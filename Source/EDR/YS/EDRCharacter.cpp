@@ -124,7 +124,15 @@ void AEDRCharacter::Tick(float DeltaSecond)
 
 	}
 
+	if (bIsRolling)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, TEXT("bIsRolling True"));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, TEXT("bIsRolling False"));
 
+	}
 	
 }
 
@@ -333,7 +341,10 @@ void AEDRCharacter::Rolling()
 
 	if (!IsValid(EDRAnimInstance)) return;
 
-	bIsRolling = true;
+	if (!bIsRolling)
+	{
+		bIsRolling = true;
+	}
 	
 }
 

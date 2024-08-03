@@ -16,6 +16,9 @@ void UEDRPlayerRollingCheck::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 	PlayerCharacter = Cast<AEDRCharacter>(MeshComp->GetOwner());
 	if (IsValid(PlayerCharacter))
 	{
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%s"),*Animation->GetName()));
+
 		PlayerCharacter->SetIsRolling(bIsAnimRolling);
 	}
 }
