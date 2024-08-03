@@ -17,7 +17,7 @@ void UEDRPlayerRollingCheck::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 	if (IsValid(PlayerCharacter))
 	{
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("%s"),*Animation->GetName()));
+		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("PlayerRollingCheck -> Animation Name : %s"),*Animation->GetName()));
 
 		PlayerCharacter->SetIsRolling(bIsAnimRolling);
 	}

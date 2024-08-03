@@ -136,6 +136,7 @@ void AEDRCharacter::Tick(float DeltaSecond)
 
 	}
 
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Result : %d"),GetIsMoving()));
 
 
 
@@ -347,21 +348,17 @@ void AEDRCharacter::Rolling()
 
 	if (!IsValid(EDRAnimInstance)) return;
 
-	//구르기 상태가 아니거나 백스텝 몽타주가 실행중이 아니라면
-	if (!bIsRolling && !EDRAnimInstance->Montage_IsPlaying(BackStepMontage))
+	if (!bIsRolling)
 	{
 		if (GetIsMoving())
 		{
 			bIsRolling = true;
-
 		}
 		else
 		{
 			if (IsValid(BackStepMontage))
 			{
 				PlayAnimMontage(BackStepMontage);
-
-
 			}
 		}
 
