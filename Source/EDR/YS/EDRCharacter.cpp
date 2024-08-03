@@ -394,4 +394,6 @@ void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 void AEDRCharacter::ResetState()
 {
 	ComboAttackMontage = InitAttackMontage;
+
+	bIsRolling = false;
 }

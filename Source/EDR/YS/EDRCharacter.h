@@ -170,6 +170,7 @@ protected:
 
 	void TargetLock(AActor* TargetActor, float DeltaTime);
 
+	UFUNCTION(BlueprintCallable)
 	void ResetState();
 
 
