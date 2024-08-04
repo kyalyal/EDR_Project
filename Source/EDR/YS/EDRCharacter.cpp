@@ -264,7 +264,11 @@ void AEDRCharacter::UpdateHP(float NewHP)
 
 void AEDRCharacter::SetIsRolling(bool Roll)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("a %d"),bIsRolling));
+
 	bIsRolling = Roll;
+
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, FString::Printf(TEXT("b %d"), bIsRolling));
 
 	if (bIsRolling)
 	{
@@ -274,6 +278,7 @@ void AEDRCharacter::SetIsRolling(bool Roll)
 	{
 		SetControlState(EControlState::None);
 	}
+
 }
 
 void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
@@ -311,7 +316,6 @@ void AEDRCharacter::SetControlState(EControlState NewControlState)
 		break;
 
 	case EControlState::Rolling:
-		ResetState();
 		break;
 
 	default:
@@ -352,15 +356,15 @@ void AEDRCharacter::Rolling()
 	{
 		if (GetIsMoving())
 		{
-			bIsRolling = true;
+			SetIsRolling(true);
 
 		}
 		else
 		{
 			if (IsValid(BackStepMontage))
 			{
-				PlayAnimMontage(BackStepMontage);
 
+				PlayAnimMontage(BackStepMontage);
 
 			}
 		}
@@ -396,4 +400,6 @@ void AEDRCharacter::ResetState()
 	ComboAttackMontage = InitAttackMontage;
 
 	bIsRolling = false;
+
+	SetControlState(EControlState::None);
 }
