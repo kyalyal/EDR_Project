@@ -14,6 +14,8 @@ class EDR_API AMyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
+	UPROPERTY(BlueprintReadWrite)
+	float AttackDamage;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,5 +30,6 @@ public:
 	FORCEINLINE float GetHp(){return hp;}
 
 private:
+	UPROPERTY()
 	float hp = 100.0f;
 };

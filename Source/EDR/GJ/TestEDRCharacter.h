@@ -45,7 +45,8 @@ class ATestEDRCharacter : public ACharacter
 
 public:
 	ATestEDRCharacter();
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float hp = 100.0f;
 
 protected:
 
