@@ -356,13 +356,6 @@ void AEDRCharacter::Rolling()
 		{
 			SetIsRolling(true);
 
-			FTimerHandle DelayTimerHandle;
-			GetWorld()->GetTimerManager().SetTimer(DelayTimerHandle, FTimerDelegate::CreateLambda([&]() 
-				{
-
-					SetIsRolling(false);
-
-				}), 9.4f, false);
 		}
 		else
 		{
