@@ -45,11 +45,17 @@ AEDRCharacter::AEDRCharacter()
 		RollingAction = IA_Rolling.Object;
 	}
 
-	//백스텝 넣어주기
+	//백스텝 몽타주 넣어주기
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_BackStep(TEXT("/Game/YS/Animation/GKnight/Roll/GKnight_DodgeBackward_Root_Montage.GKnight_DodgeBackward_Root_Montage"));
 	if (AM_BackStep.Succeeded())
 	{
 		BackStepMontage = AM_BackStep.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_InitAttack(TEXT("/Game/YS/Animation/Sword/EDR_2H_Attack_A_Montage.EDR_2H_Attack_A_Montage"));
+	if (AM_InitAttack.Succeeded())
+	{
+		InitAttackMontage = AM_InitAttack.Object;
 	}
 
 
@@ -86,7 +92,7 @@ AEDRCharacter::AEDRCharacter()
 
 
 	//컨트롤 모드
-	CurrentControlMode = EControlMode::BossMode;
+	CurrentControlMode = EControlMode::None;
 
 	TargetLockCameraInterpSpeed = 1.f;
 
@@ -135,8 +141,9 @@ void AEDRCharacter::Tick(float DeltaSecond)
 		break;
 
 	}
+	FString CurrentState = StaticEnum<EControlState>()->GetNameStringByValue(static_cast<int64>(GetControlState()));
 
-
+	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("Player Current Control State : %s"), *CurrentState));
 
 
 }
@@ -251,6 +258,14 @@ void AEDRCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AEDRCharacter::Jump()
+{
+	if (CurrentControlState == EControlState::None)
+	{
+		Super::Jump();
+	}
+}
+
 
 void AEDRCharacter::SetHP(float NewHP)
 {
@@ -277,6 +292,25 @@ void AEDRCharacter::SetIsRolling(bool Roll)
 		SetControlState(EControlState::None);
 	}
 
+}
+
+void AEDRCharacter::SetIsAttack(bool Attack)
+{
+	bIsAttack = Attack;
+
+	if (bIsAttack)
+	{
+		SetControlState(EControlState::Attack);
+	}
+	else
+	{
+		SetControlState(EControlState::None);
+	}
+}
+
+void AEDRCharacter::SetComboAttackMontage(UAnimMontage* NextMontage)
+{
+	ComboAttackMontage = NextMontage;
 }
 
 void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
@@ -316,6 +350,7 @@ void AEDRCharacter::SetControlState(EControlState NewControlState)
 	case EControlState::Rolling:
 		break;
 
+
 	default:
 		break;
 	}
@@ -347,7 +382,7 @@ void AEDRCharacter::Interaction()
 void AEDRCharacter::Rolling()
 {
 
-	if (!IsValid(EDRAnimInstance)) return;
+	if (!IsValid(EDRAnimInstance) || GetCharacterMovement()->IsFalling()) return;
 
 	//구르기 상태가 아니거나 백스텝 몽타주가 실행중이 아니라면
 	if (!bIsRolling && !EDRAnimInstance->Montage_IsPlaying(BackStepMontage))
@@ -375,7 +410,14 @@ void AEDRCharacter::Attack()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Attack Success"));
 
-	EDRAnimInstance->Montage_Play(ComboAttackMontage);
+	if (!bIsAttack && CurrentControlState == EControlState::None)
+	{
+		SetIsAttack(true);
+
+		
+		EDRAnimInstance->Montage_Play(ComboAttackMontage);
+	}
+
 }
 
 void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
@@ -398,6 +440,7 @@ void AEDRCharacter::ResetState()
 	ComboAttackMontage = InitAttackMontage;
 
 	bIsRolling = false;
+	bIsAttack = false;
 
 	SetControlState(EControlState::None);
 }

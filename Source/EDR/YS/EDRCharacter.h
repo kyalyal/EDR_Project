@@ -27,7 +27,7 @@ enum class EControlState : uint8
 {
 	None,
 	Attack,
-	Rolling
+	Rolling,
 };
 
 
@@ -91,6 +91,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	virtual void Jump() override;
 			
 
 protected:
@@ -124,6 +126,9 @@ public:
 	UFUNCTION(BlueprintPure, category = "Player")
 	bool GetIsRolling() { return bIsRolling; }
 
+	UFUNCTION(BlueprintPure, category = "Player")
+	bool GetIsAttack() { return bIsAttack; }
+
 
 	UFUNCTION(BlueprintPure, category = "Player")
 	FCharacterAbility GetCharacterInfo() { return CharacterInfo; }
@@ -150,6 +155,12 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void SetIsRolling(bool Roll);
 
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void SetIsAttack(bool Attack);
+
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void SetComboAttackMontage(UAnimMontage* NextAttack);
+
 	void SetControlMode(EControlMode NewControlMode);
 
 	void SetControlState(EControlState NewControlState);
@@ -157,6 +168,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void SetCharacterInfo(FCharacterAbility NewCharacterInfo);
+
+
 
 protected:
 
@@ -208,6 +221,10 @@ protected:
 	//구르기
 	UPROPERTY()
 	bool bIsRolling;
+
+	//공격
+	UPROPERTY()
+	bool bIsAttack;
 
 	
 	//몽타주
