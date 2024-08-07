@@ -145,7 +145,8 @@ void AEDRCharacter::Tick(float DeltaSecond)
 
 	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("Player Current Control State : %s"), *CurrentState));
 
-
+	
+	
 }
 
 void AEDRCharacter::PlayerDeath()
@@ -200,6 +201,7 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEDRCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AEDRCharacter::MoveCompleted);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AEDRCharacter::Look);
@@ -242,7 +244,16 @@ void AEDRCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 
+		InputX = MovementVector.X;
+		InputY = MovementVector.Y;
 	}
+
+}
+
+void AEDRCharacter::MoveCompleted()
+{
+	InputX = 0.f;
+	InputY = 0.f;
 }
 
 void AEDRCharacter::Look(const FInputActionValue& Value)
@@ -255,6 +266,7 @@ void AEDRCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+
 	}
 }
 
@@ -266,6 +278,22 @@ void AEDRCharacter::Jump()
 	}
 }
 
+
+bool AEDRCharacter::GetIsInput()
+{
+	if (!(!InputY && !InputX))
+	{
+		InputY = 0.f;
+		InputX = 0.f;
+		return true;
+	}
+	else
+	{
+		InputY = 0.f;
+		InputX = 0.f;
+		return false;
+	}
+}
 
 void AEDRCharacter::SetHP(float NewHP)
 {
@@ -387,7 +415,7 @@ void AEDRCharacter::Rolling()
 	//구르기 상태가 아니거나 백스텝 몽타주가 실행중이 아니라면
 	if (!bIsRolling && !EDRAnimInstance->Montage_IsPlaying(BackStepMontage))
 	{
-		if (GetIsMoving())
+		if (GetIsInput())
 		{
 			SetIsRolling(true);
 
@@ -401,6 +429,7 @@ void AEDRCharacter::Rolling()
 
 			}
 		}
+
 
 	}
 	

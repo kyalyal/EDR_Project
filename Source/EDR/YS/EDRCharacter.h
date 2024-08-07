@@ -89,6 +89,8 @@ protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
+	void MoveCompleted();
+
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
@@ -142,6 +144,9 @@ public:
 
 	UFUNCTION(BlueprintPure, category = "Player")
 	bool GetIsMoving() { if (GetVelocity().Length()) { return true; } else { return false; } }
+
+	UFUNCTION(BlueprintPure, category = "Player")
+	bool GetIsInput();
 
 
 	//Set--------------------------------------------------
@@ -249,5 +254,12 @@ protected:
 	//테스트용 컴포넌트
 	UPROPERTY()
 	TObjectPtr<class USphereComponent> SphereCollision;
+
+	
+private:
+
+	float InputX;
+	float InputY;
+
 };
 
