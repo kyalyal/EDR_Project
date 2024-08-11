@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "EDRPlayerInterface.h"
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -43,6 +44,13 @@ AEDRCharacter::AEDRCharacter()
 	if (IA_Attack.Succeeded())
 	{
 		RollingAction = IA_Rolling.Object;
+	}
+
+	//LockCamera 키 생성
+	static ConstructorHelpers::FObjectFinder<UInputAction>IA_LockCamera(TEXT("/Game/ThirdPerson/Input/Actions/IA_LockCamera.IA_LockCamera"));
+	if (IA_LockCamera.Succeeded())
+	{
+		LockCamera = IA_LockCamera.Object;
 	}
 
 	//백스텝 몽타주 넣어주기
@@ -96,6 +104,8 @@ AEDRCharacter::AEDRCharacter()
 
 	TargetLockCameraInterpSpeed = 1.f;
 
+	ignores.Add(this);
+
 
 	//테스트용 스피어 컴포넌트
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERECOLLISION"));
@@ -105,6 +115,8 @@ AEDRCharacter::AEDRCharacter()
 
 	//공격 초기화
 	ComboAttackMontage = InitAttackMontage;
+
+	
 }
 
 void AEDRCharacter::BeginPlay()
@@ -127,7 +139,7 @@ void AEDRCharacter::Tick(float DeltaSecond)
 	case EControlMode::None:
 		break;
 
-	case EControlMode::BossMode:
+	case EControlMode::LockMode:
 
 		if (IsValid(TargetLockActor))
 		{
@@ -141,9 +153,17 @@ void AEDRCharacter::Tick(float DeltaSecond)
 		break;
 
 	}
-	FString CurrentState = StaticEnum<EControlState>()->GetNameStringByValue(static_cast<int64>(GetControlState()));
+	
+	
+	
+	if (this == UGameplayStatics::GetPlayerCharacter(GetWorld(),0))
+	{
+		FString CurrentState = StaticEnum<EControlState>()->GetNameStringByValue(static_cast<int64>(GetControlState()));
+		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Purple, FString::Printf(TEXT("Player Current Control State : %s"), *CurrentState));
 
-	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("Player Current Control State : %s"), *CurrentState));
+		FString CurrentMode = StaticEnum<EControlMode>()->GetNameStringByValue(static_cast<int64>(GetControlMode()));
+		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Purple, FString::Printf(TEXT("Player Current Control Mode : %s"), *CurrentMode));
+	}
 
 	
 	
@@ -215,7 +235,8 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		//Rolling
 		EnhancedInputComponent->BindAction(RollingAction, ETriggerEvent::Started, this, &AEDRCharacter::Rolling);
 
-
+		//LockCamera
+		EnhancedInputComponent->BindAction(LockCamera, ETriggerEvent::Started, this, &AEDRCharacter::CameraLockTrace);
 	}
 	else
 	{
@@ -354,7 +375,7 @@ void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
 
 		break;
 		
-	case EControlMode::BossMode:
+	case EControlMode::LockMode:
 
 		//카메라 회전에 따른 움직임 제어
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
@@ -462,6 +483,61 @@ void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 	//액터 고정
 	SetActorRotation(TargetLookRotation);
 
+}
+
+void AEDRCharacter::CameraLockTrace()
+{
+	bool Trace;
+	FHitResult OutHit;
+	FVector StartLocation = GetActorLocation();
+	FVector EndLocation = GetFollowCamera()->GetComponentLocation() + (GetFollowCamera()->GetForwardVector() * 1000.f);
+
+
+	switch (CurrentControlMode)
+	{
+	case EControlMode::None:
+
+
+
+		Trace = UKismetSystemLibrary::SphereTraceSingle
+		(
+			GetWorld(),
+			StartLocation,
+			EndLocation,
+			CollisionRaius,
+			ETraceTypeQuery::TraceTypeQuery3,
+			false,
+			ignores, EDrawDebugTrace::ForDuration,
+			OutHit,
+			true,
+			FLinearColor::Red,
+			FLinearColor::Green,
+			3.f
+
+		);
+
+		if (Trace && Cast<ACharacter>(OutHit.GetActor()))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerLockTraceTarget : %s"), *OutHit.GetActor()->GetName()));
+
+			TargetLockActor = OutHit.GetActor();
+			SetControlMode(EControlMode::LockMode);
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, TEXT("PlayerLockTraceTarget - NotFind"));
+		}
+
+		break;
+
+	case EControlMode::LockMode:
+
+		SetControlMode(EControlMode::None);
+
+		break;
+
+	};
+	
 }
 
 void AEDRCharacter::ResetState()

@@ -19,7 +19,7 @@ UENUM(BlueprintType)
 enum class EControlMode : uint8
 {
 	None,
-	BossMode
+	LockMode
 };
 
 UENUM(BlueprintType)
@@ -72,6 +72,10 @@ class AEDRCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* RollingAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* LockCamera;
+
 
 public:
 	AEDRCharacter();
@@ -187,6 +191,10 @@ protected:
 	void Attack();
 
 	void TargetLock(AActor* TargetActor, float DeltaTime);
+
+	void CameraLockTrace();
+	TArray<AActor*> ignores;
+	float CollisionRaius = 50.f;
 
 	UFUNCTION(BlueprintCallable)
 	void ResetState();
