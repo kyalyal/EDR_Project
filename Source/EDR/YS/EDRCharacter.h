@@ -150,7 +150,7 @@ public:
 	bool GetIsMoving() { if (GetVelocity().Length()) { return true; } else { return false; } }
 
 	UFUNCTION(BlueprintPure, category = "Player")
-	bool GetIsInput();
+	bool GetIsInput(bool StopInput);
 
 
 	//Set--------------------------------------------------

@@ -158,11 +158,18 @@ void AEDRCharacter::Tick(float DeltaSecond)
 	
 	if (this == UGameplayStatics::GetPlayerCharacter(GetWorld(),0))
 	{
+		//상태 디버깅
 		FString CurrentState = StaticEnum<EControlState>()->GetNameStringByValue(static_cast<int64>(GetControlState()));
 		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Purple, FString::Printf(TEXT("Player Current Control State : %s"), *CurrentState));
 
 		FString CurrentMode = StaticEnum<EControlMode>()->GetNameStringByValue(static_cast<int64>(GetControlMode()));
 		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Purple, FString::Printf(TEXT("Player Current Control Mode : %s"), *CurrentMode));
+
+		if(GetIsInput(false))
+		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, TEXT("PlayerPressMoveKey"));
+
+		if (GetIsRolling())
+		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, TEXT("PlayerPressRollingKey"));
 	}
 
 	
@@ -300,18 +307,24 @@ void AEDRCharacter::Jump()
 }
 
 
-bool AEDRCharacter::GetIsInput()
+bool AEDRCharacter::GetIsInput(bool StopInput)
 {
 	if (!(!InputY && !InputX))
 	{
-		InputY = 0.f;
-		InputX = 0.f;
+		if (StopInput)
+		{
+			InputY = 0.f;
+			InputX = 0.f;
+		}
 		return true;
 	}
 	else
 	{
-		InputY = 0.f;
-		InputX = 0.f;
+		if (StopInput)
+		{
+			InputY = 0.f;
+			InputX = 0.f;
+		}
 		return false;
 	}
 }
@@ -436,7 +449,7 @@ void AEDRCharacter::Rolling()
 	//구르기 상태가 아니거나 백스텝 몽타주가 실행중이 아니라면
 	if (!bIsRolling && !EDRAnimInstance->Montage_IsPlaying(BackStepMontage))
 	{
-		if (GetIsInput())
+		if (GetIsInput(true))
 		{
 			SetIsRolling(true);
 
