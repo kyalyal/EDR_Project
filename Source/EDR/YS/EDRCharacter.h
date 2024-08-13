@@ -257,6 +257,7 @@ protected:
 	TObjectPtr<AActor>TargetLockActor;
 
 	float TargetLockCameraInterpSpeed;
+
 	
 
 	//테스트용 컴포넌트

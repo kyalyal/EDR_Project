@@ -91,8 +91,7 @@ AEDRCharacter::AEDRCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f; 
-	CameraBoom->bUsePawnControlRotation = true; 
-
+	CameraBoom->bUsePawnControlRotation = true;
 	
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
@@ -102,7 +101,7 @@ AEDRCharacter::AEDRCharacter()
 	//컨트롤 모드
 	CurrentControlMode = EControlMode::None;
 
-	TargetLockCameraInterpSpeed = 1.f;
+	TargetLockCameraInterpSpeed = 10.f;
 
 	ignores.Add(this);
 
@@ -117,6 +116,7 @@ AEDRCharacter::AEDRCharacter()
 	ComboAttackMontage = InitAttackMontage;
 
 	
+	
 }
 
 void AEDRCharacter::BeginPlay()
@@ -125,6 +125,8 @@ void AEDRCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	EDRAnimInstance = GetMesh()->GetAnimInstance();
+
+	CameraBoom->AddLocalOffset(FVector(0.f, 0.f, 100.f));
 
 }
 
@@ -386,12 +388,14 @@ void AEDRCharacter::SetControlMode(EControlMode NewControlMode)
 		//카메라 회전에 따른 움직임 제어
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
+
 		break;
 		
 	case EControlMode::LockMode:
 
 		//카메라 회전에 따른 움직임 제어
 		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+
 
 		break;
 	}
@@ -489,7 +493,7 @@ void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 	
 
 	//카메라 고정
-	FRotator LookCameraRotation = UKismetMathLibrary::RInterpTo(GetControlRotation(), TargetLookRotation, DeltaTime, TargetLockCameraInterpSpeed);
+	FRotator LookCameraRotation = UKismetMathLibrary::RInterpTo(GetControlRotation(), TargetLookRotation, DeltaTime, TargetLockCameraInterpSpeed);	
 	GetController()->SetControlRotation(LookCameraRotation);
 
 
