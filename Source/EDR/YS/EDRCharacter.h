@@ -150,7 +150,7 @@ public:
 	bool GetIsMoving() { if (GetVelocity().Length()) { return true; } else { return false; } }
 
 	UFUNCTION(BlueprintPure, category = "Player")
-	bool GetIsInput(bool StopInput);
+	bool GetIsKeyInput(bool StopInput);
 
 
 	//Set--------------------------------------------------
@@ -192,10 +192,22 @@ protected:
 
 	void TargetLock(AActor* TargetActor, float DeltaTime);
 
+	int8 TargetChange();
+
+
 	void CameraLockTrace();
 	TArray<FHitResult> LockTraceHitResult;
+	TArray<TObjectPtr<ACharacter>> LockTargetList;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	TArray<AActor*> LockTraceIgnores;
-	float CollisionRaius = 50.f;
+
+	UPROPERTY(EditAnywhere)
+	float CollisionRaius;
+
+	//초과시 Target 변경
+	float MaxChangeTargetValue;
+	int32 CurrentTargetActorIdx;
+
 
 	UFUNCTION(BlueprintCallable)
 	void ResetState();
@@ -268,8 +280,14 @@ protected:
 	
 private:
 
-	float InputX;
-	float InputY;
+	float KeyInputX;
+	float KeyInputY;
+
+	float MouseInputX;
+	float MouseInputY;
+
+	float AbsX;
+	float AbsY;
 
 };
 

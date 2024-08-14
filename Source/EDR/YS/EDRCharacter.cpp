@@ -101,9 +101,22 @@ AEDRCharacter::AEDRCharacter()
 	//컨트롤 모드
 	CurrentControlMode = EControlMode::None;
 
-	TargetLockCameraInterpSpeed = 10.f;
 
+	//타겟 변경
+
+	TargetLockCameraInterpSpeed = 1000.f;
+
+	CollisionRaius = 500.f;
 	LockTraceIgnores.Add(this);
+
+
+	
+	MaxChangeTargetValue = 100.f;
+	CurrentTargetActorIdx = 0;
+
+	TEnumAsByte<EObjectTypeQuery> TargetPawn = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+	ObjectTypes.Add(TargetPawn);
+
 
 
 	//테스트용 스피어 컴포넌트
@@ -115,8 +128,7 @@ AEDRCharacter::AEDRCharacter()
 	//공격 초기화
 	ComboAttackMontage = InitAttackMontage;
 
-	
-	
+
 }
 
 void AEDRCharacter::BeginPlay()
@@ -145,11 +157,35 @@ void AEDRCharacter::Tick(float DeltaSecond)
 
 		if (IsValid(TargetLockActor))
 		{
+			//타겟 고정
 			TargetLock(TargetLockActor, DeltaSecond);
+
+			//타겟 바꾸기
+			if (int8 NextIdx = TargetChange())
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Tick() - Change Target"));
+
+				AbsX = 0.f;
+				AbsY = 0.f;
+
+				CurrentTargetActorIdx += NextIdx;
+
+				if (CurrentTargetActorIdx > LockTargetList.Num()-1)
+				{
+					CurrentTargetActorIdx = 0;
+				}
+				else if (CurrentTargetActorIdx < 0)
+				{
+					CurrentTargetActorIdx = LockTargetList.Num() - 1;
+				}
+
+				TargetLockActor = LockTargetList[CurrentTargetActorIdx];
+			}
+
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Yellow, TEXT("EDRCharacter Tick - NoneLockTarget."));
+			GEngine->AddOnScreenDebugMessage(-1, GetWorld()->DeltaTimeSeconds, FColor::Yellow, TEXT("EDRCharacter Tick - NoneLockTarget."));
 		}
 
 		break;
@@ -162,16 +198,29 @@ void AEDRCharacter::Tick(float DeltaSecond)
 	{
 		//상태 디버깅
 		FString CurrentState = StaticEnum<EControlState>()->GetNameStringByValue(static_cast<int64>(GetControlState()));
-		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Purple, FString::Printf(TEXT("Player Current Control State : %s"), *CurrentState));
+		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Purple, FString::Printf(TEXT("Player Current Control State : %s"), *CurrentState));
 
 		FString CurrentMode = StaticEnum<EControlMode>()->GetNameStringByValue(static_cast<int64>(GetControlMode()));
-		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Purple, FString::Printf(TEXT("Player Current Control Mode : %s"), *CurrentMode));
+		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Purple, FString::Printf(TEXT("Player Current Control Mode : %s"), *CurrentMode));
 
-		if(GetIsInput(false))
-		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, TEXT("PlayerPressMoveKey"));
+		/*if(GetIsKeyInput(false))
+		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Green, TEXT("PlayerPressMoveKey"));
 
 		if (GetIsRolling())
-		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, TEXT("PlayerPressRollingKey"));
+		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Green, TEXT("PlayerPressRollingKey"));*/
+
+
+		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Purple, FString::Printf(TEXT("LockTraceHitResult.Num() : %d"), LockTargetList.Num()));
+
+		if (LockTargetList.Num())
+		{
+			for (int32 i = 0; i < LockTargetList.Num(); i++)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, GetWorld()->DeltaTimeSeconds, FColor::Blue, FString::Printf(TEXT("TargetActorList - %s"), *(LockTargetList[i]->GetName())));
+			}
+		}
+		
+		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Purple, FString::Printf(TEXT("CurrentTargetActorIdx : %d"), CurrentTargetActorIdx));
 	}
 
 	
@@ -274,16 +323,16 @@ void AEDRCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 
-		InputX = MovementVector.X;
-		InputY = MovementVector.Y;
+		KeyInputX = MovementVector.X;
+		KeyInputY = MovementVector.Y;
 	}
 
 }
 
 void AEDRCharacter::MoveCompleted()
 {
-	InputX = 0.f;
-	InputY = 0.f;
+	KeyInputX = 0.f;
+	KeyInputY = 0.f;
 }
 
 void AEDRCharacter::Look(const FInputActionValue& Value)
@@ -297,6 +346,8 @@ void AEDRCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 
+		MouseInputX = LookAxisVector.X;
+		MouseInputY = LookAxisVector.Y;
 	}
 }
 
@@ -309,14 +360,14 @@ void AEDRCharacter::Jump()
 }
 
 
-bool AEDRCharacter::GetIsInput(bool StopInput)
+bool AEDRCharacter::GetIsKeyInput(bool StopInput)
 {
-	if (!(!InputY && !InputX))
+	if (!(!KeyInputY && !KeyInputX))
 	{
 		if (StopInput)
 		{
-			InputY = 0.f;
-			InputX = 0.f;
+			KeyInputY = 0.f;
+			KeyInputX = 0.f;
 		}
 		return true;
 	}
@@ -324,8 +375,8 @@ bool AEDRCharacter::GetIsInput(bool StopInput)
 	{
 		if (StopInput)
 		{
-			InputY = 0.f;
-			InputX = 0.f;
+			KeyInputY = 0.f;
+			KeyInputX = 0.f;
 		}
 		return false;
 	}
@@ -453,7 +504,7 @@ void AEDRCharacter::Rolling()
 	//구르기 상태가 아니거나 백스텝 몽타주가 실행중이 아니라면
 	if (!bIsRolling && !EDRAnimInstance->Montage_IsPlaying(BackStepMontage))
 	{
-		if (GetIsInput(true))
+		if (GetIsKeyInput(true))
 		{
 			SetIsRolling(true);
 
@@ -475,7 +526,7 @@ void AEDRCharacter::Rolling()
 
 void AEDRCharacter::Attack()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Attack Success"));
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Attack() - Success"));
 
 	if (!bIsAttack && CurrentControlState == EControlState::None)
 	{
@@ -502,11 +553,39 @@ void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 
 }
 
+int8 AEDRCharacter::TargetChange()
+{
+	
+	if (LockTargetList.Num() >= 2)
+	{
+		if (UKismetMathLibrary::Abs(MouseInputX) > 0.5f)
+		{
+			AbsX += MouseInputX;
+		}
+		if (UKismetMathLibrary::Abs(MouseInputY) > 0.5f)
+		{
+			AbsY += MouseInputY;
+		}
+
+		if ((AbsX + AbsY) >= MaxChangeTargetValue)
+		{
+			return 1;
+		}
+		else if ((AbsX + AbsY) <= -MaxChangeTargetValue)
+		{
+			return -1;
+		}
+	}
+
+	return 0;
+}
+
 void AEDRCharacter::CameraLockTrace()
 {
 	bool Trace;
 	FVector StartLocation = GetActorLocation();
-	FVector EndLocation = GetFollowCamera()->GetComponentLocation() + (GetFollowCamera()->GetForwardVector() * 1000.f);
+	FVector EndLocation = GetFollowCamera()->GetComponentLocation() + (GetFollowCamera()->GetForwardVector() * 5000.f);
+
 
 
 	switch (CurrentControlMode)
@@ -515,15 +594,16 @@ void AEDRCharacter::CameraLockTrace()
 
 
 
-		Trace = UKismetSystemLibrary::SphereTraceMulti
+		Trace = UKismetSystemLibrary::SphereTraceMultiForObjects
 		(
 			GetWorld(),
 			StartLocation,
 			EndLocation,
 			CollisionRaius,
-			ETraceTypeQuery::TraceTypeQuery3,
+			ObjectTypes,
 			false,
-			LockTraceIgnores, EDrawDebugTrace::ForDuration,
+			LockTraceIgnores,
+			EDrawDebugTrace::ForDuration,
 			LockTraceHitResult,
 			true,
 			FLinearColor::Red,
@@ -532,12 +612,18 @@ void AEDRCharacter::CameraLockTrace()
 
 		);
 
-		if (Trace && Cast<ACharacter>(LockTraceHitResult[0].GetActor()))
+		if (Trace)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerLockTraceTarget : %s"), *LockTraceHitResult[0].GetActor()->GetName()));
+			for (FHitResult TargetCharacter : LockTraceHitResult)
+			{
+				LockTargetList.AddUnique(Cast<ACharacter>(TargetCharacter.GetActor()));
+			}
 
-			TargetLockActor = LockTraceHitResult[0].GetActor();
+
+			TargetLockActor = LockTargetList[CurrentTargetActorIdx];
 			SetControlMode(EControlMode::LockMode);
+
+			
 		}
 		else
 		{
@@ -546,9 +632,15 @@ void AEDRCharacter::CameraLockTrace()
 
 		break;
 
+	// 타겟 해제
 	case EControlMode::LockMode:
 
 		SetControlMode(EControlMode::None);
+
+		CurrentTargetActorIdx = 0;
+
+		//초기화
+		LockTargetList.Empty();
 
 		break;
 
