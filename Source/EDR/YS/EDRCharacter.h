@@ -193,7 +193,8 @@ protected:
 	void TargetLock(AActor* TargetActor, float DeltaTime);
 
 	void CameraLockTrace();
-	TArray<AActor*> ignores;
+	TArray<FHitResult> LockTraceHitResult;
+	TArray<AActor*> LockTraceIgnores;
 	float CollisionRaius = 50.f;
 
 	UFUNCTION(BlueprintCallable)

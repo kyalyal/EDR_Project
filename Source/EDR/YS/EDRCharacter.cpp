@@ -103,7 +103,7 @@ AEDRCharacter::AEDRCharacter()
 
 	TargetLockCameraInterpSpeed = 10.f;
 
-	ignores.Add(this);
+	LockTraceIgnores.Add(this);
 
 
 	//테스트용 스피어 컴포넌트
@@ -505,7 +505,6 @@ void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 void AEDRCharacter::CameraLockTrace()
 {
 	bool Trace;
-	FHitResult OutHit;
 	FVector StartLocation = GetActorLocation();
 	FVector EndLocation = GetFollowCamera()->GetComponentLocation() + (GetFollowCamera()->GetForwardVector() * 1000.f);
 
@@ -516,7 +515,7 @@ void AEDRCharacter::CameraLockTrace()
 
 
 
-		Trace = UKismetSystemLibrary::SphereTraceSingle
+		Trace = UKismetSystemLibrary::SphereTraceMulti
 		(
 			GetWorld(),
 			StartLocation,
@@ -524,8 +523,8 @@ void AEDRCharacter::CameraLockTrace()
 			CollisionRaius,
 			ETraceTypeQuery::TraceTypeQuery3,
 			false,
-			ignores, EDrawDebugTrace::ForDuration,
-			OutHit,
+			LockTraceIgnores, EDrawDebugTrace::ForDuration,
+			LockTraceHitResult,
 			true,
 			FLinearColor::Red,
 			FLinearColor::Green,
@@ -533,11 +532,11 @@ void AEDRCharacter::CameraLockTrace()
 
 		);
 
-		if (Trace && Cast<ACharacter>(OutHit.GetActor()))
+		if (Trace && Cast<ACharacter>(LockTraceHitResult[0].GetActor()))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerLockTraceTarget : %s"), *OutHit.GetActor()->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("PlayerLockTraceTarget : %s"), *LockTraceHitResult[0].GetActor()->GetName()));
 
-			TargetLockActor = OutHit.GetActor();
+			TargetLockActor = LockTraceHitResult[0].GetActor();
 			SetControlMode(EControlMode::LockMode);
 		}
 		else
