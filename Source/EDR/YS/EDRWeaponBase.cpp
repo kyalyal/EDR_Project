@@ -28,6 +28,7 @@ AEDRWeaponBase::AEDRWeaponBase()
     AttackCollision->SetBoxExtent(FVector(5.f, 5.f, 60.f));
     AttackCollision->AddLocalOffset(FVector(0.f, 0.f, 80.f));
     AttackCollision->SetHiddenInGame(false);
+    AttackCollision->SetCollisionProfileName(TEXT("TargetCharacter"));
 
 }
 
@@ -81,6 +82,18 @@ void AEDRWeaponBase::StopAttack()
 
 void AEDRWeaponBase::OverlapActor(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+    if (IgnoreActors.Contains(OtherActor)) return;
+
+
+    
+
     ApplyDamage(OtherActor);
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%s - WeaponBase::OverlapActor - AttackTarget : %s"), *GetName(), *OtherActor->GetName()));
+
+}
+
+void AEDRWeaponBase::AddIgnoreActor(AActor* IgnoreActor)
+{
+    IgnoreActors.Add(IgnoreActor);
 }
 

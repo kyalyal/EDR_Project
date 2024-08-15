@@ -51,6 +51,8 @@ public:
 	UFUNCTION()
 	void OverlapActor(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
+	void AddIgnoreActor(AActor* IgnoreActor);
+
 protected:
 
 
@@ -67,4 +69,6 @@ protected:
 	float Damage;
 
 	
+	TArray<TObjectPtr<AActor>> IgnoreActors;
+
 };

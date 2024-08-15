@@ -147,6 +147,7 @@ void AEDRCharacter::BeginPlay()
 	if (IsValid(CurrentWeapon))
 	{
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,TEXT("WeaponSoket_r"));
+		CurrentWeapon->AddIgnoreActor(this);
 	}
 
 }
