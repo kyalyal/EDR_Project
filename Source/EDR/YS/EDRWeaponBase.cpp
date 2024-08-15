@@ -20,23 +20,27 @@ AEDRWeaponBase::AEDRWeaponBase()
         WeaponMesh->SetStaticMesh(SM_Weapon.Object);
     }
 
+    WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
     LineTraceStart = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACESTART"));
     LineTraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACEEND"));
-    LineTraceStart->SetupAttachment(RootComponent);
-    LineTraceEnd->SetupAttachment(RootComponent);
+    LineTraceStart->SetupAttachment(WeaponMesh);
+    LineTraceEnd->SetupAttachment(WeaponMesh);
 
     LineTraceEnd->AddLocalOffset(FVector(0.f, 0.f, 130.f));
 
     TEnumAsByte<EObjectTypeQuery> TargetPawn = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
     ObjectTypes.Add(TargetPawn);
     
+
+    TraceIgnores.Add(this);
+
 }
 
 // Called when the game starts or when spawned
 void AEDRWeaponBase::BeginPlay()
 {
-	Super::BeginPlay();
-	
+    Super::BeginPlay();
 }
 
 // Called every frame
@@ -52,22 +56,20 @@ void AEDRWeaponBase::SetDamage(float NewDamage)
     Damage = NewDamage;
 }
 
+void AEDRWeaponBase::AddTraceIgnores(AActor* IgnoreActor)
+{
+    TraceIgnores.Add(IgnoreActor);
+}
+
 void AEDRWeaponBase::ApplyDamage()
 {
-    TArray<AActor*> IgnoreActors;
-    TArray<AActor*> OutActors;
-
-    IgnoreActors.Add(this);
 
 
-
-    if (OutActors.Num())
+    if (TraceHitResult.Num())
     {
-        for (int32 i = 0; i < OutActors.Num(); i++)
+        for (int32 i = 0; i < TraceHitResult.Num(); i++)
         {
-            if (IgnoreActors.Contains(OutActors[i])) continue;
-
-            OutActors[i]->TakeDamage(Damage, DamageEvent(), GetInstigatorController(), this);
+            TraceHitResult[i].GetActor()->TakeDamage(Damage, DamageEvent(), GetInstigatorController(), this);
         }
     }
 }
@@ -87,8 +89,8 @@ void AEDRWeaponBase::StartAttack()
 
     UKismetSystemLibrary::LineTraceMultiForObjects(
         GetWorld(),
-        GetActorLocation() + LineTraceStart->GetComponentLocation(),
-        GetActorLocation() + LineTraceEnd->GetComponentLocation(),
+        LineTraceStart->GetComponentLocation(),
+        LineTraceEnd->GetComponentLocation(),
         ObjectTypes,
         false,
         TraceIgnores,

@@ -252,6 +252,9 @@ protected:
 	UPROPERTY()
 	bool bIsAttack;
 
+	UPROPERTY()
+	TObjectPtr<class AEDRWeaponBase> CurrentWeapon;
+
 	
 	//몽타주
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, category = "Player")

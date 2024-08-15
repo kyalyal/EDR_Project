@@ -14,6 +14,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "EDRPlayerInterface.h"
+#include "EDRWeaponBase.h"
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -139,6 +140,15 @@ void AEDRCharacter::BeginPlay()
 	EDRAnimInstance = GetMesh()->GetAnimInstance();
 
 	CameraBoom->AddLocalOffset(FVector(0.f, 0.f, 100.f));
+
+
+
+	CurrentWeapon = GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator);
+	if (IsValid(CurrentWeapon))
+	{
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,TEXT("WeaponSoket_r"));
+		CurrentWeapon->AddTraceIgnores(this);
+	}
 
 }
 

@@ -32,11 +32,13 @@ public:
 	UFUNCTION(BlueprintPure, category = "Weapon")
 	float GetDamage() { return Damage; }
 
-
 	//Set
 
 	UFUNCTION(BlueprintCallable, category = "Weapon")
 	void SetDamage(float NewDamage);
+
+	UFUNCTION(BlueprintCallable, category = "Weapon")
+	void AddTraceIgnores(AActor* IgnoreActor);
 
 public:
 
