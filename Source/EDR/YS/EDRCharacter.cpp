@@ -104,7 +104,7 @@ AEDRCharacter::AEDRCharacter()
 
 	//타겟 변경
 
-	TargetLockCameraInterpSpeed = 1000.f;
+	TargetLockCameraInterpSpeed = 10.f;
 
 	CollisionRaius = 500.f;
 	LockTraceIgnores.Add(this);
@@ -342,9 +342,11 @@ void AEDRCharacter::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		if (CurrentControlMode != EControlMode::LockMode)
+		{
+			AddControllerYawInput(LookAxisVector.X);
+			AddControllerPitchInput(LookAxisVector.Y);
+		}
 
 		MouseInputX = LookAxisVector.X;
 		MouseInputY = LookAxisVector.Y;
