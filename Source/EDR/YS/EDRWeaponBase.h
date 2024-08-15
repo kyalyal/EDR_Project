@@ -56,10 +56,6 @@ protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
 	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
-	//콜리전
-	UPROPERTY(EditAnywhere, category = "Weapon")
-	TObjectPtr<class UBoxComponent> AttackCollision;
-
 
 	//공격 트레이스
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
@@ -68,10 +64,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = "Weapon")
 	TObjectPtr<USceneComponent> LineTraceEnd;
 
-
-	FTimerHandle AttackTimerHandle;
-
-	float AttackDelayTime = 0.001f;
+	TArray<FHitResult> TraceHitResult;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	TArray<AActor*> TraceIgnores;
 
 
 	//데미지

@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "EDRWeaponBase.h"
-#include "Components/BoxComponent.h"
 #include "Engine/DamageEvents.h"
-#include "DrawDebugHelpers.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -15,19 +14,22 @@ AEDRWeaponBase::AEDRWeaponBase()
     WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPONMESH"));
     WeaponMesh->SetupAttachment(RootComponent);
 
+    static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_Weapon(TEXT("/Game/GKnight/Meshes/Weapon/SM_WP_GothicKnight_Sword.SM_WP_GothicKnight_Sword"));
+    if (SM_Weapon.Succeeded())
+    {
+        WeaponMesh->SetStaticMesh(SM_Weapon.Object);
+    }
 
     LineTraceStart = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACESTART"));
     LineTraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACEEND"));
     LineTraceStart->SetupAttachment(RootComponent);
     LineTraceEnd->SetupAttachment(RootComponent);
 
+    LineTraceEnd->AddLocalOffset(FVector(0.f, 0.f, 130.f));
 
-    AttackCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("ATTACKCOLLECTION"));
-    AttackCollision->SetupAttachment(RootComponent);
-    AttackCollision->SetBoxExtent(FVector(100.f,100.f,100.f));
-
+    TEnumAsByte<EObjectTypeQuery> TargetPawn = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
+    ObjectTypes.Add(TargetPawn);
     
-    LineTraceEnd->AddLocalOffset(FVector(100.f, 0.f, 0.f));
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +37,6 @@ void AEDRWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-    StartAttack();
 }
 
 // Called every frame
@@ -43,6 +44,7 @@ void AEDRWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+    StartAttack();
 }
 
 void AEDRWeaponBase::SetDamage(float NewDamage)
@@ -57,7 +59,6 @@ void AEDRWeaponBase::ApplyDamage()
 
     IgnoreActors.Add(this);
 
-    AttackCollision->GetOverlappingActors(OutActors);
 
 
     if (OutActors.Num())
@@ -83,31 +84,23 @@ FDamageEvent AEDRWeaponBase::DamageEvent()
 
 void AEDRWeaponBase::StartAttack()
 {
-    GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, this, &AEDRWeaponBase::StartAttack, AttackDelayTime, true);
 
-    
-    FHitResult HitResult;
-    GetWorld()->LineTraceSingleByObjectType(HitResult,
-        LineTraceStart->GetComponentLocation(),
-        LineTraceEnd->GetComponentLocation(),
-        FCollisionObjectQueryParams::AllDynamicObjects,
-        FCollisionQueryParams::DefaultQueryParam
-        );
-
-    DrawDebugLine(
+    UKismetSystemLibrary::LineTraceMultiForObjects(
         GetWorld(),
-        LineTraceStart->GetComponentLocation(),
-        LineTraceEnd->GetComponentLocation(),
-        FColor(255, 0, 0),
+        GetActorLocation() + LineTraceStart->GetComponentLocation(),
+        GetActorLocation() + LineTraceEnd->GetComponentLocation(),
+        ObjectTypes,
         false,
-        0.f,
-        0.f,
-        10.f
-    );
+        TraceIgnores,
+        EDrawDebugTrace::ForDuration,
+        TraceHitResult,
+        true
+        );
+    
 }
 
 void AEDRWeaponBase::StopAttack()
 {
-    GetWorld()->GetTimerManager().ClearTimer(AttackTimerHandle);
+    
 }
 
