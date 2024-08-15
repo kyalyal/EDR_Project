@@ -48,6 +48,9 @@ public:
 	void StartAttack();
 	void StopAttack();
 
+	UFUNCTION()
+	void OverlapActor(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
 protected:
 
 

@@ -470,12 +470,30 @@ void AEDRCharacter::SetControlState(EControlState NewControlState)
 	switch (CurrentControlState)
 	{
 	case EControlState::None:
+
+		if (IsValid(CurrentWeapon))
+		{
+			CurrentWeapon->StopAttack();
+		}
+
 		break;
 
 	case EControlState::Attack:
+
+		if (IsValid(CurrentWeapon))
+		{
+			CurrentWeapon->StartAttack();
+		}
+
 		break;
 
 	case EControlState::Rolling:
+
+		if (IsValid(CurrentWeapon))
+		{
+			CurrentWeapon->StopAttack();
+		}
+
 		break;
 
 
@@ -665,6 +683,11 @@ void AEDRCharacter::ResetState()
 
 	bIsRolling = false;
 	bIsAttack = false;
+
+	if (IsValid(CurrentWeapon))
+	{
+		CurrentWeapon->StopAttack();
+	}
 
 	SetControlState(EControlState::None);
 }
