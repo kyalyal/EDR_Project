@@ -37,13 +37,10 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Weapon")
 	void SetDamage(float NewDamage);
 
-	UFUNCTION(BlueprintCallable, category = "Weapon")
-	void AddTraceIgnores(AActor* IgnoreActor);
-
 public:
 
 	//데미지 주기
-	void ApplyDamage();
+	void ApplyDamage(AActor* TargetActor);
 
 	FDamageEvent DamageEvent();
 
@@ -58,18 +55,9 @@ protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
 	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
-
-	//공격 트레이스
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
-	TObjectPtr<USceneComponent> LineTraceStart;
-
+	//데미지 콜리전
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = "Weapon")
-	TObjectPtr<USceneComponent> LineTraceEnd;
-
-	TArray<FHitResult> TraceHitResult;
-	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-	TArray<AActor*> TraceIgnores;
-
+	TObjectPtr<class UBoxComponent> AttackCollision;
 
 	//데미지
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")

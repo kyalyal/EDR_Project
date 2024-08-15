@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "EDRWeaponBase.h"
 #include "Engine/DamageEvents.h"
-#include "Kismet/KismetSystemLibrary.h"
+#include "Components/BoxComponent.h"
 
 
 // Sets default values
@@ -22,18 +22,12 @@ AEDRWeaponBase::AEDRWeaponBase()
 
     WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
-    LineTraceStart = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACESTART"));
-    LineTraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("LINETRACEEND"));
-    LineTraceStart->SetupAttachment(WeaponMesh);
-    LineTraceEnd->SetupAttachment(WeaponMesh);
 
-    LineTraceEnd->AddLocalOffset(FVector(0.f, 0.f, 130.f));
-
-    TEnumAsByte<EObjectTypeQuery> TargetPawn = UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn);
-    ObjectTypes.Add(TargetPawn);
-    
-
-    TraceIgnores.Add(this);
+    AttackCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BOXCOMPONENT"));
+    AttackCollision->SetupAttachment(WeaponMesh);
+    AttackCollision->SetBoxExtent(FVector(5.f, 5.f, 60.f));
+    AttackCollision->AddLocalOffset(FVector(0.f, 0.f, 80.f));
+    AttackCollision->SetHiddenInGame(false);
 
 }
 
@@ -56,22 +50,11 @@ void AEDRWeaponBase::SetDamage(float NewDamage)
     Damage = NewDamage;
 }
 
-void AEDRWeaponBase::AddTraceIgnores(AActor* IgnoreActor)
-{
-    TraceIgnores.Add(IgnoreActor);
-}
 
-void AEDRWeaponBase::ApplyDamage()
+void AEDRWeaponBase::ApplyDamage(AActor* TargetActor)
 {
 
-
-    if (TraceHitResult.Num())
-    {
-        for (int32 i = 0; i < TraceHitResult.Num(); i++)
-        {
-            TraceHitResult[i].GetActor()->TakeDamage(Damage, DamageEvent(), GetInstigatorController(), this);
-        }
-    }
+     TargetActor->TakeDamage(Damage, DamageEvent(), GetInstigatorController(), this);
 }
 
 FDamageEvent AEDRWeaponBase::DamageEvent()
@@ -87,17 +70,7 @@ FDamageEvent AEDRWeaponBase::DamageEvent()
 void AEDRWeaponBase::StartAttack()
 {
 
-    UKismetSystemLibrary::LineTraceMultiForObjects(
-        GetWorld(),
-        LineTraceStart->GetComponentLocation(),
-        LineTraceEnd->GetComponentLocation(),
-        ObjectTypes,
-        false,
-        TraceIgnores,
-        EDrawDebugTrace::ForDuration,
-        TraceHitResult,
-        true
-        );
+   
     
 }
 
