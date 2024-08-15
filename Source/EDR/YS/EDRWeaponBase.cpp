@@ -10,6 +10,8 @@ AEDRWeaponBase::AEDRWeaponBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+
 
     WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPONMESH"));
     WeaponMesh->SetupAttachment(RootComponent);
@@ -29,6 +31,11 @@ AEDRWeaponBase::AEDRWeaponBase()
     AttackCollision->AddLocalOffset(FVector(0.f, 0.f, 80.f));
     AttackCollision->SetHiddenInGame(false);
     AttackCollision->SetCollisionProfileName(TEXT("TargetCharacter"));
+
+
+    //데미지 초기화
+    Damage = 20.f;
+
 
 }
 
@@ -84,11 +91,7 @@ void AEDRWeaponBase::OverlapActor(UPrimitiveComponent* HitComp, AActor* OtherAct
 {
     if (IgnoreActors.Contains(OtherActor)) return;
 
-
-    
-
     ApplyDamage(OtherActor);
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("%s - WeaponBase::OverlapActor - AttackTarget : %s"), *GetName(), *OtherActor->GetName()));
 
 }
 

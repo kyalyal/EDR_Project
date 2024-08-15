@@ -2,7 +2,7 @@
 
 #include "EDRInteractItem.h"
 #include "Kismet/GameplayStatics.h"
-#include "EDR/YS/EDRCharacter.h"
+#include "EDRCharacter.h"
 
 
 // Sets default values
@@ -21,9 +21,7 @@ void AEDRInteractItem::BeginPlay()
 	PlayerCharacter = Cast<AEDRCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (IsValid(PlayerCharacter))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("EDRInteractItem::BeginPlay - Player Cast Success."));
 		PlayerCharacter->OnDeath.AddDynamic(this, &AEDRInteractItem::PlayerDie);
-
 	}
 }
 
@@ -37,10 +35,12 @@ void AEDRInteractItem::Tick(float DeltaTime)
 void AEDRInteractItem::PlayerInteract()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, TEXT("EDRInteractItem::PlayerInteract() - Interact Success."));
+
+	UE_LOG(LogTemp, Log, TEXT("EDRInteractItem::PlayerInteract() - Interact Success."));
 }
 
 void AEDRInteractItem::PlayerDie()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, TEXT("EDRInteractItem::PlayerDie() - Success."));
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("EDRInteractItem::PlayerDie() - Success."));
 }
 

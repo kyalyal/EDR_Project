@@ -8,6 +8,8 @@
 #include "EDRCharacterStruct.h"
 #include "EDRCharacter.generated.h"
 
+
+
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -31,8 +33,7 @@ enum class EControlState : uint8
 };
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeathDelegate);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeathDelegateDynamic);
 
 UCLASS(config=Game)
 class AEDRCharacter : public ACharacter
@@ -82,8 +83,8 @@ public:
 
 	virtual void Tick(float DeltaSecond) override;
 	
-	UPROPERTY(BlueprintAssignable,BlueprintCallable, Category = "Event")
-	FDeathDelegate OnDeath;
+	UPROPERTY(BlueprintAssignable, VisibleAnywhere ,BlueprintCallable, Category = "Player")
+	FDeathDelegateDynamic OnDeath;
 
 	UFUNCTION()
 	void PlayerDeath();

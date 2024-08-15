@@ -129,6 +129,10 @@ AEDRCharacter::AEDRCharacter()
 	//공격 초기화
 	ComboAttackMontage = InitAttackMontage;
 
+	
+	//캐릭터 info 초기화
+	CharacterInfo.HP = 100.f;
+
 
 }
 
@@ -232,20 +236,19 @@ void AEDRCharacter::Tick(float DeltaSecond)
 		
 		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Purple, FString::Printf(TEXT("CurrentTargetActorIdx : %d"), CurrentTargetActorIdx));
 	}
-
-	
 	
 }
 
 void AEDRCharacter::PlayerDeath()
 {
-	if (OnDeath.IsBound())
+	if (OnDeath.IsBound()  == true)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("EDRCharacter::PlayerDeath() - Broadcast Success."));
 		OnDeath.Broadcast();
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, TEXT("EDRCharacter::PlayerDeath() - IsBound Fail."));
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, TEXT("EDRCharacter::PlayerDeath() - Not Find Binding Delegate Actor."));
 	}
 
 }
@@ -402,6 +405,8 @@ void AEDRCharacter::SetHP(float NewHP)
 void AEDRCharacter::UpdateHP(float NewHP)
 {
 	CharacterInfo.HP += NewHP;
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), CharacterInfo.HP));
 }
 
 void AEDRCharacter::SetIsRolling(bool Roll)
@@ -556,14 +561,15 @@ void AEDRCharacter::Rolling()
 
 void AEDRCharacter::Attack()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Attack() - Success"));
+	
 
 	if (!bIsAttack && CurrentControlState == EControlState::None)
 	{
 		SetIsAttack(true);
-
 		
 		EDRAnimInstance->Montage_Play(ComboAttackMontage);
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player Attack() - Success"));
 	}
 
 }

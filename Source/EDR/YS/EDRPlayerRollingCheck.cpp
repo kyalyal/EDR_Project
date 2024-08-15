@@ -2,16 +2,16 @@
 
 
 #include "EDRPlayerRollingCheck.h"
-#include "EDRPlayerCharacter.h"
+#include "EDRCharacter.h"
 
 UEDRPlayerRollingCheck::UEDRPlayerRollingCheck()
 {
 	
 }
 
-void UEDRPlayerRollingCheck::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
+void UEDRPlayerRollingCheck::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
-	Super::Notify(MeshComp, Animation);
+	Super::Notify(MeshComp, Animation, EventReference);
 
 	PlayerCharacter = Cast<AEDRCharacter>(MeshComp->GetOwner());
 	if (IsValid(PlayerCharacter))

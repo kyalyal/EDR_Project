@@ -17,7 +17,7 @@ class EDR_API UEDRPlayerRollingCheck : public UAnimNotify
 public:
 	UEDRPlayerRollingCheck();
 
-	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
+	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
 	UPROPERTY()
 	TObjectPtr<class AEDRCharacter> PlayerCharacter;
