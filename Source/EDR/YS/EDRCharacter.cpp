@@ -576,12 +576,13 @@ void AEDRCharacter::Attack()
 
 void AEDRCharacter::TargetLock(AActor* TargetActor, float DeltaTime)
 {
-	FRotator TargetLookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActor->GetActorLocation());
-	
+	FRotator TargetLookRotationCal = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActor->GetActorLocation());
+	FRotator TargetLookRotation = FRotator(0.f, TargetLookRotationCal.Yaw, TargetLookRotationCal.Roll);
+
 
 	//카메라 고정
-	FRotator LookCameraRotation = UKismetMathLibrary::RInterpTo(GetControlRotation(), TargetLookRotation, DeltaTime, TargetLockCameraInterpSpeed);	
-	GetController()->SetControlRotation(LookCameraRotation);
+	FRotator LookCameraRotationCal = UKismetMathLibrary::RInterpTo(GetControlRotation(), TargetLookRotation, DeltaTime, TargetLockCameraInterpSpeed);
+	GetController()->SetControlRotation(LookCameraRotationCal);
 
 
 	//액터 고정
