@@ -10,12 +10,12 @@
 UENUM(BlueprintType)
 enum class EClothCategory : uint8
 {
-	Head,
-	Chest,
-	Arms,
-	Hands,
-	Legs,
-	Feet
+	Bracers,
+	Cloaks,
+	Gloves,
+	Robes,
+	Shoulders
+
 };
 
 
@@ -84,15 +84,6 @@ public:
 	EClothCategory Category;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
-	FName Name;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
-	TObjectPtr<USkeletalMesh> SkeletalMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
-	float PhysicalDefense;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
-	float MagicDefense;
+	TObjectPtr<UDataTable> Accessories;
 
 };
