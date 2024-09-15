@@ -3,7 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "EDRCharacterStruct.generated.h"
+
+
+UENUM(BlueprintType)
+enum class EClothCategory : uint8
+{
+	Head,
+	Chest,
+	Arms,
+	Hands,
+	Legs,
+	Feet
+};
+
 
 /**
  * 
@@ -16,9 +30,9 @@ public:
 };
 
 USTRUCT(Atomic, BlueprintType)
-struct FCharacterAbility
+struct FCharacterAbility : public FTableRowBase
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 public:
 
@@ -57,4 +71,28 @@ public:
 	//신비
 	UPROPERTY(BlueprintReadWrite)
 	float Mystery;
+};
+
+USTRUCT(BlueprintType)
+struct FEDRClothing : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
+	EClothCategory Category;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
+	FName Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
+	TObjectPtr<USkeletalMesh> SkeletalMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
+	float PhysicalDefense;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
+	float MagicDefense;
+
 };
