@@ -55,7 +55,7 @@ AEDRCharacter::AEDRCharacter()
 	}
 
 	//백스텝 몽타주 넣어주기
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_BackStep(TEXT("/Game/YS/Animation/GKnight/Roll/GKnight_DodgeBackward_Root_Montage.GKnight_DodgeBackward_Root_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_BackStep(TEXT("/Game/YS/Animation/ROG_Male/ROG_Roll/EDR_GKnight_DodgeBackward_Root_Montage.EDR_GKnight_DodgeBackward_Root_Montage"));
 	if (AM_BackStep.Succeeded())
 	{
 		BackStepMontage = AM_BackStep.Object;
