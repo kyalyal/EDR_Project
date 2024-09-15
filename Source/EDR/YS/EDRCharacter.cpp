@@ -99,6 +99,21 @@ AEDRCharacter::AEDRCharacter()
 	FollowCamera->bUsePawnControlRotation = false; 
 
 
+	//모듈형 메시
+
+	Body_Arms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BODYARMS"));
+	Body_Chest = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BODYCHEST"));
+	Body_Hands = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BODYHANDS"));
+	Body_Legs = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BODYLEGS"));
+	Body_Feet = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BODYFEET"));
+
+	Body_Arms->SetupAttachment(GetMesh());
+	Body_Chest->SetupAttachment(GetMesh());
+	Body_Hands->SetupAttachment(GetMesh());
+	Body_Legs->SetupAttachment(GetMesh());
+	Body_Feet->SetupAttachment(GetMesh());
+
+
 	//컨트롤 모드
 	CurrentControlMode = EControlMode::None;
 
@@ -127,7 +142,7 @@ AEDRCharacter::AEDRCharacter()
 	
 
 	//공격 초기화
-	ComboAttackMontage = InitAttackMontage;
+	bIsAttack = false;
 
 	
 	//캐릭터 info 초기화
@@ -145,6 +160,9 @@ void AEDRCharacter::BeginPlay()
 
 	CameraBoom->AddLocalOffset(FVector(0.f, 0.f, 100.f));
 
+
+	//공격 초기화
+	ComboAttackMontage = InitAttackMontage;
 
 
 	CurrentWeapon = GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator);

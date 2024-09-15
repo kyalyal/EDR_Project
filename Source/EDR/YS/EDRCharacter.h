@@ -77,8 +77,27 @@ class AEDRCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LockCamera;
 
+public:
+
+	//모듈형 캐릭터
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Chest;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Arms;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Hands;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Legs;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Feet;
+	
 
 public:
+
 	AEDRCharacter();
 
 	virtual void Tick(float DeltaSecond) override;
