@@ -280,7 +280,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, category = "Player")
 	TObjectPtr<UAnimMontage> ComboAttackMontage;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, category = "Player")
 	TObjectPtr<UAnimMontage> InitAttackMontage;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")

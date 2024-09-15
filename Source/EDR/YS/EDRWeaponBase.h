@@ -39,11 +39,10 @@ public:
 
 public:
 
-	//데미지 주기
+	//데미지 주기----------------------------------
 	void ApplyDamage(AActor* TargetActor);
 
 	FDamageEvent DamageEvent();
-
 
 	void StartAttack();
 	void StopAttack();
@@ -52,6 +51,12 @@ public:
 	void OverlapActor(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	void AddIgnoreActor(AActor* IgnoreActor);
+	
+	//--------------------------------------------
+
+	//무기 고유 애니메이션
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Weapon")
+	UAnimMontage* WeaponAttackAnim;
 
 protected:
 

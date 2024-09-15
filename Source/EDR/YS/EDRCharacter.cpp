@@ -61,12 +61,6 @@ AEDRCharacter::AEDRCharacter()
 		BackStepMontage = AM_BackStep.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_InitAttack(TEXT("/Game/YS/Animation/Sword/EDR_2H_Attack_A_Montage.EDR_2H_Attack_A_Montage"));
-	if (AM_InitAttack.Succeeded())
-	{
-		InitAttackMontage = AM_InitAttack.Object;
-	}
-
 
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -161,16 +155,19 @@ void AEDRCharacter::BeginPlay()
 	CameraBoom->AddLocalOffset(FVector(0.f, 0.f, 100.f));
 
 
-	//공격 초기화
-	ComboAttackMontage = InitAttackMontage;
-
 
 	CurrentWeapon = GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (IsValid(CurrentWeapon))
 	{
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,TEXT("WeaponSoket_r"));
 		CurrentWeapon->AddIgnoreActor(this);
+		
+
+		//공격 초기화
+		InitAttackMontage = CurrentWeapon->WeaponAttackAnim;
 	}
+
+	ComboAttackMontage = InitAttackMontage;
 
 }
 
