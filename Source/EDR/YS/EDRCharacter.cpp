@@ -15,6 +15,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EDRPlayerInterface.h"
 #include "EDRWeaponBase.h"
+#include "EDRGameInstance.h"
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -108,6 +109,22 @@ AEDRCharacter::AEDRCharacter()
 	Body_Feet->SetupAttachment(GetMesh());
 
 
+	Bracers_L = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BRACERSL"));
+	Bracers_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BRACERSR"));
+	Cloaks = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CLOAKS"));
+	Gloves = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GLOVES"));
+	Robes = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ROBES"));
+	Shoulders = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SHOULDERS"));
+
+	Bracers_L->SetupAttachment(GetMesh());
+	Bracers_R->SetupAttachment(GetMesh());
+	Cloaks->SetupAttachment(GetMesh());
+	Gloves->SetupAttachment(GetMesh());
+	Robes->SetupAttachment(GetMesh());
+	Shoulders->SetupAttachment(GetMesh());
+
+
+
 	//컨트롤 모드
 	CurrentControlMode = EControlMode::None;
 
@@ -152,10 +169,12 @@ void AEDRCharacter::BeginPlay()
 
 	EDRAnimInstance = GetMesh()->GetAnimInstance();
 
+
+	//카메라 위치 조정
 	CameraBoom->AddLocalOffset(FVector(0.f, 0.f, 100.f));
 
 
-
+	//무기 스폰
 	CurrentWeapon = GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (IsValid(CurrentWeapon))
 	{
@@ -168,6 +187,28 @@ void AEDRCharacter::BeginPlay()
 	}
 
 	ComboAttackMontage = InitAttackMontage;
+
+
+	//모듈화
+
+
+
+	//게임 인스턴스 불러오기
+	EDR_GameInstance = Cast<UEDRGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	//게임 인스턴스에서 Cloth정보 가져오기
+	if (IsValid(EDR_GameInstance))
+	{
+		Bracers_L->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerBracers_L);
+		Bracers_R->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerBracers_R);
+		Cloaks->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerCloacks);
+		Gloves->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerGloves);
+		Robes->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerRobes);
+		Shoulders->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerShoulders);
+	}
+
+	
+	
 
 }
 
@@ -252,6 +293,28 @@ void AEDRCharacter::Tick(float DeltaSecond)
 		GEngine->AddOnScreenDebugMessage(-1, DeltaSecond, FColor::Purple, FString::Printf(TEXT("CurrentTargetActorIdx : %d"), CurrentTargetActorIdx));
 	}
 	
+}
+
+//컨스트럭션 스크립트
+void AEDRCharacter::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	//Mesh따라가는 코드
+	Body_Legs->SetMasterPoseComponent(GetMesh());
+	Body_Hands->SetMasterPoseComponent(GetMesh());
+	Body_Chest->SetMasterPoseComponent(GetMesh());
+	Body_Arms->SetMasterPoseComponent(GetMesh());
+	Body_Feet->SetMasterPoseComponent(GetMesh());
+
+	Robes->SetMasterPoseComponent(GetMesh());
+	Bracers_L->SetMasterPoseComponent(GetMesh());
+	Bracers_R->SetMasterPoseComponent(GetMesh());
+	Gloves->SetMasterPoseComponent(GetMesh());
+	Cloaks->SetMasterPoseComponent(GetMesh());
+	Shoulders->SetMasterPoseComponent(GetMesh());
+
+
 }
 
 void AEDRCharacter::PlayerDeath()

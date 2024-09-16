@@ -121,6 +121,9 @@ public:
 	AEDRCharacter();
 
 	virtual void Tick(float DeltaSecond) override;
+
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 	
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere ,BlueprintCallable, Category = "Player")
 	FDeathDelegateDynamic OnDeath;
@@ -249,11 +252,6 @@ protected:
 	int32 CurrentTargetActorIdx;
 
 
-	UFUNCTION(BlueprintCallable)
-	void ResetState();
-
-
-
 
 	//고유 변수--------------------------------------------------------
 
@@ -323,6 +321,8 @@ protected:
 	
 private:
 
+	//키 입력
+
 	float KeyInputX;
 	float KeyInputY;
 
@@ -331,6 +331,18 @@ private:
 
 	float AbsX;
 	float AbsY;
+
+
+
+	//저장 초기화
+
+	UFUNCTION(BlueprintCallable)
+	void ResetState();
+
+
+	//게임 인스턴스
+	UPROPERTY()
+	TObjectPtr<class UEDRGameInstance> EDR_GameInstance;
 
 };
 
