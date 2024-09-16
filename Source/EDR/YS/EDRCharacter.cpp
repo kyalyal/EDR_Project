@@ -178,7 +178,7 @@ void AEDRCharacter::BeginPlay()
 	CurrentWeapon = GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (IsValid(CurrentWeapon))
 	{
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,TEXT("WeaponSoket_r"));
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,TEXT("hand_rSocket"));
 		CurrentWeapon->AddIgnoreActor(this);
 		
 
