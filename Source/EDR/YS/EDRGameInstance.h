@@ -15,9 +15,4 @@ class EDR_API UEDRGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
-public:
-
-	UPROPERTY(BlueprintReadWrite)
-	FEDRClothing EDRClothing;
-
 };
