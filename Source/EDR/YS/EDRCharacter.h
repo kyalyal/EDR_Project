@@ -77,6 +77,9 @@ class AEDRCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LockCamera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InventoryButton;
+
 public:
 
 	//모듈형 캐릭터
@@ -123,6 +126,8 @@ public:
 	virtual void Tick(float DeltaSecond) override;
 
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+	class UEDRInventory* EDRInventory;
 
 	
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere ,BlueprintCallable, Category = "Player")
@@ -253,6 +258,11 @@ protected:
 
 
 
+	// 인벤토리 시스템
+	void ShowInventory();
+
+
+
 	//고유 변수--------------------------------------------------------
 
 
@@ -315,7 +325,7 @@ protected:
 	
 
 	//테스트용 컴포넌트
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<class USphereComponent> SphereCollision;
 
 	

@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "EDRCharacter.h"
+#include "EDRInventory.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -16,6 +17,7 @@
 #include "EDRPlayerInterface.h"
 #include "EDRWeaponBase.h"
 #include "EDRGameInstance.h"
+
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -55,6 +57,15 @@ AEDRCharacter::AEDRCharacter()
 		LockCamera = IA_LockCamera.Object;
 	}
 
+	//인벤토리 키 생성
+	static ConstructorHelpers::FObjectFinder<UInputAction>IA_EDRInventory(TEXT("/Game/ThirdPerson/Input/Actions/IA_EDRInventory.IA_EDRInventory"));
+	if (IA_LockCamera.Succeeded())
+	{
+		InventoryButton = IA_EDRInventory.Object;
+	}
+
+
+
 	//백스텝 몽타주 넣어주기
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_BackStep(TEXT("/Game/YS/Animation/ROG_Male/ROG_Roll/EDR_GKnight_DodgeBackward_Root_Montage.EDR_GKnight_DodgeBackward_Root_Montage"));
 	if (AM_BackStep.Succeeded())
@@ -62,6 +73,8 @@ AEDRCharacter::AEDRCharacter()
 		BackStepMontage = AM_BackStep.Object;
 	}
 
+
+	
 
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -92,6 +105,13 @@ AEDRCharacter::AEDRCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; 
+
+
+	//인벤토리 컴포넌트 장착
+
+	EDRInventory = CreateDefaultSubobject<UEDRInventory>(TEXT("EDRINVENTORY"));
+
+
 
 
 	//모듈형 메시
@@ -301,18 +321,18 @@ void AEDRCharacter::OnConstruction(const FTransform& Transform)
 	Super::OnConstruction(Transform);
 
 	//Mesh따라가는 코드
-	Body_Legs->SetMasterPoseComponent(GetMesh());
-	Body_Hands->SetMasterPoseComponent(GetMesh());
-	Body_Chest->SetMasterPoseComponent(GetMesh());
-	Body_Arms->SetMasterPoseComponent(GetMesh());
-	Body_Feet->SetMasterPoseComponent(GetMesh());
+	Body_Legs->SetLeaderPoseComponent(GetMesh());
+	Body_Hands->SetLeaderPoseComponent(GetMesh());
+	Body_Chest->SetLeaderPoseComponent(GetMesh());
+	Body_Arms->SetLeaderPoseComponent(GetMesh());
+	Body_Feet->SetLeaderPoseComponent(GetMesh());
 
-	Robes->SetMasterPoseComponent(GetMesh());
-	Bracers_L->SetMasterPoseComponent(GetMesh());
-	Bracers_R->SetMasterPoseComponent(GetMesh());
-	Gloves->SetMasterPoseComponent(GetMesh());
-	Cloaks->SetMasterPoseComponent(GetMesh());
-	Shoulders->SetMasterPoseComponent(GetMesh());
+	Robes->SetLeaderPoseComponent(GetMesh());
+	Bracers_L->SetLeaderPoseComponent(GetMesh());
+	Bracers_R->SetLeaderPoseComponent(GetMesh());
+	Gloves->SetLeaderPoseComponent(GetMesh());
+	Cloaks->SetLeaderPoseComponent(GetMesh());
+	Shoulders->SetLeaderPoseComponent(GetMesh());
 
 
 }
@@ -386,6 +406,9 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		//LockCamera
 		EnhancedInputComponent->BindAction(LockCamera, ETriggerEvent::Started, this, &AEDRCharacter::CameraLockTrace);
+
+		//Inventory
+		EnhancedInputComponent->BindAction(InventoryButton, ETriggerEvent::Started, this, &AEDRCharacter::ShowInventory);
 	}
 	else
 	{
@@ -594,12 +617,16 @@ void AEDRCharacter::SetCharacterInfo(FCharacterAbility NewCharacterInfo)
 
 void AEDRCharacter::Interaction()
 {
+
 	//Sphere Collision Test
 	TArray<AActor*> OverlapActor;
 	SphereCollision->GetOverlappingActors(OverlapActor);
 
 	for (AActor* i : OverlapActor)
 	{
+		if (i == this) continue;
+
+
 		IEDRPlayerInterface* PlayerInterface = Cast<IEDRPlayerInterface>(i);
 		if (PlayerInterface)
 		{
@@ -761,6 +788,12 @@ void AEDRCharacter::CameraLockTrace()
 
 	};
 	
+}
+
+//인벤토리 보여주기
+void AEDRCharacter::ShowInventory()
+{
+	EDRInventory->InteractInventory();
 }
 
 void AEDRCharacter::ResetState()
