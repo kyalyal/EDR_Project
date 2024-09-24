@@ -63,6 +63,8 @@ void AEDRInteractItem::PlayerInteract()
 	if (IsValid(InventoryComp))
 	{
 		InventoryComp->PickUpItem(this);
+
+		GetWorld()->DestroyActor(this);
 	}
 }
 
