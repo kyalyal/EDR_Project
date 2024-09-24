@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "EDRPlayerInterface.h"
+#include "EDRCharacterStruct.h"
 #include "EDRInteractItem.generated.h"
 
 UCLASS()
@@ -33,4 +34,15 @@ public:
 
 	UFUNCTION()
 	void PlayerDie();
+
+
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Item")
+	TObjectPtr<USkeletalMeshComponent> SkeletalMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category="Item")
+	FEDR_InventoryStruct InventoryStructure;
+
 };
