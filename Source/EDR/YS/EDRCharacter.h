@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "EDRCharacterStruct.h"
+#include "EDRInventoryStruct.h"
 #include "EDRCharacter.generated.h"
 
 
