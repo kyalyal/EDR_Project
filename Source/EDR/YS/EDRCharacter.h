@@ -77,11 +77,58 @@ class AEDRCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LockCamera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InventoryButton;
 
 public:
+
+	//모듈형 캐릭터
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Chest;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Arms;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Hands;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Legs;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Body_Feet;
+
+
+	//파츠
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Bracers_L;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Bracers_R;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Cloaks;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Gloves;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Robes;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Shoulders;
+
+
+public:
+
 	AEDRCharacter();
 
 	virtual void Tick(float DeltaSecond) override;
+
+	virtual void OnConstruction(const FTransform& Transform) override;
+
+	class UEDRInventory* EDRInventory;
+
 	
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere ,BlueprintCallable, Category = "Player")
 	FDeathDelegateDynamic OnDeath;
@@ -210,9 +257,9 @@ protected:
 	int32 CurrentTargetActorIdx;
 
 
-	UFUNCTION(BlueprintCallable)
-	void ResetState();
 
+	// 인벤토리 시스템
+	void ShowInventory();
 
 
 
@@ -261,7 +308,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, category = "Player")
 	TObjectPtr<UAnimMontage> ComboAttackMontage;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, category = "Player")
 	TObjectPtr<UAnimMontage> InitAttackMontage;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
@@ -278,11 +325,13 @@ protected:
 	
 
 	//테스트용 컴포넌트
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<class USphereComponent> SphereCollision;
 
 	
 private:
+
+	//키 입력
 
 	float KeyInputX;
 	float KeyInputY;
@@ -292,6 +341,18 @@ private:
 
 	float AbsX;
 	float AbsY;
+
+
+
+	//저장 초기화
+
+	UFUNCTION(BlueprintCallable)
+	void ResetState();
+
+
+	//게임 인스턴스
+	UPROPERTY()
+	TObjectPtr<class UEDRGameInstance> EDR_GameInstance;
 
 };
 

@@ -33,6 +33,13 @@ AEDRWeaponBase::AEDRWeaponBase()
     AttackCollision->SetCollisionProfileName(TEXT("TargetCharacter"));
 
 
+    WeaponAttackAnim = CreateDefaultSubobject<UAnimMontage>(TEXT("WEAPONATTACKANIM"));
+    ConstructorHelpers::FObjectFinder<UAnimMontage>WA(TEXT("/Game/YS/Animation/ROG_Male/ROG_Sword/EDR_ROG_2H_Attack_A_Montage.EDR_ROG_2H_Attack_A_Montage"));
+    if (WA.Succeeded())
+    {
+        WeaponAttackAnim = WA.Object;
+    }
+
     //데미지 초기화
     Damage = 20.f;
 
@@ -43,6 +50,13 @@ AEDRWeaponBase::AEDRWeaponBase()
 void AEDRWeaponBase::BeginPlay()
 {
     Super::BeginPlay();
+
+
+
+    if (!IsValid(WeaponAttackAnim))
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s No Weapon Animation"), *GetName()));
+    }
 
 }
 
