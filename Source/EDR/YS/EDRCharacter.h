@@ -174,6 +174,9 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 
+	UEDRInventory* GetEDRInventory() { return EDRInventory; }
+
+
 	UFUNCTION(BlueprintPure, category = "Player")
 	float GetHP() { return CharacterInfo.HP; }
 

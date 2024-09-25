@@ -8,6 +8,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "EDRInventory.h"
 #include "Blueprint/UserWidget.h"
+#include "UW_EDRInventoryWidget.h"
 
 
 UEDRInventory::UEDRInventory()
@@ -20,6 +21,7 @@ UEDRInventory::UEDRInventory()
 		UMG_InventoryClass = InventoryWidgetClass.Class;
 	}
 
+	
 
 	MaxSize = 3;
 
@@ -73,7 +75,18 @@ void UEDRInventory::InteractInventory()
 		As_UMG_Inventory = CreateWidget<UUserWidget>(GetWorld(), UMG_InventoryClass);
 		if (As_UMG_Inventory != nullptr)
 		{
+			//위젯 화면에 뿌려주기
 			As_UMG_Inventory->AddToViewport();
+
+			InventoryWidgetScript = Cast<UUW_EDRInventoryWidget>(As_UMG_Inventory);
+			if (IsValid(InventoryWidgetScript))
+			{
+				//델리게이트 바인딩
+				InventoryWidgetScript->ItemAdded.BindUFunction(this, FName("ItemAdded"));
+				InventoryWidgetScript->ItemDropped.BindUFunction(this, FName("ItemDropped"));
+				InventoryWidgetScript->ItemRemoved.BindUFunction(this, FName("ItemRemove"));
+			}
+
 		}
 
 		
