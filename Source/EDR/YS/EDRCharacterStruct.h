@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "DA_EDRItem.h"
 #include "EDRCharacterStruct.generated.h"
 
 
@@ -112,5 +113,21 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clothing")
 	USkeletalMesh* PlayerShoulders;
+
+};
+
+
+USTRUCT(BlueprintType)
+struct FEDR_InventoryStruct : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Quantity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UDA_EDRItem* DataAsset;
 
 };
