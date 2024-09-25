@@ -36,6 +36,9 @@ public:
 	void PlayerDie();
 
 
+	UFUNCTION()
+	void ModifyQuantity(int32 NewQuantity);
+
 
 public:
 
