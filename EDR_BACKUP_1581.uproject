@@ -10,7 +10,11 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
+<<<<<<< HEAD
+				"AIModule"
+=======
 				"UMG"
+>>>>>>> KYS
 			]
 		}
 	],

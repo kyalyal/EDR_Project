@@ -48,16 +48,27 @@ public:
 	void ItemRemove(int32 Key);
 
 
+public:
+
+	UFUNCTION()
+	TMap<int32, FEDR_InventoryStruct> GetInventory() { return Inventory; }
+
+	int32 GetMaxSize() { return MaxSize; }
+
+	bool GetAllowDuplicates() { return AllowDuplicates; }
+
 	
 private:
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true") ,category = "Inventory")
 	TMap<int32, FEDR_InventoryStruct> Inventory;
 
 	//최대 사이즈
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), category = "Inventory")
 	int32 MaxSize;
 
 	//중복 허용
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), category = "Inventory")
 	bool AllowDuplicates;
 
 
@@ -74,6 +85,8 @@ public:
 
 	UPROPERTY()
 	TObjectPtr<class UUserWidget> As_UMG_Inventory;
+
+	TObjectPtr<class UUW_EDRInventoryWidget> InventoryWidgetScript;
 
 
 private:
