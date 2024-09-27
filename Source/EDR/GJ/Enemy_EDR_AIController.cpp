@@ -21,7 +21,7 @@ const FName AEnemy_EDR_AIController::TargetLocation(TEXT("TargetLocation"));
 AEnemy_EDR_AIController::AEnemy_EDR_AIController(FObjectInitializer const& object_initializer)
 {
 	//ConstructorHelpers로 에디터에 미리 만들어둔 비헤이비어트리를 지정
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/All/Game/GJ/AI/EneMy_Ai/Enemy_BehaviorTree.Enemy_BehaviorTree'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/GJ/AI/EneMy_Ai/Enemy_EDR_BehaviorTree.Enemy_EDR_BehaviorTree'"));
 	if (BTObject.Succeeded())
 	{
 		btree = BTObject.Object;
