@@ -32,6 +32,15 @@ private:
 	class UBlackboardComponent* blackboard;
 	class UAISenseConfig_Sight* SightConfig;
 
+
+	// 타이머 핸들러
+	FTimerHandle TimerHandle;
+
+	// 비동기 로딩을 위한 콜백 함수
+	void OnBehaviorTreeLoaded();
+
+	// 비헤이비어 트리 로드 재시도 함수
+	void RetryLoadBehaviorTree();
 public:
 	static const FName HomePosKey;
 	static const FName TargetLocation;
