@@ -17,6 +17,7 @@
 
 const FName AEnemy_EDR_AIController::HomePosKey(TEXT("HomePos"));
 const FName AEnemy_EDR_AIController::TargetLocation(TEXT("TargetLocation"));
+const FName AEnemy_EDR_AIController::TargetKey(TEXT("Target"));
 
 AEnemy_EDR_AIController::AEnemy_EDR_AIController(FObjectInitializer const& object_initializer)
 {
