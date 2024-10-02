@@ -62,14 +62,21 @@ void AEDRInteractItem::PlayerInteract()
 	UEDRInventory* InventoryComp = PlayerCharacter->GetComponentByClass<UEDRInventory>();
 	if (IsValid(InventoryComp))
 	{
-		InventoryComp->PickUpItem(this);
+		if (InventoryComp->PickUpItem(this))
+		{
+			GetWorld()->DestroyActor(this);
+		}
 
-		GetWorld()->DestroyActor(this);
 	}
 }
 
 void AEDRInteractItem::PlayerDie()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("EDRInteractItem::PlayerDie() - Success."));
+}
+
+void AEDRInteractItem::ModifyQuantity(int32 NewQuantity)
+{
+	InventoryStructure.Quantity = NewQuantity;
 }
 

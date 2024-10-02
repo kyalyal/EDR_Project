@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "EDRCharacterStruct.h"
+#include "EDRInventoryStruct.h"
 #include "EDRCharacter.generated.h"
 
 
@@ -171,6 +172,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+
+	UEDRInventory* GetEDRInventory() { return EDRInventory; }
 
 
 	UFUNCTION(BlueprintPure, category = "Player")

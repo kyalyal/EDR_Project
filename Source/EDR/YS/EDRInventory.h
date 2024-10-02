@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "EDRCharacterStruct.h"
+#include "EDRInventoryStruct.h"
 #include "EDRInventory.generated.h"
 
 
@@ -25,24 +25,57 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-
+	UFUNCTION()
 	void InteractInventory();
 
-	void PickUpItem(AEDRInteractItem* Item);
+	UFUNCTION()
+	bool PickUpItem(class AEDRInteractItem* Item);
+
+
+	//최대 갯수가 다 찼는지
+	TTuple<bool,int32> IsKeyFull(int32 Key);
+
+	//아이템 추가
+	UFUNCTION()
+	void ItemAdded(int32 SlotKey, FEDR_InventoryStruct SlotValue);
+
+	//드롭
+	UFUNCTION()
+	void ItemDropped(FEDR_InventoryStruct ItemDropped);
+
+	//제거
+	UFUNCTION()
+	void ItemRemove(int32 Key);
+
+
+public:
+
+	UFUNCTION()
+	TMap<int32, FEDR_InventoryStruct> GetInventory() { return Inventory; }
+
+	int32 GetMaxSize() { return MaxSize; }
+
+	bool GetAllowDuplicates() { return AllowDuplicates; }
 
 	
 private:
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true") ,category = "Inventory")
 	TMap<int32, FEDR_InventoryStruct> Inventory;
 
 	//최대 사이즈
-	uint32 MaxSize;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), category = "Inventory")
+	int32 MaxSize;
 
 	//중복 허용
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), category = "Inventory")
 	bool AllowDuplicates;
 
 
+
+
+
+	//레퍼런스---------------------------------------
 
 public:
 
@@ -53,9 +86,10 @@ public:
 	UPROPERTY()
 	TObjectPtr<class UUserWidget> As_UMG_Inventory;
 
+	TObjectPtr<class UUW_EDRInventoryWidget> InventoryWidgetScript;
+
 
 private:
-
 
 
 	UPROPERTY()
@@ -63,6 +97,10 @@ private:
 
 	FInputModeGameAndUI GameAndUIMode;
 	FInputModeGameOnly GameOnlyMode;
+
+
+	TArray<AActor*> HitActor;
+	TArray<AActor*> IgnoreActor;
 
 		
 };
