@@ -11,12 +11,17 @@
 UUW_EDRInvGrid::UUW_EDRInvGrid(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)  // 부모 클래스의 생성자를 호출
 {
-	// 위젯 슬롯 클래스를 찾습니다.
-	static ConstructorHelpers::FClassFinder<UUserWidget> InventorySlotWidgetClass(TEXT("/Game/YS/Blueprint/UMG/UMG_EDR_Inv_Slot.UMG_EDR_Inv_Slot_C"));
+	
+	static ConstructorHelpers::FClassFinder<UUW_EDRInvSlot> InventorySlotWidgetClass(TEXT("/Game/YS/Blueprint/UMG/UMG_EDR_Inv_Slot.UMG_EDR_Inv_Slot_C"));
 	if (InventorySlotWidgetClass.Succeeded())
 	{
 		WidgetSlotClass = InventorySlotWidgetClass.Class;
 	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find UMG_EDR_Inv_Slot"));
+	}
+
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> InventoryItemWidgetClass(TEXT("/Game/YS/Blueprint/UMG/UMG_EDRItem.UMG_EDRItem_C"));
 	if (InventoryItemWidgetClass.Succeeded())
@@ -49,25 +54,29 @@ TTuple<int32, int32> UUW_EDRInvGrid::DetermainGridLocation(int32 ChildCount, int
 
 void UUW_EDRInvGrid::CreateGridBackGround()
 {
-	// this가 nullptr인지 확인
-	if (this == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("this is nullptr in CreateGridBackGround"));
-		return;
-	}
-
-	// EDRGridPanel이 nullptr인지 확인
-	if (EDRGridPanel == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("EDRGridPanel is nullptr. Make sure it's bound correctly in UMG."));
-		return;
-	}
+	
 
 	for (int32 i = 0; i < GridSize; i++)
 	{
-		TObjectPtr<UUserWidget> ItemSlot;
-		ItemSlot = CreateWidget<UUserWidget>(GetWorld(),WidgetSlotClass);
+		//아이템 생성
+		TObjectPtr<UUW_EDRInvSlot> ItemSlot;
+		ItemSlot = CreateWidget<UUW_EDRInvSlot>(GetWorld(),WidgetSlotClass);
 
+
+		//UUW_EDRInvSlot* ItemSlotRef = Cast<UUW_EDRInvSlot>(ItemSlot);
+
+		if (ItemSlot == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("ItemSlotRef is NULL. Cast to UUW_EDRInvSlot failed."));
+			return;
+		}
+
+		ItemSlot->Key = i;
+		ItemSlot->ItemPlaced.BindUFunction(this, FName("AddItemToGrid"));
+
+
+
+		//아이템 그리드에 붙이기
 		TTuple<int32,int32> CalGrid = DetermainGridLocation(i, MaxRow);
 
 		EDRGridPanel->AddChildToGrid(ItemSlot, CalGrid.Get<1>(), CalGrid.Get<0>() );
@@ -81,19 +90,22 @@ void UUW_EDRInvGrid::AddItemToGrid(int32 Key, FEDR_InventoryStruct Value)
 
 	UUW_EDR_UMGItem* EDRItem = Cast<UUW_EDR_UMGItem>(Item);
 
-	if (EDRItem == nullptr)
+	
+	//델리게이트 바인드
+	EDRItem->SplitStack.BindUFunction(this, FName("ItemStackSplit"));
+	EDRItem->ItemRemoved.BindUFunction(this, FName("ItemRemoved"));
+	EDRItem->QuantityModified.BindUFunction(this, FName("ItemQuantityModified"));
+
+
+	if (Value.DataAsset->Image == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("EDRItem is nullptr in AddItemToGrid."));
-		return;
+
+	}
+	else
+	{
+		EDRItem->InitItemInfo(Key, Value);
 	}
 
-	if (Value.DataAsset == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Value.DataAsset is nullptr. Item was not properly initialized."));
-		return;
-	}
-	
-	EDRItem->InitItemInfo(Key, Value);
 
 	//그리드 셀에 추가하기
 	TTuple<int32, int32> CalGrid = DetermainGridLocation(Key, MaxRow);
@@ -109,10 +121,45 @@ void UUW_EDRInvGrid::AddItemToGrid(int32 Key, FEDR_InventoryStruct Value)
 
 void UUW_EDRInvGrid::ItemStackSplit(UUW_EDR_UMGItem* ItemSplit)
 {
+
+	if (bDuplicatesAllowed)
+	{
+		int32 L_NewQuantity;
+		int32 L_OldQuantity;
+
+		for (int32 i = 0; i < GridSize; i++)
+		{
+			if (GridInventory.Contains(i))
+			{
+				L_NewQuantity = ItemSplit->ItemStructure.Quantity / 2;
+
+				L_OldQuantity = ItemSplit->ItemStructure.Quantity - L_NewQuantity;
+
+				
+				FEDR_InventoryStruct NewInvST;
+				NewInvST.Quantity = L_NewQuantity;
+				NewInvST.DataAsset = ItemSplit->ItemStructure.DataAsset;
+
+				ItemSplit->UpdateQuantity(L_OldQuantity);
+
+				AddItemToGrid(i, NewInvST);
+
+				return;
+			}
+		}
+	}
+	else
+	{
+		return;
+	}
 }
 
 void UUW_EDRInvGrid::ItemRemoved(int32 Key)
 {
+	GridInventory.Remove(Key);
+
+	Inv_ItemRemoved.Execute(Key);
+
 }
 
 void UUW_EDRInvGrid::ItemQuantityModified(int32 Key, FEDR_InventoryStruct Value)
