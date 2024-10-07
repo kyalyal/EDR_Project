@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
+//#include "Animation/AnimInstance.h"
+
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 
 UCLASS()
 class EDR_API AMyCharacter : public ACharacter
@@ -38,6 +41,22 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void UpdateHP(float NewHP);
 
+	virtual void PostInitializeComponents() override;
+
+	//void PlayAttackMontage();
+
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly,Category = Attack, Meta= (AllowPrivateAccess = true))
+	//UAnimMontage* AttackMontage;
+	void Attack();
+	FOnAttackEndDelegate OnAttackEnd;
+
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
 private:
-	
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly,  Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsAttacking;
+
+	UPROPERTY()
+	class UAnim_EDR_AnimInstance* EDRAnim;
 };
