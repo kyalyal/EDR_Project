@@ -352,6 +352,13 @@ void AEDRCharacter::PlayerDeath()
 
 float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	if (bIsInvincible)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("Player - invincible Mode. no damage taken"));
+		return 0.0f; // 무적 상태일 때는 데미지를 받지 않음
+	}
+	
+	
 	UpdateHP(-DamageAmount);
 
 	if (CharacterInfo.HP <= 0)
@@ -518,10 +525,12 @@ void AEDRCharacter::SetIsRolling(bool Roll)
 	if (bIsRolling)
 	{
 		SetControlState(EControlState::Rolling);
+		SetInvincible(false);
 	}
 	else
 	{
 		SetControlState(EControlState::None);
+		SetInvincible(false);
 	}
 
 }
@@ -613,6 +622,20 @@ void AEDRCharacter::SetCharacterInfo(FCharacterAbility NewCharacterInfo)
 	CharacterInfo = NewCharacterInfo;
 }
 
+void AEDRCharacter::SetInvincible(bool NewInvincible)
+{
+	bIsInvincible = NewInvincible;
+
+	if (bIsInvincible)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("Player - invincible Mode"));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Player - No invincible Mode"));
+	}
+}
+
 
 void AEDRCharacter::Interaction()
 {
@@ -646,7 +669,7 @@ void AEDRCharacter::Rolling()
 		if (GetIsKeyInput(true))
 		{
 			SetIsRolling(true);
-
+			SetInvincible(true);
 		}
 		else
 		{
@@ -654,6 +677,7 @@ void AEDRCharacter::Rolling()
 			{
 
 				PlayAnimMontage(BackStepMontage);
+				SetInvincible(true);
 
 			}
 		}
@@ -801,6 +825,7 @@ void AEDRCharacter::ResetState()
 
 	bIsRolling = false;
 	bIsAttack = false;
+	SetInvincible(false);
 
 	if (IsValid(CurrentWeapon))
 	{

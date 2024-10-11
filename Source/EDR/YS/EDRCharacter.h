@@ -231,6 +231,9 @@ public:
 	void SetCharacterInfo(FCharacterAbility NewCharacterInfo);
 
 
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void SetInvincible(bool NewInvincible);
+
 
 protected:
 
@@ -303,6 +306,11 @@ protected:
 	//공격
 	UPROPERTY()
 	bool bIsAttack;
+
+
+	//무적
+	bool bIsInvincible;
+
 
 	UPROPERTY()
 	TObjectPtr<class AEDRWeaponBase> CurrentWeapon;

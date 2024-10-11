@@ -60,7 +60,7 @@ public:
 
 
 	UPROPERTY()
-	TSubclassOf<UUserWidget> WidgetSlotClass;
+	TSubclassOf<class UUW_EDRInvSlot> WidgetSlotClass;
 
 	UPROPERTY()
 	TSubclassOf<UUserWidget> WidgetItemClass;
@@ -71,6 +71,9 @@ public:
 
 	UPROPERTY()
 	int32 MaxRow;
+
+	UPROPERTY()
+	bool bDuplicatesAllowed;
 
 	UPROPERTY()
 	TMap<int32, class UUW_EDR_UMGItem*> GridInventory;

@@ -46,6 +46,12 @@ void UUW_EDRInventoryWidget::NativeConstruct()
 	for (int32 Key : Keys)
 	{
 		FEDR_InventoryStruct Item = *WidgetInventory.Find(Key);
+
+		if (Item.DataAsset->Image == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("DataAsset->Image = nullptr"));
+		}
+
 		UMG_EDR_Inv_Grid->AddItemToGrid(Key, Item);
 		
 	}
@@ -54,13 +60,17 @@ void UUW_EDRInventoryWidget::NativeConstruct()
 void UUW_EDRInventoryWidget::InvItemRemovedFunc(int32 Key)
 {
 	WidgetInventory.Remove(Key);
-	//ItemRemoved.Execute(Key); //나중에 체크 풀어줌
+	ItemRemoved.Execute(Key); //나중에 체크 풀어줌
 }
 
 void UUW_EDRInventoryWidget::InvItemAddedFunc(int32 Key, FEDR_InventoryStruct Value)
 {
 	WidgetInventory.Add({ Key,Value });
-	//ItemAdded.Execute(Key, Value); //나중에 체크 풀어줌
+
+	if (ItemAdded.IsBound())
+	{
+		ItemAdded.Execute(Key, Value);
+	}
 }
 
 
