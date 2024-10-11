@@ -10,7 +10,7 @@
 
 
 
-DECLARE_DELEGATE_ThreeParams(FItemAdded, int32, TMap<int32, FEDR_InventoryStruct>);
+DECLARE_DELEGATE_TwoParams(FItemAdded, int32, FEDR_InventoryStruct);
 DECLARE_DELEGATE_OneParam(FItemDropped, FEDR_InventoryStruct);
 DECLARE_DELEGATE_OneParam(FItemRemoved, int32);
 
@@ -27,12 +27,26 @@ public:
 
 	virtual void NativeOnInitialized() override;
 
+	virtual void NativeConstruct() override;
+
 	//델리게이트 부분
 
 	FItemAdded ItemAdded;
 	FItemDropped ItemDropped;
 	FItemRemoved ItemRemoved;
 
+	//델리게이트 함수
+
+	UFUNCTION()
+	void InvItemRemovedFunc(int32 Key);
+
+	UFUNCTION()
+	void InvItemAddedFunc(int32 Key, FEDR_InventoryStruct Value);
+
+
+
+	UPROPERTY(meta = (BindWidget, OptionalWidget = true))
+	TObjectPtr<class UUW_EDRInvGrid> UMG_EDR_Inv_Grid;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -43,6 +57,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool DuplicatesAllowed;
+
+
 
 
 

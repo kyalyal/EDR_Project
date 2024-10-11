@@ -17,6 +17,8 @@ class EDR_API UDA_EDRItem : public UPrimaryDataAsset
 
 public:
 
+	UPROPERTY(EditAnywhere)
+	int32 ItemID;
 
 	UPROPERTY(EditAnywhere)
 	FText Name;
