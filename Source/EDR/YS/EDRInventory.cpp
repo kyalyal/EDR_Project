@@ -49,6 +49,17 @@ void UEDRInventory::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	TArray<TPair<int32, int32>> Items = GetAllInventoryItems();
+
+	for (const TPair<int32, int32>& Item : Items)
+	{
+		int32 ItemID = Item.Key;
+		int32 Quantity = Item.Value;
+
+		FString ItemInfo = FString::Printf(TEXT("아이템 ID: %d, 수량: %d"), ItemID, Quantity);
+		GEngine->AddOnScreenDebugMessage(-1, DeltaTime, FColor::Yellow, ItemInfo);
+	}
+
 }
 
 void UEDRInventory::InteractInventory()
@@ -221,7 +232,6 @@ bool UEDRInventory::PickUpItem(AEDRInteractItem* Item)
 
 	}
 
-	
 }
 
 
@@ -312,4 +322,26 @@ void UEDRInventory::ItemDropped(FEDR_InventoryStruct ItemDropped)
 void UEDRInventory::ItemRemove(int32 Key)
 {
 	Inventory.Remove(Key);
+}
+
+TArray<TPair<int32, int32>> UEDRInventory::GetAllInventoryItems() const
+{
+	TArray<TPair<int32, int32>> ItemsWithIDAndQuantity;
+
+	// Inventory 맵을 순회하면서 각 슬롯의 아이템 ID와 수량을 가져옴
+	for (const TPair<int32, FEDR_InventoryStruct>& Slot : Inventory)
+	{
+		UDA_EDRItem* ItemData = Slot.Value.DataAsset;  // 아이템 데이터
+
+		if (IsValid(ItemData))
+		{
+			int32 ItemID = ItemData->ItemID;           // 고유 ID (int32 타입)
+			int32 Quantity = Slot.Value.Quantity;      // 해당 슬롯에 있는 아이템 수량
+
+			// 고유 ID(ItemID)와 수량(Quantity)를 한 쌍으로 배열에 추가
+			ItemsWithIDAndQuantity.Add(TPair<int32, int32>(ItemID, Quantity));
+		}
+	}
+
+	return ItemsWithIDAndQuantity;
 }

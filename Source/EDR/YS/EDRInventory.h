@@ -57,6 +57,12 @@ public:
 
 	bool GetAllowDuplicates() { return AllowDuplicates; }
 
+
+	//모든 아이템 반환받기
+	TArray<TPair<int32, int32>> GetAllInventoryItems() const;
+
+	
+
 	
 private:
 

@@ -85,6 +85,6 @@ public:
 	int32 Quantity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UDA_EDRItem* DataAsset;
+	TObjectPtr<UDA_EDRItem> DataAsset;
 
 };
