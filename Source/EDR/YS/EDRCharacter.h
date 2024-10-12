@@ -204,6 +204,9 @@ public:
 	UFUNCTION(BlueprintPure, category = "Player")
 	bool GetIsKeyInput(bool StopInput);
 
+	UFUNCTION(BlueprintPure, category = "Player")
+	UAnimMontage* GetSitDownMontage() { return SitDownMontage; }
+
 
 	//Set--------------------------------------------------
 
@@ -325,6 +328,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
 	TObjectPtr<UAnimMontage> BackStepMontage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	TObjectPtr<UAnimMontage> SitDownMontage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	TObjectPtr<UAnimMontage> SitUpMontage;
 
 
 

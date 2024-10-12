@@ -17,6 +17,7 @@
 #include "EDRPlayerInterface.h"
 #include "EDRWeaponBase.h"
 #include "EDRGameInstance.h"
+#include "EDRGameViewportClient.h"
 
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -73,8 +74,20 @@ AEDRCharacter::AEDRCharacter()
 		BackStepMontage = AM_BackStep.Object;
 	}
 
-
+	//앉기 몽타주 넣어주기
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_SitDown(TEXT("/Game/YS/Animation/Pedestrian/EDR_SitDown_03_Montage.EDR_SitDown_03_Montage"));
+	if (AM_SitDown.Succeeded())
+	{
+		SitDownMontage = AM_SitDown.Object;
+	}
 	
+	//일어나기 몽타주 넣어주기
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_SitUp(TEXT("/Game/YS/Animation/Pedestrian/EDR_SitUp_END_Montage.EDR_SitUp_END_Montage"));
+	if (AM_SitUp.Succeeded())
+	{
+		SitUpMontage = AM_SitUp.Object;
+	}
+
 
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -167,7 +180,7 @@ AEDRCharacter::AEDRCharacter()
 
 	//테스트용 스피어 컴포넌트
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERECOLLISION"));
-	SphereCollision->SetSphereRadius(500);
+	SphereCollision->SetSphereRadius(200);
 	SphereCollision->SetupAttachment(RootComponent);
 	
 
@@ -185,6 +198,23 @@ void AEDRCharacter::BeginPlay()
 {
 
 	Super::BeginPlay();
+
+	// 페이드 인
+	UEDRGameViewportClient* ViewportClient = Cast<UEDRGameViewportClient>(GetWorld()->GetGameViewport());
+
+	if (ViewportClient)
+	{
+
+		ViewportClient->StartFadeIn(5.0f);
+
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("EDRCharacter::BeginPlay - No Viewport"));
+	}
+
+
+
 
 	EDRAnimInstance = GetMesh()->GetAnimInstance();
 
@@ -208,7 +238,6 @@ void AEDRCharacter::BeginPlay()
 	ComboAttackMontage = InitAttackMontage;
 
 
-	//모듈화
 
 
 
@@ -226,6 +255,16 @@ void AEDRCharacter::BeginPlay()
 		Shoulders->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerShoulders);
 	}
 
+	//캐릭터 저장된 위치에서 스폰
+	if (EDR_GameInstance->GetPlayerStartLocation() != FVector::Zero())
+	{
+
+		SetActorLocation(EDR_GameInstance->GetPlayerStartLocation());
+		SetActorRotation(EDR_GameInstance->GetPlayerStartRotation());
+		GetController()->SetControlRotation(EDR_GameInstance->GetControllerStartRotation());
+		
+		PlayAnimMontage(SitUpMontage);
+	}
 	
 	
 
