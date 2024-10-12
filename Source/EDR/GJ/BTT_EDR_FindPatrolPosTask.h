@@ -9,9 +9,7 @@
 #include "BehaviorTree/BehaviorTreeTypes.h"
 #include "UObject/UObjectGlobals.h"
 #include "BTT_EDR_FindPatrolPosTask.generated.h"
-/**
- * 
- */
+
 UCLASS(Blueprintable)
 class EDR_API UBTT_EDR_FindPatrolPosTask : public UBTTaskNode
 {
@@ -20,6 +18,7 @@ public:
 	UBTT_EDR_FindPatrolPosTask(FObjectInitializer const& object_initializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
 private:
+	// Å½»ö ¹üÀ§
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
 	float search_radius = 1500.f;
 };

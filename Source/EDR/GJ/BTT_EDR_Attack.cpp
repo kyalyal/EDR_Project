@@ -22,14 +22,17 @@ EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
 	EBTNodeResult::Type Result = Super:: ExecuteTask(OwnerComp, NodeMemory);
 
+	// 캐릭터 캐스팅
 	auto MyCharacter = Cast<AMyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == MyCharacter)
 	{
 		return EBTNodeResult::Failed;
 	}
 
+	// 공격함수 호출
 	MyCharacter->Attack();
 	IsAttacking = true;
+	// 공격 끝났음을 알림
 	MyCharacter->OnAttackEnd.AddLambda([this]() -> void {IsAttacking = false; });
 
 	return EBTNodeResult::InProgress;

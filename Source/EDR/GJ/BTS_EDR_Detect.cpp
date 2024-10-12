@@ -26,6 +26,7 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	}
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
+	// 감지 범위
 	float DetectRadius = 600.0f;
 
 	if (nullptr == World)
@@ -35,7 +36,9 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 
 	TArray<FOverlapResult> OverlapResults;
 	FCollisionQueryParams CollisionQueryParam(NAME_None, false, ControllingPawn);
+	// 다른 액터와 오버랩 되는지 감지
 	bool bResult = World->OverlapMultiByChannel(
+		// 오버랩 결과 저장
 		OverlapResults,
 		Center,
 		FQuat::Identity,
@@ -43,13 +46,16 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 		FCollisionShape::MakeSphere(DetectRadius),
 		CollisionQueryParam
 	);
+	// 오버랩시, 참일경우
 	if (bResult)
 	{
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			AEDRCharacter* EDRCharacter = Cast<AEDRCharacter>(OverlapResult.GetActor());
+			// 감지된 액터가 플레이어일경우
 			if (EDRCharacter && EDRCharacter->GetController()->IsPlayerController())
 			{
+				// 디버그 정보 색상 출력
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AEnemy_EDR_AIController::TargetKey, EDRCharacter);
 				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
 				DrawDebugPoint(World, EDRCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);

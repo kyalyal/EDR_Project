@@ -21,5 +21,6 @@ public:
 protected:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 private:
+	// 현재 공격중인지 확인
 	bool IsAttacking = false;
 };

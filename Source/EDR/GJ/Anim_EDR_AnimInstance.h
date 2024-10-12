@@ -18,12 +18,14 @@ public:
 	UAnim_EDR_AnimInstance();
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	// 몽타주 실행 함수
 	void PlayAttackMontage();
 	
 private:
 	UPROPERTY(EditAnyWhere,BlueprintReadOnly,Category = Pawn, Meta=(AllowPrivateAccess = true))
 	float CurrentPawnSpeed;
 
+	// 애니메이션 몽타주 저장할 변수
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
 };

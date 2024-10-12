@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
-//#include "Animation/AnimInstance.h"
 
+// 공격 애니메이션이 끝났는지 확인
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 
 UCLASS()
@@ -43,10 +43,7 @@ public:
 
 	virtual void PostInitializeComponents() override;
 
-	//void PlayAttackMontage();
-
-	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly,Category = Attack, Meta= (AllowPrivateAccess = true))
-	//UAnimMontage* AttackMontage;
+	// 공격 함수
 	void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
 
@@ -54,9 +51,12 @@ public:
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 private:
+	// 애니메이션 재생을 위해 공격중인지 확인
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly,  Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;
 
+
+	// 애니메이션 인스턴트 객체
 	UPROPERTY()
 	class UAnim_EDR_AnimInstance* EDRAnim;
 };

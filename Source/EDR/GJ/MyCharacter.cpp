@@ -33,6 +33,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+// 데미지 받는 함수
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	UpdateHP(-DamageAmount);
@@ -45,6 +46,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
+// 데미지 받았을때 hp 업데이트
 void AMyCharacter::UpdateHP(float NewHP)
 {
 	hp += NewHP;
@@ -52,11 +54,13 @@ void AMyCharacter::UpdateHP(float NewHP)
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), hp));
 }
 
+
+// 공격 시에 호출되는 함수
 void AMyCharacter::Attack()
 {
 	if (IsAttacking)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("isattacking true"));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
 		return;
 	}
 
@@ -66,11 +70,13 @@ void AMyCharacter::Attack()
 		return;
 	}
 
+	// 애니메이션 몽타주 실행
 	EDRAnim->PlayAttackMontage();
 	
 	IsAttacking = true;
 }
 
+// 연속 공격 추후 제작
 void AMyCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -83,6 +89,7 @@ void AMyCharacter::PostInitializeComponents()
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
 }
 
+// 공격 애니메이션 끝
 void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	if (!IsAttacking)
