@@ -41,9 +41,15 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	if (hp <= 0)
 	{
 		hp = 0;
+		IsDeath();
 	}
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
+void AMyCharacter::IsDeath()
+{
+	Death = true;
 }
 
 // 데미지 받았을때 hp 업데이트

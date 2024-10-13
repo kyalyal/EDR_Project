@@ -32,6 +32,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(BluePrintReadWrite)
 	float hp = 100.0f;
+	UPROPERTY(BluePrintReadWrite)
+	bool Death =  false;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -40,6 +43,9 @@ public:
 	float GetHp(){return hp;}
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void UpdateHP(float NewHP);
+
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void IsDeath();
 
 	virtual void PostInitializeComponents() override;
 
