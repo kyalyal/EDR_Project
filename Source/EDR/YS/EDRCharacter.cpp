@@ -18,6 +18,8 @@
 #include "EDRWeaponBase.h"
 #include "EDRGameInstance.h"
 #include "EDRGameViewportClient.h"
+#include "Engine/DamageEvents.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -397,6 +399,9 @@ float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 		return 0.0f; // 무적 상태일 때는 데미지를 받지 않음
 	}
 	
+
+	
+
 	
 	UpdateHP(-DamageAmount);
 
