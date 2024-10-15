@@ -19,7 +19,6 @@
 #include "EDRGameInstance.h"
 #include "EDRGameViewportClient.h"
 #include "Engine/DamageEvents.h"
-#include "NiagaraFunctionLibrary.h"
 
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -68,6 +67,12 @@ AEDRCharacter::AEDRCharacter()
 	}
 
 
+	
+
+
+
+	/////////////////////////
+
 
 	//백스텝 몽타주 넣어주기
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_BackStep(TEXT("/Game/YS/Animation/ROG_Male/ROG_Roll/EDR_GKnight_DodgeBackward_Root_Montage.EDR_GKnight_DodgeBackward_Root_Montage"));
@@ -90,6 +95,12 @@ AEDRCharacter::AEDRCharacter()
 		SitUpMontage = AM_SitUp.Object;
 	}
 
+	//Death 몽타주 넣어주기
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_Death(TEXT("/Game/Deaths/Animation/Root_Motion/Deaths_Shot_In_Chest_Montage.Deaths_Shot_In_Chest_Montage"));
+	if (AM_Death.Succeeded())
+	{
+		DeathMontage = AM_Death.Object;
+	}
 
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -156,6 +167,36 @@ AEDRCharacter::AEDRCharacter()
 	Gloves->SetupAttachment(GetMesh());
 	Robes->SetupAttachment(GetMesh());
 	Shoulders->SetupAttachment(GetMesh());
+
+	//아머 넣어주기
+
+
+	Boots = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BOOTS"));
+	Helms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("HELMS"));
+	Pants = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PANTS"));
+
+	Boots->SetupAttachment(GetMesh());
+	Helms->SetupAttachment(GetMesh());
+	Pants->SetupAttachment(GetMesh());
+	
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_BOOTS(TEXT("/Game/ROG_Modular_Armor/Armor_Cloth/ROG_CodeSpartan/ROG_Male/Boots/SkeletalMeshes/SK_Boots2_Light_T7_1.SK_Boots2_Light_T7_1"));
+	if (SK_BOOTS.Succeeded())
+	{
+		Boots->SetSkeletalMesh(SK_BOOTS.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_HELMS(TEXT("/Game/ROG_Modular_Armor/Armor_Cloth/ROG_CodeSpartan/ROG_Male/Helms/SkeletalMeshes/SK_Helm0_Hunt_T4.SK_Helm0_Hunt_T4"));
+	if (SK_HELMS.Succeeded())
+	{
+		Helms->SetSkeletalMesh(SK_HELMS.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_PANTS(TEXT("/Game/ROG_Modular_Armor/Armor_Cloth/ROG_CodeSpartan/ROG_Male/Pants/SkeletalMeshes/SK_Pants_Light_T2.SK_Pants_Light_T2"));
+	if (SK_PANTS.Succeeded())
+	{
+		Pants->SetSkeletalMesh(SK_PANTS.Object);
+	}
 
 
 
@@ -374,11 +415,22 @@ void AEDRCharacter::OnConstruction(const FTransform& Transform)
 	Cloaks->SetLeaderPoseComponent(GetMesh());
 	Shoulders->SetLeaderPoseComponent(GetMesh());
 
+	Helms->SetLeaderPoseComponent(GetMesh());
+	Pants->SetLeaderPoseComponent(GetMesh());
+	Boots->SetLeaderPoseComponent(GetMesh());
+
 
 }
 
 void AEDRCharacter::PlayerDeath()
 {
+	bIsDead = true;
+
+	PlayAnimMontage(DeathMontage);
+
+	GetCapsuleComponent()->DestroyComponent();
+
+
 	if (OnDeath.IsBound()  == true)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("EDRCharacter::PlayerDeath() - Broadcast Success."));
@@ -401,11 +453,10 @@ float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	
 
 	
-
 	
 	UpdateHP(-DamageAmount);
 
-	if (CharacterInfo.HP <= 0)
+	if (CharacterInfo.HP <= 0 && !bIsDead)
 	{
 		PlayerDeath();
 		CharacterInfo.HP = 0;
