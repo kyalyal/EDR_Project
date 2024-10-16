@@ -24,6 +24,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// 데미지 받기
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -35,7 +38,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	FORCEINLINE float GetHp(){return hp;}
+
+	UFUNCTION(BlueprintPure, category = "Player")
+	float GetHp(){return hp;}
+	UFUNCTION(BlueprintCallable, category = "Player")
+	void UpdateHP(float NewHP);
 
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void IsDeath();
