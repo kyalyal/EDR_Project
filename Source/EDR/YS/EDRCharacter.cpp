@@ -302,9 +302,14 @@ void AEDRCharacter::BeginPlay()
 	if (EDR_GameInstance->GetPlayerStartLocation() != FVector::Zero())
 	{
 
-		SetActorLocation(EDR_GameInstance->GetPlayerStartLocation());
-		SetActorRotation(EDR_GameInstance->GetPlayerStartRotation());
-		GetController()->SetControlRotation(EDR_GameInstance->GetControllerStartRotation());
+		
+
+		if (IsValid(UGameplayStatics::GetPlayerController(GetWorld(), 0)))
+		{
+			GetController()->SetControlRotation(EDR_GameInstance->GetControllerStartRotation());
+			SetActorLocation(EDR_GameInstance->GetPlayerStartLocation());
+			SetActorRotation(EDR_GameInstance->GetPlayerStartRotation());
+		}
 		
 		PlayAnimMontage(SitUpMontage);
 	}
