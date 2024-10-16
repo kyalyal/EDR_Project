@@ -40,17 +40,16 @@ public:
 public:
 
 	//데미지 주기----------------------------------
-	void ApplyDamage(AActor* TargetActor);
-
-	FDamageEvent DamageEvent();
-
-	void StartAttack();
-	void StopAttack();
 
 	UFUNCTION()
 	void OverlapActor(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	void AddIgnoreActor(AActor* IgnoreActor);
+
+	void StopAttack();
+	void StartAttack();
+
+	void TraceAttack();
 	
 	//--------------------------------------------
 
@@ -69,11 +68,23 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = "Weapon")
 	TObjectPtr<class UBoxComponent> AttackCollision;
 
+	//트레이스 시작포인트
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = "Weapon")
+	TObjectPtr<class USceneComponent> AttackPointStart;
+
+	//트레이스 끝 포인트
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = "Weapon")
+	TObjectPtr<class USceneComponent> AttackPointEnd;
+
+
+
 	//데미지
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, category = "Weapon")
 	float Damage;
 
 	
 	TArray<TObjectPtr<AActor>> IgnoreActors;
+
+	bool bAttacking;
 
 };

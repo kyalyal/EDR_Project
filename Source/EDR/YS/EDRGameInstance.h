@@ -20,12 +20,38 @@ public:
 	UEDRGameInstance();
 
 
+
+	//Get
 	FEDRClothing GetEDRClothing() { return EDRClothing; }
 
+	FVector GetPlayerStartLocation() { return PlayerStartLocation; }
+
+	FRotator GetPlayerStartRotation() { return PlayerStartRotation; }
+
+	FRotator GetControllerStartRotation() { return ControllerStartRotation; }
+	
+
+
+	//Set
 	void SetEDRClothing(FEDRClothing NewEDRClothing) { EDRClothing = NewEDRClothing; }
+
+	void SetPlayerStartLocation(FVector NewLocation) { PlayerStartLocation = NewLocation; }
+
+	void SetPlayerStartRotation(FRotator NewRotation) { PlayerStartRotation = NewRotation; }
+
+	void SetControllerStartRotation(FRotator NewRotation) { ControllerStartRotation = NewRotation; }
 
 private:
 
+	UPROPERTY()
 	FEDRClothing EDRClothing;
 
+	UPROPERTY()
+	FVector PlayerStartLocation;
+
+	UPROPERTY()
+	FRotator PlayerStartRotation;
+
+	UPROPERTY()
+	FRotator ControllerStartRotation;
 };

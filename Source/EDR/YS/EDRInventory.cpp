@@ -49,7 +49,7 @@ void UEDRInventory::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	TArray<TPair<int32, int32>> Items = GetAllInventoryItems();
+	/*TArray<TPair<int32, int32>> Items = GetAllInventoryItems();
 
 	for (const TPair<int32, int32>& Item : Items)
 	{
@@ -58,7 +58,7 @@ void UEDRInventory::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 		FString ItemInfo = FString::Printf(TEXT("아이템 ID: %d, 수량: %d"), ItemID, Quantity);
 		GEngine->AddOnScreenDebugMessage(-1, DeltaTime, FColor::Yellow, ItemInfo);
-	}
+	}*/
 
 }
 
@@ -213,7 +213,7 @@ bool UEDRInventory::PickUpItem(AEDRInteractItem* Item)
 			if (L_EmptyKey != -1)
 			{
 
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("%d"), L_EmptyKey));
+				//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("%d"), L_EmptyKey));
 
 				//아이템 넣어주기
 				FEDR_InventoryStruct AddInventoryStruct;
