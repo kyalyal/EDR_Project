@@ -65,4 +65,9 @@ private:
 	// 애니메이션 인스턴트 객체
 	UPROPERTY()
 	class UAnim_EDR_AnimInstance* EDRAnim;
+
+
+
+	UPROPERTY()
+	TObjectPtr<class UAnimMontage> DeathMontage;
 };

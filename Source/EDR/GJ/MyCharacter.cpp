@@ -10,6 +10,13 @@ AMyCharacter::AMyCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
+
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Death1_Montage.Death1_Montage"));
+	if (DEATHANIM.Succeeded())
+	{
+		DeathMontage = DEATHANIM.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +43,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 // 데미지 받는 함수
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	if (Death) return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
+
 	UpdateHP(-DamageAmount);
 
 	if (hp <= 0)
@@ -49,6 +58,8 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 
 void AMyCharacter::IsDeath()
 {
+	PlayAnimMontage(DeathMontage);
+
 	Death = true;
 }
 
@@ -64,6 +75,7 @@ void AMyCharacter::UpdateHP(float NewHP)
 // 공격 시에 호출되는 함수
 void AMyCharacter::Attack()
 {
+	if (Death) return;
 	if (IsAttacking)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
