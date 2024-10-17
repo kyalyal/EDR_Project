@@ -20,6 +20,8 @@ public:
 
 	// 몽타주 실행 함수
 	void PlayAttackMontage();
+
+	void PlayDeathMontage();
 	
 private:
 	UPROPERTY(EditAnyWhere,BlueprintReadOnly,Category = Pawn, Meta=(AllowPrivateAccess = true))
@@ -28,4 +30,7 @@ private:
 	// 애니메이션 몽타주 저장할 변수
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY()
+	TObjectPtr<class UAnimMontage> DeathMontage;
 };

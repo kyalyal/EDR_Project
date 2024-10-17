@@ -12,11 +12,7 @@ AMyCharacter::AMyCharacter()
 	IsAttacking = false;
 
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Death1_Montage.Death1_Montage"));
-	if (DEATHANIM.Succeeded())
-	{
-		DeathMontage = DEATHANIM.Object;
-	}
+
 }
 
 // Called when the game starts or when spawned
@@ -40,59 +36,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-// 데미지 받는 함수
-float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	if (Death) return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
-
-	UpdateHP(-DamageAmount);
-
-	if (hp <= 0)
-	{
-		hp = 0;
-		IsDeath();
-	}
-
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-}
-
-void AMyCharacter::IsDeath()
-{
-	PlayAnimMontage(DeathMontage);
-
-	Death = true;
-}
-
-// 데미지 받았을때 hp 업데이트
-void AMyCharacter::UpdateHP(float NewHP)
-{
-	hp += NewHP;
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), hp));
-}
-
-
-// 공격 시에 호출되는 함수
-void AMyCharacter::Attack()
-{
-	if (Death) return;
-	if (IsAttacking)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
-		return;
-	}
-
-	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr == EDRAnim)
-	{
-		return;
-	}
-
-	// 애니메이션 몽타주 실행
-	EDRAnim->PlayAttackMontage();
-	
-	IsAttacking = true;
-}
 
 // 연속 공격 추후 제작
 void AMyCharacter::PostInitializeComponents()

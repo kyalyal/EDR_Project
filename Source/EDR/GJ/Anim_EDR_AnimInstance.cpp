@@ -15,6 +15,12 @@ UAnim_EDR_AnimInstance::UAnim_EDR_AnimInstance()
 	{
 		AttackMontage = ATTACK_MONTAGE.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Death1_Montage.Death1_Montage"));
+	if (DEATHANIM.Succeeded())
+	{
+		DeathMontage = DEATHANIM.Object;
+	}
 }
 
 void UAnim_EDR_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -37,5 +43,17 @@ void UAnim_EDR_AnimInstance::PlayAttackMontage()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("qqAnimPlay"));
 		// 애니메이션 플레이
 		Montage_Play(AttackMontage, 1.0f);
+	}
+}
+
+
+// 사망 애니메이션 실행함수
+void UAnim_EDR_AnimInstance::PlayDeathMontage()
+{
+	if (!Montage_IsPlaying(DeathMontage))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("qqAnimPlay"));
+		// 애니메이션 플레이
+		Montage_Play(DeathMontage);
 	}
 }

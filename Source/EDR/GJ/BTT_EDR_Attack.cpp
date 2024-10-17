@@ -4,6 +4,7 @@
 #include "BTT_EDR_Attack.h"
 #include "Enemy_EDR_AIController.h"
 #include "MyCharacter.h"
+#include "EDR_Boss_Giant.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BehaviorTree.h"
@@ -23,7 +24,7 @@ EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	EBTNodeResult::Type Result = Super:: ExecuteTask(OwnerComp, NodeMemory);
 
 	// 캐릭터 캐스팅
-	auto MyCharacter = Cast<AMyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	auto MyCharacter = Cast<AEDR_Boss_Giant>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == MyCharacter)
 	{
 		return EBTNodeResult::Failed;

@@ -17,8 +17,7 @@ class EDR_API AMyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
-	UPROPERTY(BlueprintReadWrite)
-	float AttackDamage;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,6 +25,18 @@ protected:
 
 	// 데미지 받기
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	UPROPERTY()
+	TObjectPtr<class UAnimMontage> DeathMontage;
+
+	// 애니메이션 재생을 위해 공격중인지 확인
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsAttacking;
+
+
+	// 애니메이션 인스턴트 객체
+	UPROPERTY()
+	class UAnim_EDR_AnimInstance* EDRAnim;
 
 public:	
 	// Called every frame
@@ -41,6 +52,7 @@ public:
 
 	UFUNCTION(BlueprintPure, category = "Player")
 	float GetHp(){return hp;}
+
 	UFUNCTION(BlueprintCallable, category = "Player")
 	void UpdateHP(float NewHP);
 
@@ -57,17 +69,10 @@ public:
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 private:
-	// 애니메이션 재생을 위해 공격중인지 확인
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly,  Category = Attack, Meta = (AllowPrivateAccess = true))
-	bool IsAttacking;
-
-
-	// 애니메이션 인스턴트 객체
-	UPROPERTY()
-	class UAnim_EDR_AnimInstance* EDRAnim;
 
 
 
-	UPROPERTY()
-	TObjectPtr<class UAnimMontage> DeathMontage;
+
+
+
 };
