@@ -8,6 +8,8 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 {
 
 }
+
+// 사망 애니메이션 처리 함수
 void AEDR_Boss_Giant::IsDeath()
 {
 	if (Super::Death)
