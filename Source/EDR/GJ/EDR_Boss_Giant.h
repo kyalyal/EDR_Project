@@ -21,13 +21,13 @@ public:
 	// 보스 캐릭터의 공격 데미지 설정 변수
 	float AttackDamage;
 	// 보스 캐릭터 체력
-	float hp = 1000;
+	float hp = 100;
 
 	// 마이 캐릭터에서 재정의 해서 사용할 사망 처리 함수
-	virtual void IsDeath();
+	virtual void IsDeath() override;
 
 	// 공격 함수
-	virtual void Attack();
+	virtual void Attack() override;
 
 protected:
 

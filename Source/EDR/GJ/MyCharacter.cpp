@@ -61,3 +61,16 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("end play"));
 	OnAttackEnd.Broadcast();
 }
+void AMyCharacter::IsDeath()
+{
+
+}
+void AMyCharacter::UpdateHP(float NewHp)
+{
+
+}
+
+void AMyCharacter::Attack()
+{
+
+}

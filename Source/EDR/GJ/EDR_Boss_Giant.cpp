@@ -54,9 +54,9 @@ float AEDR_Boss_Giant::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 
 	UpdateHP(-DamageAmount);
 
-	if (hp <= 0)
+	if (this->hp <= 0)
 	{
-		hp = 0;
+		this->hp = 0;
 		IsDeath();
 	}
 
@@ -67,7 +67,7 @@ float AEDR_Boss_Giant::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 // 데미지 받았을때 hp 업데이트
 void AEDR_Boss_Giant::UpdateHP(float NewHP)
 {
-	hp += NewHP;
+	this->hp += NewHP;
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), hp));
 }

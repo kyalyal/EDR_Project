@@ -23,8 +23,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// 데미지 받기
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY()
 	TObjectPtr<class UAnimMontage> DeathMontage;
@@ -54,25 +52,20 @@ public:
 	float GetHp(){return hp;}
 
 	UFUNCTION(BlueprintCallable, category = "Player")
-	void UpdateHP(float NewHP);
+	virtual void UpdateHP(float NewHP);
 
 	UFUNCTION(BlueprintCallable, category = "Player")
-	void IsDeath();
+	virtual void IsDeath();
 
 	virtual void PostInitializeComponents() override;
 
 	// 공격 함수
-	void Attack();
+	virtual void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
 
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 private:
-
-
-
-
-
 
 };
