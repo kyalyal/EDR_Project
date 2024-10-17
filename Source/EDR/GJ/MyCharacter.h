@@ -22,7 +22,19 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	// 받는 데미지 처리 함수
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	UPROPERTY(BluePrintReadWrite)
+	float hp = 100.0f;
+
+	// 보스 캐릭터의 공격 데미지 설정 변수
+	UPROPERTY(BluePrintReadWrite)
+	float AttackDamage;
+
+
+	UPROPERTY()
+	TObjectPtr<class UAnimMontage> AttackMontage;
 
 	UPROPERTY()
 	TObjectPtr<class UAnimMontage> DeathMontage;
@@ -39,8 +51,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(BluePrintReadWrite)
-	float hp = 100.0f;
+
 	UPROPERTY(BluePrintReadWrite)
 	bool Death =  false;
 
@@ -57,7 +68,6 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void IsDeath();
 
-	virtual void PostInitializeComponents() override;
 
 	// 공격 함수
 	virtual void Attack();

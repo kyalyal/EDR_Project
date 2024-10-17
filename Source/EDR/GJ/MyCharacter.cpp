@@ -36,20 +36,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-
-// 연속 공격 추후 제작
-void AMyCharacter::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr == EDRAnim)
-	{
-		return;
-	}
-
-	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
-}
-
 // 공격 애니메이션 끝
 void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
@@ -63,7 +49,14 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 }
 void AMyCharacter::IsDeath()
 {
-
+	if (Death)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Death true"));
+		return;
+	}
+	
+	PlayAnimMontage(DeathMontage);
+	Death = true;
 }
 void AMyCharacter::UpdateHP(float NewHp)
 {
@@ -73,4 +66,42 @@ void AMyCharacter::UpdateHP(float NewHp)
 void AMyCharacter::Attack()
 {
 
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is alsdhkjfgalskjdfhalkudfhasl,djfhasdlkhfjbn true"));
+	if (Death)
+	{
+		return;
+	}
+
+	if (IsAttacking)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
+		return;
+	}
+
+	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr == EDRAnim)
+	{
+		return;
+	}
+
+	// 애니메이션 몽타주 실행
+	PlayAnimMontage(AttackMontage, 1.0f);
+	IsAttacking = true;
+
+}
+
+// 데미지 받는 함수
+float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (Death) return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
+
+	UpdateHP(-DamageAmount);
+
+	if (this->hp <= 0)
+	{
+		this->hp = 0;
+		IsDeath();
+	}
+
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }

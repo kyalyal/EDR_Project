@@ -9,18 +9,9 @@ UAnim_EDR_AnimInstance::UAnim_EDR_AnimInstance()
 {
 	CurrentPawnSpeed = 0.0f;
 
-	// 공격 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/JumpingAttack_Montage.JumpingAttack_Montage"));
-	if (ATTACK_MONTAGE.Succeeded()) 
-	{
-		AttackMontage = ATTACK_MONTAGE.Object;
-	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Death1_Montage.Death1_Montage"));
-	if (DEATHANIM.Succeeded())
-	{
-		DeathMontage = DEATHANIM.Object;
-	}
+
+
 }
 
 void UAnim_EDR_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)

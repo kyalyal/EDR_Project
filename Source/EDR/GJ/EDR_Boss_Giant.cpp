@@ -6,68 +6,20 @@
 
 AEDR_Boss_Giant::AEDR_Boss_Giant()
 {
+	hp = 100.0f;
+	AttackDamage = 40.0f;
 
-}
-
-// 사망 애니메이션 처리 함수
-void AEDR_Boss_Giant::IsDeath()
-{
-	if (Super::Death)
+	// 공격 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/JumpingAttack_Montage.JumpingAttack_Montage"));
+	if (ATTACK_MONTAGE.Succeeded())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Death true"));
-		return;
+		AttackMontage = ATTACK_MONTAGE.Object;
 	}
-	EDRAnim->PlayDeathMontage();
 
-	Super::Death = true;
-}
-// 공격 시에 호출되는 함수
-void AEDR_Boss_Giant::Attack()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is alsdhkjfgalskjdfhalkudfhasl,djfhasdlkhfjbn true"));
-	if (Super::Death) 
-	{ 
-		return;
-	}
-	if (Super::IsAttacking)
+	// 사망 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Death1_Montage.Death1_Montage"));
+	if (DEATHANIM.Succeeded())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
-		return;
+		DeathMontage = DEATHANIM.Object;
 	}
-
-	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr == EDRAnim)
-	{
-		return;
-	}
-
-	// 애니메이션 몽타주 실행
-	EDRAnim->PlayAttackMontage();
-
-	Super::IsAttacking = true;
-}
-
-// 데미지 받는 함수
-float AEDR_Boss_Giant::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	if (Death) return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
-
-	UpdateHP(-DamageAmount);
-
-	if (this->hp <= 0)
-	{
-		this->hp = 0;
-		IsDeath();
-	}
-
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-}
-
-
-// 데미지 받았을때 hp 업데이트
-void AEDR_Boss_Giant::UpdateHP(float NewHP)
-{
-	this->hp += NewHP;
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), hp));
 }
