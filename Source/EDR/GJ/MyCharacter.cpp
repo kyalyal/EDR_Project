@@ -2,14 +2,18 @@
 
 
 #include "MyCharacter.h"
+#include "Engine/World.h"
 #include "Anim_EDR_AnimInstance.h"
+#include "TimerManager.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
+
+
 
 }
 
@@ -17,7 +21,7 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -41,8 +45,9 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 	{
 		return;
 	}
-	IsAttacking = false;
+	
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("end play"));
+	IsAttacking = false;
 	OnAttackEnd.Broadcast();
 }
 
@@ -55,23 +60,26 @@ void AMyCharacter::IsDeath()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Death true"));
 		return;
 	}
-	
+
 	// 애니메이션 몽타주 실행
 	PlayAnimMontage(DeathMontage);
 	Death = true;
 }
-void AMyCharacter::UpdateHP(float NewHp)
+void AMyCharacter::UpdateHP(float NewHP)
 {
+	hp += NewHP;
 
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), hp));
 }
 
 void AMyCharacter::Attack()
 {
 
 	// Death가 true 일경우 공격 애니메이션 정지 
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is alsdhkjfgalskjdfhalkudfhasl,djfhasdlkhfjbn true"));
+	
 	if (Death)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is Death true"));
 		return;
 	}
 
@@ -83,6 +91,7 @@ void AMyCharacter::Attack()
 	}
 
 	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
+	
 	if (nullptr == EDRAnim)
 	{
 		return;
@@ -92,12 +101,17 @@ void AMyCharacter::Attack()
 	PlayAnimMontage(AttackMontage, 1.0f);
 	IsAttacking = true;
 
+	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
+
 }
 
 // 데미지 받는 함수
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (Death) return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
+	if (Death)
+	{
+		return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	}
 
 
 	// 입은 데미지 만큼 hp 차감

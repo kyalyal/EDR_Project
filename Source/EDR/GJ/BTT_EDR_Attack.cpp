@@ -13,7 +13,6 @@
 
 UBTT_EDR_Attack::UBTT_EDR_Attack()
 {
-
 	bNotifyTick = true;
 	IsAttacking = false;
 }
@@ -24,7 +23,7 @@ EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	EBTNodeResult::Type Result = Super:: ExecuteTask(OwnerComp, NodeMemory);
 
 	// 캐릭터 캐스팅
-	auto MyCharacter = Cast<AEDR_Boss_Giant>(OwnerComp.GetAIOwner()->GetPawn());
+	auto MyCharacter = Cast<AMyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == MyCharacter)
 	{
 		return EBTNodeResult::Failed;
@@ -34,7 +33,7 @@ EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	MyCharacter->Attack();
 	IsAttacking = true;
 	// 공격 끝났음을 알림
-	MyCharacter->OnAttackEnd.AddLambda([this]() -> void {IsAttacking = false; });
+	MyCharacter->OnAttackEnd.AddLambda([this]() -> void { IsAttacking = false; GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("lambda clear")); });
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("over"));
 	return EBTNodeResult::InProgress;
 }

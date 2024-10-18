@@ -2,7 +2,6 @@
 
 
 #include "EDR_Boss_Giant.h"
-#include "Anim_EDR_AnimInstance.h"
 
 AEDR_Boss_Giant::AEDR_Boss_Giant()
 {

@@ -16,6 +16,7 @@ class EDR_API AMyCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
+
 	AMyCharacter();
 
 
@@ -48,19 +49,20 @@ protected:
 	UPROPERTY()
 	class UAnim_EDR_AnimInstance* EDRAnim;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(BluePrintReadWrite)
-	bool Death =  false;
+	bool Death = false;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+
 	UFUNCTION(BlueprintPure, category = "Player")
-	float GetHp(){return hp;}
+	float GetHp() { return hp; }
 
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void UpdateHP(float NewHP);
@@ -77,5 +79,4 @@ public:
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 private:
-
 };

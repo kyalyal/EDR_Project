@@ -10,8 +10,6 @@ UAnim_EDR_AnimInstance::UAnim_EDR_AnimInstance()
 	CurrentPawnSpeed = 0.0f;
 
 
-
-
 }
 
 void UAnim_EDR_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
