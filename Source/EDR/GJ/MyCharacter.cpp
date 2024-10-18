@@ -11,8 +11,6 @@ AMyCharacter::AMyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
 
-
-
 }
 
 // Called when the game starts or when spawned
@@ -36,7 +34,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-// 공격 애니메이션 끝
+// 공격 애니메이션 종료
 void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	if (!IsAttacking)
@@ -47,14 +45,18 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("end play"));
 	OnAttackEnd.Broadcast();
 }
+
+// 사망 애니메이션
 void AMyCharacter::IsDeath()
 {
+	// 이미 죽어있으면 애니메이션 실행 안함
 	if (Death)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Death true"));
 		return;
 	}
 	
+	// 애니메이션 몽타주 실행
 	PlayAnimMontage(DeathMontage);
 	Death = true;
 }
@@ -66,12 +68,14 @@ void AMyCharacter::UpdateHP(float NewHp)
 void AMyCharacter::Attack()
 {
 
+	// Death가 true 일경우 공격 애니메이션 정지 
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is alsdhkjfgalskjdfhalkudfhasl,djfhasdlkhfjbn true"));
 	if (Death)
 	{
 		return;
 	}
 
+	// 공격중일 경우 애니메이션 정지
 	if (IsAttacking)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
@@ -95,8 +99,12 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 {
 	if (Death) return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
 
+
+	// 입은 데미지 만큼 hp 차감
 	UpdateHP(-DamageAmount);
 
+
+	// hp가 0이 되었을경우 사망 함수 호출
 	if (this->hp <= 0)
 	{
 		this->hp = 0;

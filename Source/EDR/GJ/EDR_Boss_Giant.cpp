@@ -6,6 +6,7 @@
 
 AEDR_Boss_Giant::AEDR_Boss_Giant()
 {
+	// hp ¿Á¡§¿«
 	hp = 100.0f;
 	AttackDamage = 40.0f;
 
