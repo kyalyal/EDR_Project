@@ -27,7 +27,7 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
 	// 감지 범위
-	float DetectRadius = 2000.0f;
+	float DetectRadius = 1500.0f;
 
 	if (nullptr == World)
 	{
@@ -42,7 +42,7 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 		OverlapResults,
 		Center,
 		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel2,
+		ECollisionChannel::ECC_GameTraceChannel1,
 		FCollisionShape::MakeSphere(DetectRadius),
 		CollisionQueryParam
 	);

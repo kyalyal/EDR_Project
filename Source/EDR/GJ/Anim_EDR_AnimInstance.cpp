@@ -12,6 +12,12 @@ UAnim_EDR_AnimInstance::UAnim_EDR_AnimInstance()
 
 }
 
+void UAnim_EDR_AnimInstance::AnimNotify_AttackHitCheck()
+{
+	OnAttackHitCheck.Broadcast();
+}
+
+
 void UAnim_EDR_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);

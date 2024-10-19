@@ -4,7 +4,10 @@
 #include "MyCharacter.h"
 #include "Engine/World.h"
 #include "Anim_EDR_AnimInstance.h"
-#include "TimerManager.h"
+#include "Components/CapsuleComponent.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -12,9 +15,20 @@ AMyCharacter::AMyCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MyCharacter"));
+	AttackRange = 400.0f;
+	AttackRadius = 200.0f;
+}
 
-
-
+void AMyCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
+	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 }
 
 // Called when the game starts or when spawned
@@ -102,8 +116,53 @@ void AMyCharacter::Attack()
 	IsAttacking = true;
 
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
-
+	EDRAnim->OnAttackHitCheck.AddUObject(this, &AMyCharacter::AttackCheck);
 }
+
+//  공격 판정
+void AMyCharacter::AttackCheck()
+{
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+
+	// 구체의 중심을 캐릭터 발 앞에 설정
+	FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+	FVector ForwardLocation = StartLocation + GetActorForwardVector() * AttackRange;
+
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		StartLocation,
+		ForwardLocation,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(AttackRadius),
+		Params);
+
+#if ENABLE_DRAW_DEBUG
+	FVector TraceVec = GetActorForwardVector() * AttackRange;
+	FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 5.0f;
+
+	DrawDebugSphere(GetWorld(),
+		ForwardLocation,
+		AttackRadius,
+		12, // 세그먼트 수, 더 많을수록 부드러워짐
+		DrawColor,
+		false,
+		DebugLifeTime);
+
+#endif
+	if (bResult)
+	{
+		if (HitResult.GetActor() != nullptr)
+		{
+			// 적중 시 처리 로직 작성
+		}
+	}
+}
+
 
 // 데미지 받는 함수
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

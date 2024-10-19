@@ -18,7 +18,7 @@ public:
 	// Sets default values for this character's properties
 
 	AMyCharacter();
-
+	virtual void PossessedBy(AController* NewController)override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -75,8 +75,18 @@ public:
 	virtual void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
 
+	void AttackCheck();
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
+
+
 private:
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRange;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRadius;
+
+
 };

@@ -25,7 +25,7 @@ EBTNodeResult::Type UBTT_EDR_TurnToTarget::ExecuteTask(UBehaviorTreeComponent& O
 	}
 
 	// target Ä³½ºÆÃ
-	auto Target = Cast<AMyCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
+	auto Target = Cast<AEDR_Boss_Giant>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
 	if (nullptr == Target)
 	{
 		return EBTNodeResult::Failed;

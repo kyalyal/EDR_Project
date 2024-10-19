@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Anim_EDR_AnimInstance.generated.h"
-
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 /**
  * 
  */
@@ -23,6 +23,7 @@ public:
 
 	void PlayDeathMontage();
 	
+	FOnAttackHitCheckDelegate OnAttackHitCheck;
 private:
 	UPROPERTY(EditAnyWhere,BlueprintReadOnly,Category = Pawn, Meta=(AllowPrivateAccess = true))
 	float CurrentPawnSpeed;
@@ -33,4 +34,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<class UAnimMontage> DeathMontage;
+
+	UFUNCTION()
+	void AnimNotify_AttackHitCheck();
 };
