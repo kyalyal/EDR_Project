@@ -28,10 +28,11 @@ bool UBTD_EDR_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent
 	auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
 	if (nullptr == Target)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("over"));
 		return false;
 	}
 
 	// 거리 조건 계산
-	bResult = (Target->GetDistanceTo(ControllingPawn) <= 500.0f);
+	bResult = (Target->GetDistanceTo(ControllingPawn) <= 400.0f);
 	return bResult;
 }

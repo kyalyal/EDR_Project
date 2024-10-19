@@ -143,7 +143,7 @@ void AMyCharacter::AttackCheck()
 	FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-	float DebugLifeTime = 5.0f;
+	float DebugLifeTime = 1.0f;
 
 	DrawDebugSphere(GetWorld(),
 		ForwardLocation,
