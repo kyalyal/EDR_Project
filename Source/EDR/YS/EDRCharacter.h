@@ -120,6 +120,17 @@ public:
 	USkeletalMeshComponent* Shoulders;
 
 
+	//Armor
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Helms;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Pants;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* Boots;
+
+
 public:
 
 	AEDRCharacter();
@@ -203,6 +214,9 @@ public:
 
 	UFUNCTION(BlueprintPure, category = "Player")
 	bool GetIsKeyInput(bool StopInput);
+
+	UFUNCTION(BlueprintPure, category = "Player")
+	UAnimMontage* GetSitDownMontage() { return SitDownMontage; }
 
 
 	//Set--------------------------------------------------
@@ -307,6 +321,10 @@ protected:
 	UPROPERTY()
 	bool bIsAttack;
 
+	//사망
+	UPROPERTY()
+	bool bIsDead;
+
 
 	//무적
 	bool bIsInvincible;
@@ -325,6 +343,15 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
 	TObjectPtr<UAnimMontage> BackStepMontage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	TObjectPtr<UAnimMontage> SitDownMontage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	TObjectPtr<UAnimMontage> SitUpMontage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, category = "Player")
+	TObjectPtr<UAnimMontage> DeathMontage;
 
 
 

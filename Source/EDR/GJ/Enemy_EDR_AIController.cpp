@@ -26,11 +26,9 @@ AEnemy_EDR_AIController::AEnemy_EDR_AIController(FObjectInitializer const& objec
 	if (BTObject.Succeeded())
 	{
 		btree = BTObject.Object;
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("BT completed!"));
 	}
 	else
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("BT failed!"));
 	}
 	behavior_tree_component = object_initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 	blackboard = object_initializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
@@ -40,28 +38,6 @@ AEnemy_EDR_AIController::AEnemy_EDR_AIController(FObjectInitializer const& objec
 
 
 }
-
-//void AEnemy_EDR_AIController::BeginPlay()
-//{
-//	Super::BeginPlay();
-//	RunBehaviorTree(btree);
-//	behavior_tree_component->StartTree(*btree);
-//}
-//void AEnemy_EDR_AIController::BeginPlay()
-//{
-//	Super::BeginPlay();
-//
-//	if (btree)
-//	{
-//		RunBehaviorTree(btree);
-//		behavior_tree_component->StartTree(*btree);
-//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Behavior Tree started!"));
-//	}
-//	else
-//	{
-//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Behavior Tree is null!"));
-//	}
-//}
 void AEnemy_EDR_AIController::BeginPlay()
 {
     Super::BeginPlay();
@@ -91,17 +67,6 @@ void AEnemy_EDR_AIController::RetryLoadBehaviorTree()
         behavior_tree_component->StartTree(*btree);
     }
 }
-
-//void AEnemy_EDR_AIController::OnPossess(APawn* pawn)
-//{
-//	Super::OnPossess(pawn);
-//	if (blackboard)
-//	{
-//		//비헤이비어트리에 있는 블랙보드로 초기화
-//		blackboard->InitializeBlackboard(*btree->BlackboardAsset);
-//	}
-//
-//}
 void AEnemy_EDR_AIController::OnPossess(APawn* pawn)
 {
 	Super::OnPossess(pawn);
@@ -132,15 +97,6 @@ UBlackboardComponent* AEnemy_EDR_AIController::get_blackboard() const
 void AEnemy_EDR_AIController::OnUpdated(TArray<AActor*> const& updated_actors)
 {
 }
-
-//void AEnemy_EDR_AIController::OnTargetDetected(AActor* actor, FAIStimulus const Stimulus)
-//{
-//	if (auto const player = Cast<AMyCharacter>(actor))
-//	{
-//		//성공적으로 감지하면 블랙보드에 true값을 넣어준다.
-//		get_blackboard()->SetValueAsBool(bb_keys::can_see_player, Stimulus.WasSuccessfullySensed());
-//	}
-//}
 void AEnemy_EDR_AIController::OnTargetDetected(AActor* actor, FAIStimulus const Stimulus)
 {
 	if (auto const player = Cast<AMyCharacter>(actor))
@@ -156,6 +112,7 @@ void AEnemy_EDR_AIController::OnTargetDetected(AActor* actor, FAIStimulus const 
 		}
 	}
 }
+// Ai Perception
 void AEnemy_EDR_AIController::SetPerceptionSystem()
 {
 	SightConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));

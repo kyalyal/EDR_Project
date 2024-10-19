@@ -17,6 +17,8 @@
 #include "EDRPlayerInterface.h"
 #include "EDRWeaponBase.h"
 #include "EDRGameInstance.h"
+#include "EDRGameViewportClient.h"
+#include "Engine/DamageEvents.h"
 
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -65,6 +67,12 @@ AEDRCharacter::AEDRCharacter()
 	}
 
 
+	
+
+
+
+	/////////////////////////
+
 
 	//백스텝 몽타주 넣어주기
 	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_BackStep(TEXT("/Game/YS/Animation/ROG_Male/ROG_Roll/EDR_GKnight_DodgeBackward_Root_Montage.EDR_GKnight_DodgeBackward_Root_Montage"));
@@ -73,8 +81,26 @@ AEDRCharacter::AEDRCharacter()
 		BackStepMontage = AM_BackStep.Object;
 	}
 
-
+	//앉기 몽타주 넣어주기
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_SitDown(TEXT("/Game/YS/Animation/Pedestrian/EDR_SitDown_03_Montage.EDR_SitDown_03_Montage"));
+	if (AM_SitDown.Succeeded())
+	{
+		SitDownMontage = AM_SitDown.Object;
+	}
 	
+	//일어나기 몽타주 넣어주기
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_SitUp(TEXT("/Game/YS/Animation/Pedestrian/EDR_SitUp_END_Montage.EDR_SitUp_END_Montage"));
+	if (AM_SitUp.Succeeded())
+	{
+		SitUpMontage = AM_SitUp.Object;
+	}
+
+	//Death 몽타주 넣어주기
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>AM_Death(TEXT("/Game/Deaths/Animation/Root_Motion/Deaths_Shot_In_Chest_Montage.Deaths_Shot_In_Chest_Montage"));
+	if (AM_Death.Succeeded())
+	{
+		DeathMontage = AM_Death.Object;
+	}
 
 
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -142,6 +168,36 @@ AEDRCharacter::AEDRCharacter()
 	Robes->SetupAttachment(GetMesh());
 	Shoulders->SetupAttachment(GetMesh());
 
+	//아머 넣어주기
+
+
+	Boots = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BOOTS"));
+	Helms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("HELMS"));
+	Pants = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PANTS"));
+
+	Boots->SetupAttachment(GetMesh());
+	Helms->SetupAttachment(GetMesh());
+	Pants->SetupAttachment(GetMesh());
+	
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_BOOTS(TEXT("/Game/ROG_Modular_Armor/Armor_Cloth/ROG_CodeSpartan/ROG_Male/Boots/SkeletalMeshes/SK_Boots2_Light_T7_1.SK_Boots2_Light_T7_1"));
+	if (SK_BOOTS.Succeeded())
+	{
+		Boots->SetSkeletalMesh(SK_BOOTS.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_HELMS(TEXT("/Game/ROG_Modular_Armor/Armor_Cloth/ROG_CodeSpartan/ROG_Male/Helms/SkeletalMeshes/SK_Helm0_Hunt_T4.SK_Helm0_Hunt_T4"));
+	if (SK_HELMS.Succeeded())
+	{
+		Helms->SetSkeletalMesh(SK_HELMS.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_PANTS(TEXT("/Game/ROG_Modular_Armor/Armor_Cloth/ROG_CodeSpartan/ROG_Male/Pants/SkeletalMeshes/SK_Pants_Light_T2.SK_Pants_Light_T2"));
+	if (SK_PANTS.Succeeded())
+	{
+		Pants->SetSkeletalMesh(SK_PANTS.Object);
+	}
+
 
 
 	//컨트롤 모드
@@ -167,7 +223,7 @@ AEDRCharacter::AEDRCharacter()
 
 	//테스트용 스피어 컴포넌트
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERECOLLISION"));
-	SphereCollision->SetSphereRadius(500);
+	SphereCollision->SetSphereRadius(200);
 	SphereCollision->SetupAttachment(RootComponent);
 	
 
@@ -185,6 +241,23 @@ void AEDRCharacter::BeginPlay()
 {
 
 	Super::BeginPlay();
+
+	// 페이드 인
+	UEDRGameViewportClient* ViewportClient = Cast<UEDRGameViewportClient>(GetWorld()->GetGameViewport());
+
+	if (ViewportClient)
+	{
+
+		ViewportClient->StartFadeIn(5.0f);
+
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("EDRCharacter::BeginPlay - No Viewport"));
+	}
+
+
+
 
 	EDRAnimInstance = GetMesh()->GetAnimInstance();
 
@@ -208,7 +281,6 @@ void AEDRCharacter::BeginPlay()
 	ComboAttackMontage = InitAttackMontage;
 
 
-	//모듈화
 
 
 
@@ -226,6 +298,21 @@ void AEDRCharacter::BeginPlay()
 		Shoulders->SetSkeletalMesh(EDR_GameInstance->GetEDRClothing().PlayerShoulders);
 	}
 
+	//캐릭터 저장된 위치에서 스폰
+	if (EDR_GameInstance->GetPlayerStartLocation() != FVector::Zero())
+	{
+
+		
+
+		if (IsValid(UGameplayStatics::GetPlayerController(GetWorld(), 0)))
+		{
+			GetController()->SetControlRotation(EDR_GameInstance->GetControllerStartRotation());
+			SetActorLocation(EDR_GameInstance->GetPlayerStartLocation());
+			SetActorRotation(EDR_GameInstance->GetPlayerStartRotation());
+		}
+		
+		PlayAnimMontage(SitUpMontage);
+	}
 	
 	
 
@@ -333,11 +420,22 @@ void AEDRCharacter::OnConstruction(const FTransform& Transform)
 	Cloaks->SetLeaderPoseComponent(GetMesh());
 	Shoulders->SetLeaderPoseComponent(GetMesh());
 
+	Helms->SetLeaderPoseComponent(GetMesh());
+	Pants->SetLeaderPoseComponent(GetMesh());
+	Boots->SetLeaderPoseComponent(GetMesh());
+
 
 }
 
 void AEDRCharacter::PlayerDeath()
 {
+	bIsDead = true;
+
+	PlayAnimMontage(DeathMontage);
+
+	GetCapsuleComponent()->DestroyComponent();
+
+	 
 	if (OnDeath.IsBound()  == true)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("EDRCharacter::PlayerDeath() - Broadcast Success."));
@@ -358,10 +456,12 @@ float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 		return 0.0f; // 무적 상태일 때는 데미지를 받지 않음
 	}
 	
+
+	
 	
 	UpdateHP(-DamageAmount);
 
-	if (CharacterInfo.HP <= 0)
+	if (CharacterInfo.HP <= 0 && !bIsDead)
 	{
 		PlayerDeath();
 		CharacterInfo.HP = 0;
