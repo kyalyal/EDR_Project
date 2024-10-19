@@ -98,7 +98,7 @@ void AMyCharacter::Attack()
 	}
 
 	// 局聪皋捞记 根鸥林 角青
-	PlayAnimMontage(AttackMontage, 0.5f);
+	PlayAnimMontage(AttackMontage, 1.0f);
 	IsAttacking = true;
 
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);

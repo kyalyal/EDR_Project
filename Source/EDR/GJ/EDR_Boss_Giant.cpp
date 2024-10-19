@@ -10,7 +10,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	AttackDamage = 40.0f;
 
 	// 공격 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/JumpingAttack_Montage.JumpingAttack_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/HeavyGoundHitR_Montage.HeavyGoundHitR_Montage"));
 	if (ATTACK_MONTAGE.Succeeded())
 	{
 		AttackMontage = ATTACK_MONTAGE.Object;
