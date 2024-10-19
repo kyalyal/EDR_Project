@@ -7,7 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -158,7 +158,8 @@ void AMyCharacter::AttackCheck()
 	{
 		if (HitResult.GetActor() != nullptr)
 		{
-			// 利吝 矫 贸府 肺流 累己
+			FDamageEvent DamageEvent;
+			HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
 		}
 	}
 }
