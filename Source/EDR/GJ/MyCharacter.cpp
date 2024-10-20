@@ -15,7 +15,9 @@ AMyCharacter::AMyCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
+	// 캡슐컴포넌트가 MyCharacter프리셋을 사용하도록 함
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MyCharacter"));
+	// 공격 범위 변수 초기화
 	AttackRange = 400.0f;
 	AttackRadius = 200.0f;
 }
@@ -24,6 +26,7 @@ void AMyCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	
+	// 캐릭터 회전 부드럽게
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -114,9 +117,10 @@ void AMyCharacter::Attack()
 	// 애니메이션 몽타주 실행
 	PlayAnimMontage(AttackMontage, 0.5f);
 	IsAttacking = true;
-
-	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
+	// 공격 판정
 	EDRAnim->OnAttackHitCheck.AddUObject(this, &AMyCharacter::AttackCheck);
+	// 공격 종료
+	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
 }
 
 //  공격 판정
@@ -130,14 +134,15 @@ void AMyCharacter::AttackCheck()
 	FVector ForwardLocation = StartLocation + GetActorForwardVector() * AttackRange;
 
 	bool bResult = GetWorld()->SweepSingleByChannel(
-		HitResult,
-		StartLocation,
+		HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
+		StartLocation, // 탐색 시작 위치
 		ForwardLocation,
 		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(AttackRadius),
+		ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
+		FCollisionShape::MakeSphere(AttackRadius), // 탐색 사용할  도형
 		Params);
 
+	// 디버그 출력 정보를 담은 변수
 #if ENABLE_DRAW_DEBUG
 	FVector TraceVec = GetActorForwardVector() * AttackRange;
 	FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
@@ -145,6 +150,7 @@ void AMyCharacter::AttackCheck()
 	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
 	float DebugLifeTime = 1.0f;
 
+	// 디버그 출력
 	DrawDebugSphere(GetWorld(),
 		ForwardLocation,
 		AttackRadius,
@@ -154,10 +160,12 @@ void AMyCharacter::AttackCheck()
 		DebugLifeTime);
 
 #endif
+	// 액터 감지시
 	if (bResult)
 	{
 		if (HitResult.GetActor() != nullptr)
 		{
+			// 데미지 정보 전달
 			FDamageEvent DamageEvent;
 			HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
 		}

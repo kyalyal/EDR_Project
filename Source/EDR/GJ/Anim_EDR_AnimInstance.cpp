@@ -12,6 +12,7 @@ UAnim_EDR_AnimInstance::UAnim_EDR_AnimInstance()
 
 }
 
+// 공격지점 신호
 void UAnim_EDR_AnimInstance::AnimNotify_AttackHitCheck()
 {
 	OnAttackHitCheck.Broadcast();
