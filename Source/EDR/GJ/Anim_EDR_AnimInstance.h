@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Anim_EDR_AnimInstance.generated.h"
+// 공격이 맞았는지 확인하는 델리게이트
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 /**
  * 
@@ -23,6 +24,8 @@ public:
 
 	void PlayDeathMontage();
 	
+
+	// 공격이 맞았는지 확인하는 델리게이트
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
 private:
 	UPROPERTY(EditAnyWhere,BlueprintReadOnly,Category = Pawn, Meta=(AllowPrivateAccess = true))
@@ -35,6 +38,8 @@ private:
 	UPROPERTY()
 	TObjectPtr<class UAnimMontage> DeathMontage;
 
+
+	// 공격 히트 타이밍을 노티파이로 설정
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
 };
