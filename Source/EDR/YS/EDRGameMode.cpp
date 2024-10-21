@@ -12,4 +12,30 @@ AEDRGameMode::AEDRGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+
+}
+
+void AEDRGameMode::SetFightMode(EFightMode NewFightMode)
+{
+	FightMode = NewFightMode;
+
+	switch (FightMode)
+	{
+	case EFightMode::None:
+		break;
+	case EFightMode::FightMode:
+		break;
+	default:
+		break;
+	}
+
+}
+
+void AEDRGameMode::FightStart()
+{
+}
+
+void AEDRGameMode::FightEnd()
+{
 }

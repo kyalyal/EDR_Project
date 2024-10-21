@@ -6,6 +6,14 @@
 #include "GameFramework/GameModeBase.h"
 #include "EDRGameMode.generated.h"
 
+UENUM(BlueprintType)
+enum class EFightMode : uint8
+{
+	None,
+	FightMode
+};
+
+
 UCLASS(minimalapi)
 class AEDRGameMode : public AGameModeBase
 {
@@ -13,6 +21,31 @@ class AEDRGameMode : public AGameModeBase
 
 public:
 	AEDRGameMode();
+
+	//Set
+	UFUNCTION()
+	void SetFightMode(EFightMode NewFightMode);
+
+
+	//Get
+	UFUNCTION()
+	EFightMode GetFightMode() { return FightMode; }
+
+
+
+public:
+
+	UFUNCTION()
+	void FightStart();
+
+	UFUNCTION()
+	void FightEnd();
+
+
+	
+private:
+
+	EFightMode FightMode;
 };
 
 
