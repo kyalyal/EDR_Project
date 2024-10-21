@@ -21,6 +21,7 @@
 #include "Engine/DamageEvents.h"
 #include "Blueprint/UserWidget.h"
 #include "EDRInteractItem.h"
+#include "UW_EDR_Get_Item.h"
 
 
 
@@ -244,6 +245,13 @@ AEDRCharacter::AEDRCharacter()
 	if (GetItemTextUMG.Succeeded())
 	{
 		GetItemWidgetTextClass = GetItemTextUMG.Class;
+	}
+
+	//아이템 먹은 후 나타나는 UI
+	ConstructorHelpers::FClassFinder<UUserWidget>GetItemSuccessUMG(TEXT("/Game/SK/UMG/HUD/UI_GetItemSuccess.UI_GetItemSuccess_C"));
+	if (GetItemSuccessUMG.Succeeded())
+	{
+		GetItemWidgetSuccessClass = GetItemSuccessUMG.Class;
 	}
 
 
@@ -796,9 +804,32 @@ void AEDRCharacter::Interaction()
 	TArray<AActor*> OverlapActor;
 	SphereCollision->GetOverlappingActors(OverlapActor);
 
+	//아이템 확인창 끄기
+	if (IsValid(CurrentGetItemWidgetSuccess))
+	{
+		CurrentGetItemWidgetSuccess->RemoveFromParent();
+	}
+
+
 	for (AActor* i : OverlapActor)
 	{
 		if (i == this) continue;
+
+
+
+		if (IsValid(CurrentGetItemTextWidget))
+		{
+			CurrentGetItemTextWidget->RemoveFromParent();
+
+			if (GetItemWidgetSuccessClass != nullptr)
+			{
+				CurrentGetItemWidgetSuccess = CreateWidget<UUW_EDR_Get_Item>(GetWorld(), GetItemWidgetSuccessClass);
+				if (CurrentGetItemWidgetSuccess != nullptr)
+				{
+					CurrentGetItemWidgetSuccess->AddToViewport();
+				}
+			}
+		}
 
 
 		IEDRPlayerInterface* PlayerInterface = Cast<IEDRPlayerInterface>(i);
@@ -975,11 +1006,11 @@ void AEDRCharacter::ShowInventory()
 
 void AEDRCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//지워야함
+	
 	AEDRInteractItem* Item = Cast<AEDRInteractItem>(OtherActor);
 	
 
-	if (GetItemWidgetTextClass != nullptr && IsValid(Item))
+	if (GetItemWidgetTextClass != nullptr && IsValid(Item) && !IsValid(CurrentGetItemTextWidget))
 	{
 		CurrentGetItemTextWidget = CreateWidget<UUserWidget>(GetWorld(), GetItemWidgetTextClass);
 		if (CurrentGetItemTextWidget != nullptr)
@@ -994,6 +1025,7 @@ void AEDRCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	if (IsValid(CurrentGetItemTextWidget))
 	{
 		CurrentGetItemTextWidget->RemoveFromParent();
+		CurrentGetItemTextWidget = nullptr;
 	}
 }
 

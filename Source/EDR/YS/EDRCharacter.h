@@ -380,6 +380,13 @@ protected:
 	TObjectPtr<UUserWidget> CurrentGetItemTextWidget;
 
 
+	//아이템 먹은후 위젯
+	TSubclassOf<class UUW_EDR_Get_Item> GetItemWidgetSuccessClass;
+
+	UPROPERTY()
+	TObjectPtr<class UUW_EDR_Get_Item> CurrentGetItemWidgetSuccess;
+
+
 	//플레이어 메인 위젯
 	TSubclassOf<UUserWidget> PlayerMainWidgetClass;
 	
