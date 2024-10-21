@@ -19,7 +19,6 @@ UBTT_EDR_Attack::UBTT_EDR_Attack()
 
 EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
 	EBTNodeResult::Type Result = Super:: ExecuteTask(OwnerComp, NodeMemory);
 
 	// 캐릭터 캐스팅
@@ -33,7 +32,7 @@ EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	MyCharacter->Attack();
 	IsAttacking = true;
 	// 공격 끝났음을 알림
-	MyCharacter->OnAttackEnd.AddLambda([this]() -> void { IsAttacking = false; GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("lambda clear")); });
+	MyCharacter->OnAttackEnd.AddLambda([this]() -> void { IsAttacking = false; });
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("over"));
 	return EBTNodeResult::InProgress;
 }

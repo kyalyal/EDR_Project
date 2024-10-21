@@ -100,9 +100,10 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 				// EFightMode None으로 설정
 					GameMode->SetFightMode(EFightMode::None);
 					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("FightMode Off~~~~~~~~~~~ "));
-				}, 5.0f, false);
-			
+				}, 5.0f, false);			
 		}
+		// 추적 놓쳤을때 Target 초기화
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(AEnemy_EDR_AIController::TargetKey, nullptr);
 	}
 	// 탐지가 안되었을때 디버그 출력
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);

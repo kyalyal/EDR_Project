@@ -32,11 +32,11 @@ private:
 	float CurrentPawnSpeed;
 
 	// 애니메이션 몽타주 저장할 변수
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	UAnimMontage* AttackMontage;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	//UAnimMontage* AttackMontage;
 
-	UPROPERTY()
-	TObjectPtr<class UAnimMontage> DeathMontage;
+	//UPROPERTY()
+	//TObjectPtr<class UAnimMontage> DeathMontage;
 
 
 	// 공격 히트 타이밍을 노티파이로 설정

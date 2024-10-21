@@ -17,9 +17,6 @@ AMyCharacter::AMyCharacter()
 	IsAttacking = false;
 	// 캡슐컴포넌트가 MyCharacter프리셋을 사용하도록 함
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MyCharacter"));
-	// 공격 범위 변수 초기화
-	AttackRange = 400.0f;
-	AttackRadius = 200.0f;
 }
 
 void AMyCharacter::PossessedBy(AController* NewController)
@@ -80,6 +77,9 @@ void AMyCharacter::UpdateHP(float NewHP)
 
 void AMyCharacter::Attack()
 {
+	// 공격, 스킬 확률
+	RandomValue = FMath::RandRange(0, 100);
+
 	if (Death)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is Death true"));
@@ -99,7 +99,18 @@ void AMyCharacter::Attack()
 		return;
 	}
 
-	PlayAnimMontage(AttackMontage, 0.5f);
+	// 30%확률로 스킬 발동
+	if (RandomValue <= 30)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill!!!!!!!!!!!!!!!!!"));
+		PlayAnimMontage(SkillMontage, 0.7f);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
+		PlayAnimMontage(AttackMontage, 0.5f);
+	}
+
 	IsAttacking = true;
 
 	// 공격 판정 이벤트 중복 등록 방지: 기존에 바인딩된 이벤트가 있으면 제거
@@ -136,52 +147,105 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 //  공격 판정
 void AMyCharacter::AttackCheck()
 {
+	// 스킬 판정
+	if (RandomValue <= 30)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("SkillCheck~~~~~~~~~~~~~~~~~~"));
+		FHitResult HitResult;
+		FCollisionQueryParams Params(NAME_None, false, this);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackCheck~~~~~~~~~~~~~~~~~~"));
-	FHitResult HitResult;
-	FCollisionQueryParams Params(NAME_None, false, this);
+		// 구체의 중심을 캐릭터 발 앞에 설정
+		FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+		FVector ForwardLocation = StartLocation + GetActorForwardVector() * SkillRange;
 
-	// 구체의 중심을 캐릭터 발 앞에 설정
-	FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
-	FVector ForwardLocation = StartLocation + GetActorForwardVector() * AttackRange;
+		bool bResult = GetWorld()->SweepSingleByChannel(
+			HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
+			StartLocation, // 탐색 시작 위치
+			ForwardLocation,
+			FQuat::Identity,
+			ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
+			FCollisionShape::MakeSphere(SkillRadius), // 탐색 사용할  도형
+			Params);
 
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
-		StartLocation, // 탐색 시작 위치
-		ForwardLocation,
-		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
-		FCollisionShape::MakeSphere(AttackRadius), // 탐색 사용할  도형
-		Params);
-
-	// 디버그 출력 정보를 담은 변수
+		// 디버그 출력 정보를 담은 변수
 #if ENABLE_DRAW_DEBUG
-	FVector TraceVec = GetActorForwardVector() * AttackRange;
-	FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
-	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
-	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-	float DebugLifeTime = 1.0f;
+		FVector TraceVec = GetActorForwardVector() * SkillRange;
+		FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
+		FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+		FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+		float DebugLifeTime = 1.0f;
 
-	// 디버그 출력
-	DrawDebugSphere(GetWorld(),
-		ForwardLocation,
-		AttackRadius,
-		12, // 세그먼트 수, 더 많을수록 부드러워짐
-		DrawColor,
-		false,
-		DebugLifeTime);
+		// 디버그 출력
+		DrawDebugSphere(GetWorld(),
+			ForwardLocation,
+			SkillRadius,
+			12, // 세그먼트 수, 더 많을수록 부드러워짐
+			DrawColor,
+			false,
+			DebugLifeTime);
 
 #endif
-	// 액터 감지시
-	if (bResult)
-	{
-		if (HitResult.GetActor() != nullptr)
+		// 액터 감지시
+		if (bResult)
 		{
-			// 데미지 정보 전달
-			FDamageEvent DamageEvent;
-			HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
+			if (HitResult.GetActor() != nullptr)
+			{
+				// 데미지 정보 전달
+				FDamageEvent DamageEvent;
+				HitResult.GetActor()->TakeDamage(SkillDamage, DamageEvent, GetController(), this);
+			}
 		}
 	}
+	// 공격판정
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackCheck~~~~~~~~~~~~~~~~~~"));
+		FHitResult HitResult;
+		FCollisionQueryParams Params(NAME_None, false, this);
+
+		// 구체의 중심을 캐릭터 발 앞에 설정
+		FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+		FVector ForwardLocation = StartLocation + GetActorForwardVector() * AttackRange;
+
+		bool bResult = GetWorld()->SweepSingleByChannel(
+			HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
+			StartLocation, // 탐색 시작 위치
+			ForwardLocation,
+			FQuat::Identity,
+			ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
+			FCollisionShape::MakeSphere(AttackRadius), // 탐색 사용할  도형
+			Params);
+
+		// 디버그 출력 정보를 담은 변수
+#if ENABLE_DRAW_DEBUG
+		FVector TraceVec = GetActorForwardVector() * AttackRange;
+		FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
+		FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+		FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+		float DebugLifeTime = 1.0f;
+
+		// 디버그 출력
+		DrawDebugSphere(GetWorld(),
+			ForwardLocation,
+			AttackRadius,
+			12, // 세그먼트 수, 더 많을수록 부드러워짐
+			DrawColor,
+			false,
+			DebugLifeTime);
+
+#endif
+		// 액터 감지시
+		if (bResult)
+		{
+			if (HitResult.GetActor() != nullptr)
+			{
+				// 데미지 정보 전달
+				FDamageEvent DamageEvent;
+				HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
+			}
+		}
+	}
+
 
 }
 

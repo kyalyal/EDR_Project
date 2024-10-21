@@ -32,12 +32,28 @@ protected:
 	// 보스 캐릭터의 공격 데미지 설정 변수
 	UPROPERTY(BluePrintReadWrite)
 	float AttackDamage;
+	// 보스 캐릭터의 스킬 데미지 설정 변수
+	UPROPERTY(BluePrintReadWrite)
+	float SkillDamage;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRange;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRadius;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float SkillRange;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float SkillRadius;
 
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> AttackMontage;
-
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UAnimMontage> SkillMontage;
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> DeathMontage;
 
 	// 애니메이션 재생을 위해 공격중인지 확인
@@ -82,10 +98,6 @@ public:
 
 
 private:
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	float AttackRange;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	float AttackRadius;
-
+	int32 RandomValue;
 };

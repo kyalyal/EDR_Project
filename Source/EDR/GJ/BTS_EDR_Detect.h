@@ -20,6 +20,7 @@ protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)override;
 
 private:
+	// 전투 해제시 사용할 타이머 핸들러
 	FTimerHandle ResetFightModeTimerHandle;
 	
 };

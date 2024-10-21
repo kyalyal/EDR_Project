@@ -8,12 +8,25 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	// hp 재정의
 	hp = 100.0f;
 	AttackDamage = 40.0f;
+	AttackRange = 400.0f;
+	AttackRadius = 200.0f;
+
+	SkillDamage = 40.0f;
+	SkillRange = 400.0f;
+	SkillRadius = 200.0f;
 
 	// 공격 애니메이션 몽타주 저장
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/HeavyGoundHitR_Montage.HeavyGoundHitR_Montage"));
 	if (ATTACK_MONTAGE.Succeeded())
 	{
 		AttackMontage = ATTACK_MONTAGE.Object;
+	}
+
+	// 스킬 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/GroundFallAttack_Montage.GroundFallAttack_Montage"));
+	if (SKILL_MONTAGE.Succeeded())
+	{
+		SkillMontage = SKILL_MONTAGE.Object;
 	}
 
 	// 사망 애니메이션 몽타주 저장
