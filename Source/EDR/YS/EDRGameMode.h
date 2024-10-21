@@ -33,6 +33,15 @@ public:
 
 
 
+
+	//플레이어 메인 위젯
+	TSubclassOf<UUserWidget> BossHPBarWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> CurrentBossHPBarWidget;
+
+
+
 public:
 
 	UFUNCTION()
