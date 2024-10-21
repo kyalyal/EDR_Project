@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EDRInventory.h"
 #include "EDRCharacter.h"
+#include "Components/SphereComponent.h"
 
 
 // Sets default values
@@ -17,6 +18,12 @@ AEDRInteractItem::AEDRInteractItem()
 	SkeletalMesh->SetupAttachment(RootComponent);
 	SkeletalMesh->SetGenerateOverlapEvents(true);
 	SkeletalMesh->SetCollisionProfileName(TEXT("OverlapAll"));
+
+	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERECOLLISION"));
+	SphereCollision->SetupAttachment(SkeletalMesh);
+	SphereCollision->SetSphereRadius(100.f);
+	SphereCollision->SetGenerateOverlapEvents(true);
+	SphereCollision->SetCollisionProfileName(TEXT("OverlapAll"));
 }
 
 // Called when the game starts or when spawned

@@ -43,6 +43,9 @@ public:
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Item")
+	TObjectPtr<class USphereComponent> SphereCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Item")
 	TObjectPtr<USkeletalMeshComponent> SkeletalMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category="Item")
