@@ -974,7 +974,10 @@ void AEDRCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 
 void AEDRCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	CurrentGetItemTextWidget->RemoveFromParent();
+	if (IsValid(CurrentGetItemTextWidget))
+	{
+		CurrentGetItemTextWidget->RemoveFromParent();
+	}
 }
 
 void AEDRCharacter::ResetState()
