@@ -218,6 +218,8 @@ public:
 	UFUNCTION(BlueprintPure, category = "Player")
 	UAnimMontage* GetSitDownMontage() { return SitDownMontage; }
 
+	UUserWidget* GetCurrentGetItemTextWidget() { return CurrentGetItemTextWidget; }
+
 
 	//Set--------------------------------------------------
 
@@ -366,6 +368,32 @@ protected:
 	//테스트용 컴포넌트
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class USphereComponent> SphereCollision;
+
+	//테스트용 컴포넌트
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class USphereComponent> CheckCollision;
+
+	//아이템 먹기전 위젯
+	TSubclassOf<UUserWidget> GetItemWidgetTextClass;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> CurrentGetItemTextWidget;
+
+
+
+	
+
+
+
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+		bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 	
 private:

@@ -19,6 +19,7 @@
 #include "EDRGameInstance.h"
 #include "EDRGameViewportClient.h"
 #include "Engine/DamageEvents.h"
+#include "Blueprint/UserWidget.h"
 
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -225,6 +226,25 @@ AEDRCharacter::AEDRCharacter()
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERECOLLISION"));
 	SphereCollision->SetSphereRadius(200);
 	SphereCollision->SetupAttachment(RootComponent);
+	//SphereCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+
+	//범위 체크 스피어 컴포넌트
+	CheckCollision = CreateDefaultSubobject<USphereComponent>(TEXT("CHECKCOLLISION"));
+	CheckCollision->SetSphereRadius(200);
+	CheckCollision->SetupAttachment(RootComponent);
+	//CheckCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+
+
+
+
+
+	ConstructorHelpers::FClassFinder<UUserWidget>GetItemTextUMG(TEXT("/Game/SK/UMG/HUD/UI_GetItemText.UI_GetItemText_C"));
+	if (GetItemTextUMG.Succeeded())
+	{
+		GetItemWidgetTextClass = GetItemTextUMG.Class;
+	}
+
+	
 	
 
 	//공격 초기화
@@ -235,12 +255,21 @@ AEDRCharacter::AEDRCharacter()
 	CharacterInfo.HP = 100.f;
 
 
+
+
+
+
 }
 
 void AEDRCharacter::BeginPlay()
 {
 
 	Super::BeginPlay();
+
+
+	//아이템 범위체크 바인딩
+	CheckCollision->OnComponentBeginOverlap.AddDynamic(this, &AEDRCharacter::OnOverlapBegin);
+	CheckCollision->OnComponentEndOverlap.AddDynamic(this, &AEDRCharacter::OnOverlapEnd);
 
 	// 페이드 인
 	UEDRGameViewportClient* ViewportClient = Cast<UEDRGameViewportClient>(GetWorld()->GetGameViewport());
@@ -752,6 +781,8 @@ void AEDRCharacter::Interaction()
 		if (PlayerInterface)
 		{
 			PlayerInterface->PlayerInteract();
+
+
 		}
 	}
 
@@ -916,6 +947,25 @@ void AEDRCharacter::CameraLockTrace()
 void AEDRCharacter::ShowInventory()
 {
 	EDRInventory->InteractInventory();
+}
+
+void AEDRCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+
+	if (GetItemWidgetTextClass != nullptr)
+	{
+		CurrentGetItemTextWidget = CreateWidget<UUserWidget>(GetWorld(), GetItemWidgetTextClass);
+		if (CurrentGetItemTextWidget != nullptr)
+		{
+			CurrentGetItemTextWidget->AddToViewport();
+		}
+	}
+}
+
+void AEDRCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	CurrentGetItemTextWidget->RemoveFromParent();
 }
 
 void AEDRCharacter::ResetState()
