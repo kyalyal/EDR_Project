@@ -23,7 +23,7 @@ public:
 	AEDRGameMode();
 
 	//Set
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetFightMode(EFightMode NewFightMode);
 
 
@@ -43,8 +43,8 @@ public:
 
 
 	
-private:
 
+	UPROPERTY(BlueprintReadwrite)
 	EFightMode FightMode;
 };
 

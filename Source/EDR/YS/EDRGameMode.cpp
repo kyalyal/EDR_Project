@@ -20,15 +20,15 @@ void AEDRGameMode::SetFightMode(EFightMode NewFightMode)
 {
 	FightMode = NewFightMode;
 
-	switch (FightMode)
-	{
-	case EFightMode::None:
-		break;
-	case EFightMode::FightMode:
-		break;
-	default:
-		break;
-	}
+	//switch (FightMode)
+	//{
+	//case EFightMode::None:
+	//	break;
+	//case EFightMode::FightMode:
+	//	break;
+	//default:
+	//	break;
+	//}
 
 }
 

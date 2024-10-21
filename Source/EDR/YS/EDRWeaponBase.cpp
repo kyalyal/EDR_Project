@@ -21,7 +21,7 @@ AEDRWeaponBase::AEDRWeaponBase()
 
 
     //기본 칼
-    static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_Weapon(TEXT("/Game/GKnight/Meshes/Weapon/SM_WP_GothicKnight_Sword.SM_WP_GothicKnight_Sword"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_Weapon(TEXT("/Game/JYL/Sword/Low_Fin.Low_Fin"));
     if (SM_Weapon.Succeeded())
     {
         WeaponMesh->SetStaticMesh(SM_Weapon.Object);
@@ -45,8 +45,8 @@ AEDRWeaponBase::AEDRWeaponBase()
     AttackPointStart->SetupAttachment(WeaponMesh);
     AttackPointEnd->SetupAttachment(WeaponMesh);
 
-    AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 30.f));
-    AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 130.f));
+    AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 10.f));
+    AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
 
 
     //데미지 초기화

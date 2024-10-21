@@ -65,7 +65,7 @@ void AMyCharacter::IsDeath()
 	}
 
 	// 局聪皋捞记 根鸥林 角青
-	PlayAnimMontage(DeathMontage);
+	PlayAnimMontage(DeathMontage, 0.5f);
 	Death = true;
 }
 void AMyCharacter::UpdateHP(float NewHP)

@@ -21,6 +21,9 @@
 #include "Engine/DamageEvents.h"
 #include "Blueprint/UserWidget.h"
 
+//지워야함
+#include "EDRCheckPoint.h"
+
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -951,7 +954,13 @@ void AEDRCharacter::ShowInventory()
 
 void AEDRCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
+	//지워야함
+	AEDRCheckPoint* rerere = Cast<AEDRCheckPoint>(OtherActor);
+	if (rerere)
+	{
+		return;
+	}
+	
 
 	if (GetItemWidgetTextClass != nullptr)
 	{
