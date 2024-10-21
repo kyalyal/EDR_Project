@@ -34,6 +34,23 @@ public:
 
 
 
+	
+
+
+
+public:
+
+	UFUNCTION(BlueprintNativeEvent)
+	void FightStart();
+	virtual void FightStart_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void FightEnd();
+	virtual void FightEnd_Implementation();
+
+
+private:
+
 	//플레이어 메인 위젯
 	TSubclassOf<UUserWidget> BossHPBarWidgetClass;
 
@@ -41,20 +58,11 @@ public:
 	TObjectPtr<UUserWidget> CurrentBossHPBarWidget;
 
 
-
-public:
-
-	UFUNCTION()
-	void FightStart();
-
-	UFUNCTION()
-	void FightEnd();
-
-
-	
-
-	UPROPERTY(BlueprintReadwrite)
+	UPROPERTY()
 	EFightMode FightMode;
+
+
+
 };
 
 

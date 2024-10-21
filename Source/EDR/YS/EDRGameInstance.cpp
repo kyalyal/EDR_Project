@@ -13,8 +13,11 @@ UEDRGameInstance::UEDRGameInstance()
 	}
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TESTSK2(TEXT("/Game/ROG_Modular_Armor/Accessories_Robes/ROG_CodeSpartan/ROG_Male/Cloaks/SkeletalMeshes/SK_Cloak0_T1_Red.SK_Cloak0_T1_Red"));
-	if (TESTSK.Succeeded())
+	if (TESTSK2.Succeeded())
 	{
 		EDRClothing.PlayerCloacks = TESTSK2.Object;
 	}
+
+
 }
+

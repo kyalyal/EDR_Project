@@ -2,8 +2,10 @@
 
 #include "EDRGameMode.h"
 #include "EDRCharacter.h"
-#include "UObject/ConstructorHelpers.h"
+#include "EDRGameInstance.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
 
 AEDRGameMode::AEDRGameMode()
 {
@@ -32,25 +34,12 @@ void AEDRGameMode::SetFightMode(EFightMode NewFightMode)
 	{
 	case EFightMode::None:
 
-		if (IsValid(CurrentBossHPBarWidget))
-		{
-			CurrentBossHPBarWidget->RemoveFromParent();
-		}
+		FightEnd();
 
 		break;
 	case EFightMode::FightMode:
 
-		//BossHP 위젯
-		if (BossHPBarWidgetClass != nullptr)
-		{
-			CurrentBossHPBarWidget = CreateWidget<UUserWidget>(GetWorld(), BossHPBarWidgetClass);
-			if (CurrentBossHPBarWidget != nullptr)
-			{
-				CurrentBossHPBarWidget->AddToViewport();
-			}
-
-
-		}
+		FightStart();
 
 
 		break;
@@ -60,10 +49,27 @@ void AEDRGameMode::SetFightMode(EFightMode NewFightMode)
 
 }
 
-void AEDRGameMode::FightStart()
+
+void AEDRGameMode::FightStart_Implementation()
 {
+	//BossHP 위젯
+	if (BossHPBarWidgetClass != nullptr)
+	{
+		CurrentBossHPBarWidget = CreateWidget<UUserWidget>(GetWorld(), BossHPBarWidgetClass);
+		if (CurrentBossHPBarWidget != nullptr)
+		{
+			CurrentBossHPBarWidget->AddToViewport();
+		}
+
+
+	}
 }
 
-void AEDRGameMode::FightEnd()
+
+void AEDRGameMode::FightEnd_Implementation()
 {
+	if (IsValid(CurrentBossHPBarWidget))
+	{
+		CurrentBossHPBarWidget->RemoveFromParent();
+	}
 }

@@ -41,6 +41,11 @@ public:
 
 	void SetControllerStartRotation(FRotator NewRotation) { ControllerStartRotation = NewRotation; }
 
+
+
+public:
+
+
 private:
 
 	UPROPERTY()
@@ -54,4 +59,7 @@ private:
 
 	UPROPERTY()
 	FRotator ControllerStartRotation;
+
+
+
 };
