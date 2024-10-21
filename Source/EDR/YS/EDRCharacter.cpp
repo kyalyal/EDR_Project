@@ -457,8 +457,7 @@ float AEDRCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	}
 	
 
-	
-	
+
 	UpdateHP(-DamageAmount);
 
 	if (CharacterInfo.HP <= 0 && !bIsDead)

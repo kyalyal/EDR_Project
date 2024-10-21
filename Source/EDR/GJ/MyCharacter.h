@@ -88,5 +88,4 @@ private:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float AttackRadius;
 
-
 };

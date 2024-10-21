@@ -55,18 +55,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-// 공격 애니메이션 종료
-void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-{
-	if (!IsAttacking)
-	{
-		return;
-	}
-	
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("end play"));
-	IsAttacking = false;
-	OnAttackEnd.Broadcast();
-}
+
 
 // 사망 애니메이션
 void AMyCharacter::IsDeath()
@@ -91,16 +80,12 @@ void AMyCharacter::UpdateHP(float NewHP)
 
 void AMyCharacter::Attack()
 {
-
-	// Death가 true 일경우 공격 애니메이션 정지 
-	
 	if (Death)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is Death true"));
 		return;
 	}
 
-	// 공격중일 경우 애니메이션 정지
 	if (IsAttacking)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
@@ -108,24 +93,51 @@ void AMyCharacter::Attack()
 	}
 
 	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
-	
+
 	if (nullptr == EDRAnim)
 	{
 		return;
 	}
 
-	// 애니메이션 몽타주 실행
 	PlayAnimMontage(AttackMontage, 0.5f);
 	IsAttacking = true;
-	// 공격 판정
+
+	// 공격 판정 이벤트 중복 등록 방지: 기존에 바인딩된 이벤트가 있으면 제거
+	EDRAnim->OnAttackHitCheck.RemoveAll(this);
+
+	// 공격 판정 이벤트 바인딩
 	EDRAnim->OnAttackHitCheck.AddUObject(this, &AMyCharacter::AttackCheck);
-	// 공격 종료
+
+	// 애니메이션 종료 시 공격 끝 처리
+	EDRAnim->OnMontageEnded.RemoveAll(this);  // 중복 바인딩 방지
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
 }
 
+// 공격 애니메이션 종료 처리 함수
+void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (!IsAttacking)
+	{
+		return;
+	}
+
+	IsAttacking = false;
+
+	// 공격 종료 시 이벤트 해제
+	if (EDRAnim != nullptr)
+	{
+		EDRAnim->OnAttackHitCheck.RemoveAll(this);  // 중복 호출 방지
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack Animation Ended"));
+
+	OnAttackEnd.Broadcast();
+}
 //  공격 판정
 void AMyCharacter::AttackCheck()
 {
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackCheck~~~~~~~~~~~~~~~~~~"));
 	FHitResult HitResult;
 	FCollisionQueryParams Params(NAME_None, false, this);
 
@@ -170,7 +182,10 @@ void AMyCharacter::AttackCheck()
 			HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
 		}
 	}
+
 }
+
+
 
 
 // 데미지 받는 함수
