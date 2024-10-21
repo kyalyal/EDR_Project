@@ -380,9 +380,11 @@ protected:
 	TObjectPtr<UUserWidget> CurrentGetItemTextWidget;
 
 
-
+	//플레이어 메인 위젯
+	TSubclassOf<UUserWidget> PlayerMainWidgetClass;
 	
-
+	UPROPERTY()
+	TObjectPtr<UUserWidget> CurrentPlayerMainWidget;
 
 
 	UFUNCTION()

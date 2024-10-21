@@ -239,14 +239,21 @@ AEDRCharacter::AEDRCharacter()
 
 
 
-
+	//아이템 먹을때 나타나는 UI
 	ConstructorHelpers::FClassFinder<UUserWidget>GetItemTextUMG(TEXT("/Game/SK/UMG/HUD/UI_GetItemText.UI_GetItemText_C"));
 	if (GetItemTextUMG.Succeeded())
 	{
 		GetItemWidgetTextClass = GetItemTextUMG.Class;
 	}
 
-	
+
+	//플레이어 메인 위젯
+	ConstructorHelpers::FClassFinder<UUserWidget>PlayerWidget(TEXT("/Game/SK/UMG/HUD/WBP_HUD.WBP_HUD_C"));
+	if (PlayerWidget.Succeeded())
+	{
+		PlayerMainWidgetClass = PlayerWidget.Class;
+	}
+
 	
 
 	//공격 초기화
@@ -269,9 +276,24 @@ void AEDRCharacter::BeginPlay()
 	Super::BeginPlay();
 
 
+	//PlayerWidget
+	if (PlayerMainWidgetClass != nullptr)
+	{
+		CurrentPlayerMainWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerMainWidgetClass);
+		if (CurrentPlayerMainWidget != nullptr)
+		{
+			CurrentPlayerMainWidget->AddToViewport();
+		}
+	}
+
+
+
 	//아이템 범위체크 바인딩
 	CheckCollision->OnComponentBeginOverlap.AddDynamic(this, &AEDRCharacter::OnOverlapBegin);
 	CheckCollision->OnComponentEndOverlap.AddDynamic(this, &AEDRCharacter::OnOverlapEnd);
+
+
+
 
 	// 페이드 인
 	UEDRGameViewportClient* ViewportClient = Cast<UEDRGameViewportClient>(GetWorld()->GetGameViewport());
