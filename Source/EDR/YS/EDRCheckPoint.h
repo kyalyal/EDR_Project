@@ -10,15 +10,19 @@
  * 
  */
 UCLASS()
-class EDR_API AEDRCheckPoint : public AEDRInteractItem
+class EDR_API AEDRCheckPoint : public AActor, public IEDRPlayerInterface
 {
 	GENERATED_BODY()
 	
 public:
+
+	AEDRCheckPoint();
+
 	virtual void PlayerInteract() override;
 
 
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "CheckPoint")
+	TObjectPtr<UStaticMeshComponent> StaticMesh;
 	
 
 private:
@@ -30,6 +34,11 @@ private:
 
 	// 타이머 핸들러
 	FTimerHandle FadeTimerHandle;
+
+
+
+	
+
 
 
 	TObjectPtr<class UEDRGameInstance> EDRGameInstance;

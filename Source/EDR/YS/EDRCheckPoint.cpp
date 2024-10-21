@@ -7,12 +7,20 @@
 #include "kismet/GameplayStatics.h"
 #include "EDRGameViewportClient.h"
 
+AEDRCheckPoint::AEDRCheckPoint()
+{
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("STATICMESH"));
+	RootComponent = StaticMesh;
+	StaticMesh->SetGenerateOverlapEvents(true);
+	StaticMesh->SetCollisionProfileName(TEXT("OverlapAll"));
+}
+
 void AEDRCheckPoint::PlayerInteract()
 {
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("EDRCheckPoint::PlayerInteract() - Interact Success."));
 
-	
+
 
 	EDRGameInstance = Cast<UEDRGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	
