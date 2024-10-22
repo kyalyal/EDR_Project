@@ -11,6 +11,7 @@ void UUW_EDR_Get_Item_Info::SetItemInfo(FText NewName, UTexture2D* NewImage)
 
 	FSlateBrush NewBrush;
 	NewBrush.SetResourceObject(NewImage);
+	NewBrush.SetImageSize(FVector2D(512.f, 512.f));
 
 	Image->SetBrush(NewBrush);
 
