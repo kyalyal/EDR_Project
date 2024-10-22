@@ -819,14 +819,28 @@ void AEDRCharacter::Interaction()
 
 		if (IsValid(CurrentGetItemTextWidget))
 		{
+			//아이템 얻기 텍스트 지우기
 			CurrentGetItemTextWidget->RemoveFromParent();
 
 			if (GetItemWidgetSuccessClass != nullptr)
 			{
+				//아이템 획득 띄우기
 				CurrentGetItemWidgetSuccess = CreateWidget<UUW_EDR_Get_Item>(GetWorld(), GetItemWidgetSuccessClass);
 				if (CurrentGetItemWidgetSuccess != nullptr)
 				{
-					CurrentGetItemWidgetSuccess->AddToViewport();
+					AEDRInteractItem* Item = Cast<AEDRInteractItem>(i);
+					if (IsValid(Item))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, FString::Printf(TEXT("AEDRCharacter::Interaction() - ItemName : %s"), *Item->InventoryStructure.DataAsset->Name.ToString()));
+
+						CurrentGetItemWidgetSuccess->SetItemInfo(Item->InventoryStructure.DataAsset->Name, Item->InventoryStructure.DataAsset->Image);
+						CurrentGetItemWidgetSuccess->AddToViewport();
+					}
+					else
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("AEDRCharacter::Interaction() - No Item"));
+					}
+
 				}
 			}
 		}

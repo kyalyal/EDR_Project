@@ -4,28 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "UW_EDR_Get_Item.generated.h"
+#include "UW_EDR_Get_Item_Info.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EDR_API UUW_EDR_Get_Item : public UUserWidget
+class EDR_API UUW_EDR_Get_Item_Info : public UUserWidget
 {
 	GENERATED_BODY()
 	
 
 public:
 
-
-	void SetItemInfo(FText NewText, UTexture2D* NewImage);
+	void SetItemInfo(FText NewName, UTexture2D* NewImage);
 
 
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	class UUW_EDR_Get_Item_Info* UI_NewItemGet;
+	class UTextBlock* ItemName;
 
-
-	virtual void NativeConstruct() override;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UImage* Image;
 
 };
