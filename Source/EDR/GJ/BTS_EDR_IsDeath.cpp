@@ -37,7 +37,7 @@ void UBTS_EDR_IsDeath::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
         {
             // Death 변수가 true인지 확인
             bIsDeath = MyCharacter->Death; // Death 변수가 public이어야 함
-            if (bIsDeath)
+            if (!bDeathCheck && bIsDeath)
             {
                 OwnerComp.GetBlackboardComponent()->SetValueAsBool(AEnemy_EDR_AIController::Death, bIsDeath);
                 // 게임모드가 널이 아닐때
@@ -47,6 +47,7 @@ void UBTS_EDR_IsDeath::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
                     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FightModeOFF!!!!!!!!!!!!!!!!!!"));
                     GameMode->SetFightMode(EFightMode::None);
 
+                    bDeathCheck = true;
                 }
             }
         }
