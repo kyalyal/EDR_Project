@@ -22,6 +22,7 @@
 #include "Blueprint/UserWidget.h"
 #include "EDRInteractItem.h"
 #include "UW_EDR_Get_Item.h"
+#include "UW_EDR_PlayerMenu.h"
 
 
 
@@ -261,6 +262,15 @@ AEDRCharacter::AEDRCharacter()
 	{
 		PlayerMainWidgetClass = PlayerWidget.Class;
 	}
+
+
+	//플레이어 메인 위젯
+	ConstructorHelpers::FClassFinder<UUserWidget>PlayerMenuWidget(TEXT("/Game/SK/UMG/PlayerMenu/WBP_PlayerMenu.WBP_PlayerMenu_C"));
+	if (PlayerMenuWidget.Succeeded())
+	{
+		PlayerMenuWidgetClass = PlayerMenuWidget.Class;
+	}
+
 
 	
 
@@ -574,7 +584,7 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(LockCamera, ETriggerEvent::Started, this, &AEDRCharacter::CameraLockTrace);
 
 		//Inventory
-		EnhancedInputComponent->BindAction(InventoryButton, ETriggerEvent::Started, this, &AEDRCharacter::ShowInventory);
+		EnhancedInputComponent->BindAction(InventoryButton, ETriggerEvent::Started, this, &AEDRCharacter::ShowPlayerMenu);
 	}
 	else
 	{
@@ -1016,6 +1026,18 @@ void AEDRCharacter::CameraLockTrace()
 void AEDRCharacter::ShowInventory()
 {
 	EDRInventory->InteractInventory();
+}
+
+void AEDRCharacter::ShowPlayerMenu()
+{
+	if (PlayerMenuWidgetClass != nullptr )
+	{
+		CurrentPlayerMenuWidget = CreateWidget<UUW_EDR_PlayerMenu>(GetWorld(), PlayerMenuWidgetClass);
+		if (CurrentPlayerMenuWidget != nullptr)
+		{
+			CurrentPlayerMenuWidget->AddToViewport();
+		}
+	}
 }
 
 void AEDRCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

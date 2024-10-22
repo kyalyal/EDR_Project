@@ -23,7 +23,7 @@ UEDRInventory::UEDRInventory()
 
 	
 
-	MaxSize = 3;
+	MaxSize = 55;
 
 	AllowDuplicates = true;
 }

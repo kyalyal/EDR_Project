@@ -281,10 +281,15 @@ protected:
 
 
 
+	
+
+public:
 	// 인벤토리 시스템
+	UFUNCTION()
 	void ShowInventory();
 
-
+	UFUNCTION()
+	void ShowPlayerMenu();
 
 	//고유 변수--------------------------------------------------------
 
@@ -392,6 +397,13 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<UUserWidget> CurrentPlayerMainWidget;
+
+
+	//플레이어 메뉴 위젯
+	TSubclassOf<class UUW_EDR_PlayerMenu> PlayerMenuWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<class UUW_EDR_PlayerMenu> CurrentPlayerMenuWidget;
 
 
 	UFUNCTION()
