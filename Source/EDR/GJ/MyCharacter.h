@@ -21,14 +21,16 @@ public:
 
 	AMyCharacter();
 	virtual void PossessedBy(AController* NewController)override;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	USoundCue* AttackSoundCue;  // 공격 시 재생할 사운드
 
+	// 공격 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	USoundCue* SkillSoundCue;   // 스킬 시 재생할 사운드
-
+	USoundCue* AttackSoundCue;  
+	// 스킬 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	USoundCue* DeathSoundCue;   // 사망 시 재생할 사운드
+	USoundCue* SkillSoundCue;   
+	// 사망 시 재생할 사운드
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundCue* DeathSoundCue;   
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,25 +48,34 @@ protected:
 	UPROPERTY(BluePrintReadWrite)
 	float SkillDamage;
 
+	// 공격 사거리
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float AttackRange;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float AttackRadius;
 
+
+	// 스킬 사거리
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float SkillRange;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float SkillRadius;
 
-
+	// 공격 애니메이션
 	UPROPERTY(EditAnywhere)
 	TArray<TObjectPtr<class UAnimMontage>> AttackMontage;
+
+	//  스킬 애니메이션
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> SkillMontage;
+
+	// 사망 애니메이션
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> DeathMontage;
+
+
 
 	// 애니메이션 재생을 위해 공격중인지 확인
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
