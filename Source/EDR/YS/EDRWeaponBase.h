@@ -87,4 +87,8 @@ protected:
 
 	bool bAttacking;
 
+private:
+
+	AActor* Player;
+
 };

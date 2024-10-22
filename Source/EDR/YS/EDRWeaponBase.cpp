@@ -60,7 +60,8 @@ void AEDRWeaponBase::BeginPlay()
 {
     Super::BeginPlay();
 
-
+    
+    Player = Cast<AActor>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
     if (!IsValid(WeaponAttackAnim))
     {
@@ -144,6 +145,8 @@ void AEDRWeaponBase::TraceAttack()
 
 
     if (IgnoreActors.Contains(OutHit.GetActor())) return;
+    if (OutHit.GetActor() == Player) return;
+
     if (OutHit.bBlockingHit)
     {
         // 타격이 들어온 방향 (무기에서 OtherActor 쪽으로)
