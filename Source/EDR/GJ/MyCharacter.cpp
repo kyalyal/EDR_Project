@@ -65,7 +65,7 @@ void AMyCharacter::IsDeath()
 	}
 
 	// 애니메이션 몽타주 실행
-	PlayAnimMontage(DeathMontage, 0.5f);
+	PlayAnimMontage(DeathMontage, 1.0f);
 	Death = true;
 }
 void AMyCharacter::UpdateHP(float NewHP)
@@ -123,7 +123,20 @@ void AMyCharacter::Attack()
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
-		PlayAnimMontage(AttackMontage, 0.5f);
+		if (FMath::RandRange(0, 100) > 40)
+		{
+			if (AttackMontage.IsValidIndex(0)) 
+			{
+				PlayAnimMontage(AttackMontage[0], 0.5f);
+			}
+		}
+		else
+		{
+			if (AttackMontage.IsValidIndex(1))
+			{
+				PlayAnimMontage(AttackMontage[1], 0.75f);
+			}
+		}
 
 		// 공격 사운드 재생
 		if (AttackSoundCue != nullptr)

@@ -45,6 +45,7 @@ public:
 	static const FName HomePosKey;
 	static const FName TargetLocation;
 	static const FName TargetKey;
+	static const FName Death;
 
 	UFUNCTION()
 	void OnUpdated(TArray<AActor*> const& updated_actors);

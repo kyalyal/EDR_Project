@@ -57,7 +57,7 @@ protected:
 
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<class UAnimMontage> AttackMontage;
+	TArray<TObjectPtr<class UAnimMontage>> AttackMontage;
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> SkillMontage;
 	UPROPERTY(EditAnywhere)

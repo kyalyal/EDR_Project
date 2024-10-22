@@ -16,12 +16,17 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	SkillRadius = 200.0f;
 
 	// 공격 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/HeavyGoundHitR_Montage.HeavyGoundHitR_Montage"));
-	if (ATTACK_MONTAGE.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/HeavyGoundHitR_Montage.HeavyGoundHitR_Montage"));
+	if (ATTACK_MONTAGE1.Succeeded())
 	{
-		AttackMontage = ATTACK_MONTAGE.Object;
+		AttackMontage.Add(ATTACK_MONTAGE1.Object);
 	}
-
+	// 공격 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/SmashAttack2_Montage.SmashAttack2_Montage"));
+	if (ATTACK_MONTAGE2.Succeeded())
+	{
+		AttackMontage.Add(ATTACK_MONTAGE2.Object);
+	}
 	// 스킬 애니메이션 몽타주 저장
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/GroundFallAttack_Montage.GroundFallAttack_Montage"));
 	if (SKILL_MONTAGE.Succeeded())
