@@ -67,6 +67,20 @@ void AMyCharacter::IsDeath()
 	// 애니메이션 몽타주 실행
 	PlayAnimMontage(DeathMontage, 1.0f);
 	Death = true;
+	// 스킬 사운드 재생
+	if (DeathSoundCue != nullptr)
+	{
+		UGameplayStatics::SpawnSoundAttached(
+			DeathSoundCue,
+			GetRootComponent(),
+			NAME_None,
+			FVector::ZeroVector,
+			EAttachLocation::KeepRelativeOffset,
+			false,
+			1.0f,  // Volume multiplier
+			0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+		);
+	}
 }
 void AMyCharacter::UpdateHP(float NewHP)
 {

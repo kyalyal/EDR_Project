@@ -27,6 +27,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundCue* SkillSoundCue;   // 스킬 시 재생할 사운드
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundCue* DeathSoundCue;   // 사망 시 재생할 사운드
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

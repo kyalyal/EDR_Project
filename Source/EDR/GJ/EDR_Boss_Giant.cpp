@@ -54,4 +54,13 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	{
 		SkillSoundCue = SKILLSOUNDCUE.Object;
 	}
+
+	// 사망 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>DEATHSOUNDCUE(TEXT("/Game/Monster_Sounds_Volume_01/Cues/Beast_Shouting_03_Cue.Beast_Shouting_03_Cue"));
+	if (DEATHSOUNDCUE.Succeeded())
+	{
+		DeathSoundCue = DEATHSOUNDCUE.Object;
+	}
+
+	
 }
