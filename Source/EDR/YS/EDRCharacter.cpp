@@ -373,9 +373,9 @@ void AEDRCharacter::BeginPlay()
 	if (EDR_GameInstance->GetPlayerStartLocation() != FVector::Zero())
 	{
 
-		
+		ACharacter* CheckPawn = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
-		if (IsValid(UGameplayStatics::GetPlayerController(GetWorld(), 0)))
+		if (CheckPawn == this)
 		{
 			GetController()->SetControlRotation(EDR_GameInstance->GetControllerStartRotation());
 			SetActorLocation(EDR_GameInstance->GetPlayerStartLocation());
@@ -505,6 +505,12 @@ void AEDRCharacter::PlayerDeath()
 	PlayAnimMontage(DeathMontage);
 
 	GetCapsuleComponent()->DestroyComponent();
+
+	FTimerHandle DestroyTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, [this]()
+		{
+			Destroy();
+		}, 10.0f, false);
 
 	 
 	if (OnDeath.IsBound()  == true)
@@ -1030,13 +1036,36 @@ void AEDRCharacter::ShowInventory()
 
 void AEDRCharacter::ShowPlayerMenu()
 {
-	if (PlayerMenuWidgetClass != nullptr )
+	if (PlayerMenuWidgetClass != nullptr)
 	{
-		CurrentPlayerMenuWidget = CreateWidget<UUW_EDR_PlayerMenu>(GetWorld(), PlayerMenuWidgetClass);
-		if (CurrentPlayerMenuWidget != nullptr)
+
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+
+		if (IsValid(CurrentPlayerMenuWidget))
 		{
-			CurrentPlayerMenuWidget->AddToViewport();
+			CurrentPlayerMenuWidget->RemoveFromParent();
+			CurrentPlayerMenuWidget = nullptr;
+
+			
+			FInputModeGameOnly InputMode;
+			PlayerController->SetInputMode(InputMode);
+			PlayerController->bShowMouseCursor = false;
 		}
+		else
+		{
+			CurrentPlayerMenuWidget = CreateWidget<UUW_EDR_PlayerMenu>(GetWorld(), PlayerMenuWidgetClass);
+			if (CurrentPlayerMenuWidget != nullptr)
+			{
+				CurrentPlayerMenuWidget->AddToViewport();
+
+				FInputModeGameAndUI InputMode;
+				PlayerController->SetInputMode(InputMode);
+				PlayerController->bShowMouseCursor = true;
+			}
+
+		}
+
+		
 	}
 }
 

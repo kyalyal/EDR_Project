@@ -134,7 +134,7 @@ void AEDRWeaponBase::TraceAttack()
         UEngineTypes::ConvertToTraceType(ECC_PhysicsBody),
         false,
         ignores, 
-        EDrawDebugTrace::ForDuration,
+        EDrawDebugTrace::None,
         OutHit,
         true,
         FLinearColor::Red,
