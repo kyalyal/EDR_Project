@@ -35,4 +35,18 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	{
 		DeathMontage = DEATHANIM.Object;
 	}
+
+	// 공격 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>ATTACKSOUNDCUE(TEXT("/Game/Monster_Sounds_Volume_01/Cues/Ancestral_Monster_Attack_01_Cue.Ancestral_Monster_Attack_01_Cue"));
+	if (ATTACKSOUNDCUE.Succeeded())
+	{
+		AttackSoundCue = ATTACKSOUNDCUE.Object;
+	}
+
+	// 스킬 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>SKILLSOUNDCUE(TEXT("/Game/Monster_Sounds_Volume_01/Cues/Angry_Shout_Cue.Angry_Shout_Cue"));
+	if (SKILLSOUNDCUE.Succeeded())
+	{
+		SkillSoundCue = SKILLSOUNDCUE.Object;
+	}
 }

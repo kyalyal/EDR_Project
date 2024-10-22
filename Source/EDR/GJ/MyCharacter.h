@@ -1,10 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
+
 
 // 공격 애니메이션이 끝났는지 확인
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
@@ -19,6 +21,11 @@ public:
 
 	AMyCharacter();
 	virtual void PossessedBy(AController* NewController)override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundCue* AttackSoundCue;  // 공격 시 재생할 사운드
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundCue* SkillSoundCue;   // 스킬 시 재생할 사운드
 
 protected:
 	// Called when the game starts or when spawned

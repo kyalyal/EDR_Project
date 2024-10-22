@@ -104,11 +104,41 @@ void AMyCharacter::Attack()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill!!!!!!!!!!!!!!!!!"));
 		PlayAnimMontage(SkillMontage, 0.7f);
+
+		// 스킬 사운드 재생
+		if (SkillSoundCue != nullptr)
+		{
+			UGameplayStatics::SpawnSoundAttached(
+				SkillSoundCue,
+				GetRootComponent(),
+				NAME_None,
+				FVector::ZeroVector,
+				EAttachLocation::KeepRelativeOffset,
+				false,
+				1.0f,  // Volume multiplier
+				0.5f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+			);
+		}
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
 		PlayAnimMontage(AttackMontage, 0.5f);
+
+		// 공격 사운드 재생
+		if (AttackSoundCue != nullptr)
+		{
+			UGameplayStatics::SpawnSoundAttached(
+				AttackSoundCue,
+				GetRootComponent(),
+				NAME_None,
+				FVector::ZeroVector,
+				EAttachLocation::KeepRelativeOffset,
+				false,
+				1.0f,  // Volume multiplier
+				0.5f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+			);
+		}
 	}
 
 	IsAttacking = true;
