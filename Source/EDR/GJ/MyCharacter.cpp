@@ -65,9 +65,9 @@ void AMyCharacter::IsDeath()
 	}
 
 	// 애니메이션 몽타주 실행
-	PlayAnimMontage(DeathMontage, 0.75f);
+	PlayAnimMontage(DeathMontage, 1.0f);
 	Death = true;
-	// 사망 사운드 재생
+	// 스킬 사운드 재생
 	if (DeathSoundCue != nullptr)
 	{
 		UGameplayStatics::SpawnSoundAttached(
@@ -136,7 +136,6 @@ void AMyCharacter::Attack()
 	}
 	else
 	{
-		// 일반 공격 판정
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
 		if (FMath::RandRange(0, 100) > 40)
 		{
