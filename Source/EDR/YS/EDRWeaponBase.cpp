@@ -21,7 +21,7 @@ AEDRWeaponBase::AEDRWeaponBase()
 
 
     //기본 칼
-    static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_Weapon(TEXT("/Game/JYL/Sword/Low_Fin.Low_Fin"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_Weapon(TEXT("/Game/LJY/Sword/Sword_001_Low_Final.Sword_001_Low_Final"));
     if (SM_Weapon.Succeeded())
     {
         WeaponMesh->SetStaticMesh(SM_Weapon.Object);
