@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/CapsuleComponent.h"
 #include "MyCharacter.generated.h"
 
 
@@ -33,6 +34,14 @@ public:
 	USoundCue* DeathSoundCue;   
 
 protected:
+
+	UPROPERTY(VisibleAnywhere, Category = Weapone)
+	// 무기
+	TObjectPtr<class AEDR_Enemy_Weapone> CurrentWeapon;
+
+
+
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	// 받는 데미지 처리 함수
