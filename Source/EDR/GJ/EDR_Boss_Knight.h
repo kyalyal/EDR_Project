@@ -13,5 +13,9 @@ UCLASS()
 class EDR_API AEDR_Boss_Knight : public AMyCharacter
 {
 	GENERATED_BODY()
+	AEDR_Boss_Knight();
 	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 };
