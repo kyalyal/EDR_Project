@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
+#include "EDR_Enemy_Weapon.h"
 #include "MyCharacter.generated.h"
 
 
@@ -34,10 +35,9 @@ public:
 	USoundCue* DeathSoundCue;   
 
 protected:
-
 	UPROPERTY(VisibleAnywhere, Category = Weapone)
 	// ¹«±â
-	TObjectPtr<class AEDR_Enemy_Weapone> CurrentWeapon;
+	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
 
 
 

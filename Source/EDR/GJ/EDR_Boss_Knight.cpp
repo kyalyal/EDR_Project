@@ -2,11 +2,12 @@
 
 
 #include "EDR_Boss_Knight.h"
-#include "EDR_Enemy_Weapone.h"
+#include "EDR_Enemy_Weapon.h"
 
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
 
+	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();
 	GetMesh()->SetupAttachment(GetCapsuleComponent());
 	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);
@@ -19,16 +20,22 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	{
 		GetMesh()->SetSkeletalMesh(MODEL.Object);
 	}
-
+	SetActorScale3D(FVector(1.6f, 1.6f, 1.6f));
 }
 void AEDR_Boss_Knight::BeginPlay()
 {
 	Super::BeginPlay();
 
 	FName WeaponSocket(TEXT("hand_rSocket"));
-	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_Weapone>(FVector::ZeroVector, FRotator::ZeroRotator);
+	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_Weapon>(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (nullptr != CurrentWeapon)
 	{
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		CurrentWeapon->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 180.0f)); // 180도 회전
+		CurrentWeapon->SetActorRelativeLocation(FVector(-10.0f, 5.0f, 56.0f)); // 무기이동
+
+
+		// 무기 크기 키우기
+		CurrentWeapon->SetActorScale3D(FVector(2.0f));
 	}
 }

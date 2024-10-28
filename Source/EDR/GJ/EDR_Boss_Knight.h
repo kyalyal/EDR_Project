@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MyCharacter.h"
+#include "EDR_Enemy_Weapon.h"
 #include "EDR_Boss_Knight.generated.h"
 
 /**

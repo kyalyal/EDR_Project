@@ -4,26 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "EDR_Enemy_Weapone.generated.h"
+#include "EDR_Enemy_Weapon.generated.h"
 
 UCLASS()
-class EDR_API AEDR_Enemy_Weapone : public AActor
+class EDR_API AEDR_Enemy_Weapon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AEDR_Enemy_Weapone();
 
-	// 무기 메시
+public:
+	// Sets default values for this actor's properties
+	AEDR_Enemy_Weapon();
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
-	USkeletalMeshComponent* Weapon;
+	UStaticMeshComponent* Weapon;
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	// 무기 메시
 
-public:	
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

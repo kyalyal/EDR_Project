@@ -17,6 +17,8 @@ AMyCharacter::AMyCharacter()
 	IsAttacking = false;
 	// 캡슐컴포넌트가 MyCharacter프리셋을 사용하도록 함
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MyCharacter"));
+
+
 }
 
 void AMyCharacter::PossessedBy(AController* NewController)
