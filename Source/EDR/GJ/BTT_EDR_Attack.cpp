@@ -4,7 +4,6 @@
 #include "BTT_EDR_Attack.h"
 #include "Enemy_EDR_AIController.h"
 #include "MyCharacter.h"
-#include "EDR_Boss_Giant.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BehaviorTree.h"

@@ -6,8 +6,18 @@
 #include "GameFramework/CharacterMovementComponent.h"
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
+	// hp 재정의
+	hp = 100.0f;
+	AttackDamage = 40.0f;
+	AttackRange = 400.0f;
+	AttackRadius = 200.0f;
 
-	GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+	SkillDamage = 40.0f;
+	SkillRange = 400.0f;
+	SkillRadius = 200.0f;
+
+
+	GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();
@@ -23,10 +33,32 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	if (MODEL.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(MODEL.Object);
-	}
+	}	
+	
 
 	// 크기 1.6배 키우기
-	SetActorScale3D(FVector(1.6f, 1.6f, 1.6f));
+	SetActorScale3D(FVector(1.6f, 1.6f, 1.6f));	
+	
+	
+	
+	
+	// 공격
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_InP_Montage.Boss_Attack_Uppercut_InP_Montage"));
+	if (ATTACK_MONTAGE1.Succeeded())
+	{
+		AttackMontage.Add(ATTACK_MONTAGE1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_InP_Montage.Boss_Attack_Uppercut_InP_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE2.Object);
+	}
+	// 스킬 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_InP_Montage.Boss_Attack_Uppercut_InP_Montage"));
+	if (SKILL_MONTAGE.Succeeded())
+	{
+		SkillMontage = SKILL_MONTAGE.Object;
+	}
+
 }
 void AEDR_Boss_Knight::BeginPlay()
 {

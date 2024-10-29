@@ -30,7 +30,6 @@ void AMyCharacter::PossessedBy(AController* NewController)
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
-	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 }
 
 // Called when the game starts or when spawned
@@ -93,6 +92,7 @@ void AMyCharacter::UpdateHP(float NewHP)
 
 void AMyCharacter::Attack()
 {
+	
 	// 공격, 스킬 확률
 	RandomValue = FMath::RandRange(0, 100);
 
@@ -143,14 +143,16 @@ void AMyCharacter::Attack()
 		{
 			if (AttackMontage.IsValidIndex(0)) 
 			{
-				PlayAnimMontage(AttackMontage[0], 0.5f);
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				PlayAnimMontage(AttackMontage[0], 1.0f);
 			}
 		}
 		else
 		{
 			if (AttackMontage.IsValidIndex(1))
 			{
-				PlayAnimMontage(AttackMontage[1], 0.75f);
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				PlayAnimMontage(AttackMontage[1], 1.0f);
 			}
 		}
 
