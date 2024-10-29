@@ -14,6 +14,8 @@ class EDR_API AEDR_Enemy_Weapon : public AActor
 public:
 	// Sets default values for this actor's properties
 	AEDR_Enemy_Weapon();
+
+	// 무기의 스태틱 메시를 담을 변수
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 	UStaticMeshComponent* Weapon;
 
@@ -21,7 +23,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	// 무기 메시
 
 
 public:

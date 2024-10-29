@@ -28,7 +28,7 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
 	// 감지 범위
-	float DetectRadius = 1500.0f;
+	float DetectRadius = 1000.0f;
 
 	if (nullptr == World)
 	{

@@ -14,6 +14,7 @@
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "EngineGlobals.h"
 #include "MyCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 const FName AEnemy_EDR_AIController::HomePosKey(TEXT("HomePos"));
 const FName AEnemy_EDR_AIController::TargetLocation(TEXT("TargetLocation"));

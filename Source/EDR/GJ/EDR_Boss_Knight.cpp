@@ -3,9 +3,11 @@
 
 #include "EDR_Boss_Knight.h"
 #include "EDR_Enemy_Weapon.h"
-
+#include "GameFramework/CharacterMovementComponent.h"
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
+
+	GetCharacterMovement()->MaxWalkSpeed = 100.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();

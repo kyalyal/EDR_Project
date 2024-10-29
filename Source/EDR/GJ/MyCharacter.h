@@ -128,6 +128,5 @@ public:
 
 
 private:
-
 	int32 RandomValue;
 };

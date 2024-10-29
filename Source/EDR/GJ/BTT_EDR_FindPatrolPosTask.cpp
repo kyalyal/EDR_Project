@@ -16,8 +16,6 @@ UBTT_EDR_FindPatrolPosTask::UBTT_EDR_FindPatrolPosTask(FObjectInitializer const&
 }
 
 
-
-
 EBTNodeResult::Type UBTT_EDR_FindPatrolPosTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 
