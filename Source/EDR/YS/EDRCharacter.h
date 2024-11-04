@@ -406,6 +406,19 @@ protected:
 	TObjectPtr<class UUW_EDR_PlayerMenu> CurrentPlayerMenuWidget;
 
 
+	//플레이어 메뉴 위젯
+	TSubclassOf<class UUserWidget> PlayerDeathWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<class UUserWidget> CurrentPlayerDeathWidget;
+
+	//플레이어 메뉴 위젯
+	TSubclassOf<class UUserWidget> PlayerClearWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<class UUserWidget> CurrentPlayerClearWidget;
+
+
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,

@@ -264,13 +264,26 @@ AEDRCharacter::AEDRCharacter()
 	}
 
 
-	//플레이어 메인 위젯
+	//플레이어 메뉴 위젯
 	ConstructorHelpers::FClassFinder<UUserWidget>PlayerMenuWidget(TEXT("/Game/SK/UMG/PlayerMenu/WBP_PlayerMenu.WBP_PlayerMenu_C"));
 	if (PlayerMenuWidget.Succeeded())
 	{
 		PlayerMenuWidgetClass = PlayerMenuWidget.Class;
 	}
 
+	//플레이어 사망 위젯
+	ConstructorHelpers::FClassFinder<UUserWidget>PlayerDeathWidget(TEXT("/Game/SK/UMG/UIEffects/WBP_PlayerDead.WBP_PlayerDead_C"));
+	if (PlayerDeathWidget.Succeeded())
+	{
+		PlayerDeathWidgetClass = PlayerDeathWidget.Class;
+	}
+
+	//플레이어 클리어 위젯
+	ConstructorHelpers::FClassFinder<UUserWidget>PlayerClearWidget(TEXT("/Game/SK/UMG/UIEffects/WBP_BossClear.WBP_BossClear_C"));
+	if (PlayerClearWidget.Succeeded())
+	{
+		PlayerClearWidgetClass = PlayerClearWidget.Class;
+	}
 
 	
 
@@ -506,11 +519,35 @@ void AEDRCharacter::PlayerDeath()
 
 	GetCapsuleComponent()->DestroyComponent();
 
+
+	//죽었을 때 위젯
+	if (PlayerDeathWidgetClass != nullptr)
+	{
+		CurrentPlayerDeathWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerDeathWidgetClass);
+		if (CurrentPlayerDeathWidget != nullptr)
+		{
+			CurrentPlayerDeathWidget->AddToViewport();
+		}
+	}
+
+
+
 	FTimerHandle DestroyTimerHandle;
+
 	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, [this]()
 		{
-			Destroy();
-		}, 10.0f, false);
+			// 현재 레벨 이름을 가져옴
+			FString CurrentLevelString = GetWorld()->GetMapName();
+			CurrentLevelString = CurrentLevelString.Replace(TEXT("UEDPIE_0_"), TEXT(""));  // PIE 환경에서는 "UEDPIE_0_"이 붙을 수 있음
+
+
+			FName CurrentLevelName(*CurrentLevelString);
+
+
+			// 레벨을 다시 로드
+			UGameplayStatics::OpenLevel(this, CurrentLevelName);
+
+		}, 5.0f, false);
 
 	 
 	if (OnDeath.IsBound()  == true)
