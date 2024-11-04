@@ -48,7 +48,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	{
 		AttackMontage.Add(ATTACK_MONTAGE1.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_InP_Montage.Boss_Attack_Uppercut_InP_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_ChargedCombo_InP_Montage.Boss_Attack_ChargedCombo_InP_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE2.Object);
 	}
@@ -57,6 +57,13 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	if (SKILL_MONTAGE.Succeeded())
 	{
 		SkillMontage = SKILL_MONTAGE.Object;
+	}
+
+	// 사망 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/GiantGolemIdleDeath01_Montage.GiantGolemIdleDeath01_Montage"));
+	if (DEATHANIM.Succeeded())
+	{
+		DeathMontage = DEATHANIM.Object;
 	}
 
 }
