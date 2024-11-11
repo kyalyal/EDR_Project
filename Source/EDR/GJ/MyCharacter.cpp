@@ -115,8 +115,8 @@ void AMyCharacter::Attack()
 		return;
 	}
 
-	// 30%확률로 스킬 발동
-	if (RandomValue <= 30)
+	// 20%확률로 스킬 발동
+	if (RandomValue <= 20)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill!!!!!!!!!!!!!!!!!"));
 		PlayAnimMontage(SkillMontage, 1.0f);
@@ -138,8 +138,9 @@ void AMyCharacter::Attack()
 	}
 	else
 	{
+		int aRandom = FMath::RandRange(0, 100);
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
-		if (FMath::RandRange(0, 100) > 40)
+		if (aRandom < 30 && aRandom >= 0)
 		{
 			if (AttackMontage.IsValidIndex(0)) 
 			{
@@ -147,12 +148,20 @@ void AMyCharacter::Attack()
 				PlayAnimMontage(AttackMontage[0], 1.0f);
 			}
 		}
-		else
+		else if (aRandom <60 && aRandom > 30)
 		{
 			if (AttackMontage.IsValidIndex(1))
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
 				PlayAnimMontage(AttackMontage[1], 1.0f);
+			}
+		}
+		else
+		{
+			if (AttackMontage.IsValidIndex(2))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				PlayAnimMontage(AttackMontage[2], 1.0f);
 			}
 		}
 

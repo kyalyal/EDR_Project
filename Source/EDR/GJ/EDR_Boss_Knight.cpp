@@ -48,12 +48,18 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	{
 		AttackMontage.Add(ATTACK_MONTAGE1.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_ChargedCombo_InP_Montage.Boss_Attack_ChargedCombo_InP_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Swing_InP_Montage.Boss_Attack_Swing_InP_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE2.Object);
 	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE3(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_HandAndSwordSwing_InP_Montage.Boss_Attack_HandAndSwordSwing_InP_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE3.Object);
+	}
+
+
 	// 스킬 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_InP_Montage.Boss_Attack_Uppercut_InP_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_ChargedCombo_InP_Montage.Boss_Attack_ChargedCombo_InP_Montage"));
 	if (SKILL_MONTAGE.Succeeded())
 	{
 		SkillMontage = SKILL_MONTAGE.Object;
