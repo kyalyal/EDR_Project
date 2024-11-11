@@ -115,11 +115,11 @@ void AMyCharacter::Attack()
 		return;
 	}
 
-	// 30%확률로 스킬 발동
-	if (RandomValue <= 30)
+	// 20%확률로 스킬 발동
+	if (RandomValue <= 20)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill!!!!!!!!!!!!!!!!!"));
-		PlayAnimMontage(SkillMontage, 1.0f);
+		PlayAnimMontage(SkillMontage, 1.3f);
 
 		// 스킬 사운드 재생
 		if (SkillSoundCue != nullptr)
@@ -138,8 +138,9 @@ void AMyCharacter::Attack()
 	}
 	else
 	{
+		int aRandom = FMath::RandRange(0, 100);
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
-		if (FMath::RandRange(0, 100) > 40)
+		if (aRandom < 30 && aRandom >= 0)
 		{
 			if (AttackMontage.IsValidIndex(0)) 
 			{
@@ -147,12 +148,20 @@ void AMyCharacter::Attack()
 				PlayAnimMontage(AttackMontage[0], 1.0f);
 			}
 		}
-		else
+		else if (aRandom <60 && aRandom > 30)
 		{
 			if (AttackMontage.IsValidIndex(1))
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
 				PlayAnimMontage(AttackMontage[1], 1.0f);
+			}
+		}
+		else
+		{
+			if (AttackMontage.IsValidIndex(2))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				PlayAnimMontage(AttackMontage[2], 1.0f);
 			}
 		}
 
@@ -251,6 +260,20 @@ void AMyCharacter::AttackCheck()
 		{
 			if (HitResult.GetActor() != nullptr)
 			{
+				// 히트 사운드 재생
+				if (HitSoundCue[1] != nullptr)
+				{
+					UGameplayStatics::SpawnSoundAttached(
+						HitSoundCue[1],
+						GetRootComponent(),
+						NAME_None,
+						FVector::ZeroVector,
+						EAttachLocation::KeepRelativeOffset,
+						false,
+						2.5f,  // Volume multiplier
+						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+					);
+				}
 				// 데미지 정보 전달
 				FDamageEvent DamageEvent;
 				HitResult.GetActor()->TakeDamage(SkillDamage, DamageEvent, GetController(), this);
@@ -300,6 +323,20 @@ void AMyCharacter::AttackCheck()
 		{
 			if (HitResult.GetActor() != nullptr)
 			{
+				// 히트 사운드 재생
+				if (HitSoundCue[0] != nullptr)
+				{
+					UGameplayStatics::SpawnSoundAttached(
+						HitSoundCue[0],
+						GetRootComponent(),
+						NAME_None,
+						FVector::ZeroVector,
+						EAttachLocation::KeepRelativeOffset,
+						false,
+						2.5f,  // Volume multiplier
+						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+					);
+				}
 				// 데미지 정보 전달
 				FDamageEvent DamageEvent;
 				HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
