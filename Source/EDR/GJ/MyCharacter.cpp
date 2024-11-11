@@ -119,7 +119,7 @@ void AMyCharacter::Attack()
 	if (RandomValue <= 20)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill!!!!!!!!!!!!!!!!!"));
-		PlayAnimMontage(SkillMontage, 1.0f);
+		PlayAnimMontage(SkillMontage, 1.3f);
 
 		// 스킬 사운드 재생
 		if (SkillSoundCue != nullptr)
