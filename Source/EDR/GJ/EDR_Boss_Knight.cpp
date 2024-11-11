@@ -42,6 +42,8 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	
 	
 	
+	// 애니메이션 관련
+
 	// 공격
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_InP_Montage.Boss_Attack_Uppercut_InP_Montage"));
 	if (ATTACK_MONTAGE1.Succeeded())
@@ -71,6 +73,26 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	{
 		DeathMontage = DEATHANIM.Object;
 	}
+
+	// 사운드 관련
+
+	// 공격 히트시 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>HITSOUNDCUE1(TEXT("/Game/Sword_Fighting_SFX/Cues/Blunt_Weapon_Hits_Flesh_3_Cue.Blunt_Weapon_Hits_Flesh_3_Cue"));
+	if (HITSOUNDCUE1.Succeeded())
+	{
+		HitSoundCue.Add(HITSOUNDCUE1.Object);
+	}	// 공격 히트시 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>HITSOUNDCUE2(TEXT("/Game/Sword_Fighting_SFX/Cues/Blunt_Weapon_Hits_Flesh_1_Cue.Blunt_Weapon_Hits_Flesh_1_Cue"));
+	if (HITSOUNDCUE2.Succeeded())
+	{
+		HitSoundCue.Add(HITSOUNDCUE2.Object);
+	}	// 공격 히트시 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>HITSOUNDCUE3(TEXT("/Game/Sword_Fighting_SFX/Cues/Blunt_Weapon_Hits_Flesh_5_Cue.Blunt_Weapon_Hits_Flesh_5_Cue"));
+	if (HITSOUNDCUE3.Succeeded())
+	{
+		HitSoundCue.Add(HITSOUNDCUE1.Object);
+	}
+
 
 }
 void AEDR_Boss_Knight::BeginPlay()

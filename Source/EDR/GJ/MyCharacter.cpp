@@ -260,6 +260,20 @@ void AMyCharacter::AttackCheck()
 		{
 			if (HitResult.GetActor() != nullptr)
 			{
+				// 히트 사운드 재생
+				if (HitSoundCue[1] != nullptr)
+				{
+					UGameplayStatics::SpawnSoundAttached(
+						HitSoundCue[1],
+						GetRootComponent(),
+						NAME_None,
+						FVector::ZeroVector,
+						EAttachLocation::KeepRelativeOffset,
+						false,
+						2.5f,  // Volume multiplier
+						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+					);
+				}
 				// 데미지 정보 전달
 				FDamageEvent DamageEvent;
 				HitResult.GetActor()->TakeDamage(SkillDamage, DamageEvent, GetController(), this);
@@ -309,6 +323,20 @@ void AMyCharacter::AttackCheck()
 		{
 			if (HitResult.GetActor() != nullptr)
 			{
+				// 히트 사운드 재생
+				if (HitSoundCue[0] != nullptr)
+				{
+					UGameplayStatics::SpawnSoundAttached(
+						HitSoundCue[0],
+						GetRootComponent(),
+						NAME_None,
+						FVector::ZeroVector,
+						EAttachLocation::KeepRelativeOffset,
+						false,
+						2.5f,  // Volume multiplier
+						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+					);
+				}
 				// 데미지 정보 전달
 				FDamageEvent DamageEvent;
 				HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);

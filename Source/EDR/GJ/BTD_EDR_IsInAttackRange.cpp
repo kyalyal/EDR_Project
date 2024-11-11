@@ -33,6 +33,6 @@ bool UBTD_EDR_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent
 	}
 
 	// 거리 조건 계산
-	bResult = (Target->GetDistanceTo(ControllingPawn) <= 500.0f);
+	bResult = (Target->GetDistanceTo(ControllingPawn) <= 400.0f);
 	return bResult;
 }
