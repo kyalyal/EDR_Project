@@ -44,6 +44,15 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	
 	// 애니메이션 관련
 
+	// 전투 시작 애니메이션
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> FIGHTSTART_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/NoneBattle/Boss_BattleEntrance_InP_Montage.Boss_BattleEntrance_InP_Montage"));
+	if (FIGHTSTART_MONTAGE.Succeeded())
+	{
+		FightStartMontage = FIGHTSTART_MONTAGE.Object;
+	}
+
+
 	// 공격
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_InP_Montage.Boss_Attack_Uppercut_InP_Montage"));
 	if (ATTACK_MONTAGE1.Succeeded())

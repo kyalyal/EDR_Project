@@ -38,6 +38,9 @@ public:
 	USoundCue* DeathSoundCue;   
 
 protected:
+
+
+
 	UPROPERTY(VisibleAnywhere, Category = Weapone)
 	// 무기
 	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
@@ -87,6 +90,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> DeathMontage;
 
+	// 전투 시작
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UAnimMontage> FightStartMontage;
+
 
 
 	// 애니메이션 재생을 위해 공격중인지 확인
@@ -118,6 +125,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void IsDeath();
+
+	void FightStart();
 
 
 	// 공격 함수

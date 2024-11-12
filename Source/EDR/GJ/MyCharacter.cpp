@@ -24,7 +24,7 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	
+
 	// 캐릭터 회전 부드럽게
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
@@ -90,9 +90,14 @@ void AMyCharacter::UpdateHP(float NewHP)
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), hp));
 }
 
+void AMyCharacter::FightStart()
+{
+	PlayAnimMontage(FightStartMontage, 1.0f);
+}
+
 void AMyCharacter::Attack()
 {
-	
+
 	// 공격, 스킬 확률
 	RandomValue = FMath::RandRange(0, 100);
 
@@ -142,13 +147,13 @@ void AMyCharacter::Attack()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
 		if (aRandom < 30 && aRandom >= 0)
 		{
-			if (AttackMontage.IsValidIndex(0)) 
+			if (AttackMontage.IsValidIndex(0))
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
 				PlayAnimMontage(AttackMontage[0], 1.0f);
 			}
 		}
-		else if (aRandom <60 && aRandom > 30)
+		else if (aRandom < 60 && aRandom > 30)
 		{
 			if (AttackMontage.IsValidIndex(1))
 			{

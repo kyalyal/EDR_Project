@@ -20,15 +20,21 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
-
 	if (nullptr == ControllingPawn)
 	{
 		return;
 	}
+	auto MyCharacter = Cast<AMyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	if (nullptr == MyCharacter)
+	{
+		return;
+	}
+
+
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
 	// 감지 범위
-	float DetectRadius = 1000.0f;
+	float DetectRadius = 1500.0f;
 
 	if (nullptr == World)
 	{
@@ -70,10 +76,11 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 					// 캐릭터 발견시 실행
 					if (GameMode->GetFightMode() != EFightMode::FightMode)
 					{
-
 						// EFightMode FightMode로 설정
 						GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FightModeOn!!!!!!!!!!!!!!!!!!"));
 						GameMode->SetFightMode(EFightMode::FightMode);
+						MyCharacter->FightStart();
+
 					}
 				}
 				// 디버그 정보 색상 출력
