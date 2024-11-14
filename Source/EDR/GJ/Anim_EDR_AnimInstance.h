@@ -7,6 +7,7 @@
 #include "Anim_EDR_AnimInstance.generated.h"
 // 공격이 맞았는지 확인하는 델리게이트
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackStepDelegate);
 /**
  * 
  */
@@ -27,6 +28,10 @@ public:
 
 	// 공격이 맞았는지 확인하는 델리게이트
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
+
+	// 공격이 맞았는지 확인하는 델리게이트
+	FOnAttackStepDelegate OnAttackStep;
+
 private:
 	UPROPERTY(EditAnyWhere,BlueprintReadOnly,Category = Pawn, Meta=(AllowPrivateAccess = true))
 	float CurrentPawnSpeed;
@@ -42,4 +47,9 @@ private:
 	// 공격 히트 타이밍을 노티파이로 설정
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
+
+
+	// 공격 애니메이션 재생시 스텝이 있을경우
+	UFUNCTION()
+	void AnimNotify_AttackStep();
 };

@@ -133,6 +133,10 @@ public:
 	virtual void Attack();
 	FOnAttackEndDelegate OnAttackEnd;
 
+	// 공격중 스텝 처리
+	void AttackStep();
+
+	// 공격 히트 체크
 	void AttackCheck();
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);

@@ -193,6 +193,7 @@ void AMyCharacter::Attack()
 
 	// 공격 판정 이벤트 바인딩
 	EDRAnim->OnAttackHitCheck.AddUObject(this, &AMyCharacter::AttackCheck);
+	EDRAnim->OnAttackStep.AddUObject(this, &AMyCharacter::AttackStep);
 
 	// 애니메이션 종료 시 공격 끝 처리
 	EDRAnim->OnMontageEnded.RemoveAll(this);  // 중복 바인딩 방지
@@ -376,4 +377,9 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	}
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
+void AMyCharacter::AttackStep()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackStepAttackStepAttackStepAttackStepAttackStepAttackStep"));
 }
