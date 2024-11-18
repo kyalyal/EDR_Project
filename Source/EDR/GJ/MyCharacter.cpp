@@ -15,6 +15,7 @@ AMyCharacter::AMyCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
+	IsFightStarting = false;
 	// 캡슐컴포넌트가 MyCharacter프리셋을 사용하도록 함
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("MyCharacter"));
 
@@ -90,17 +91,46 @@ void AMyCharacter::UpdateHP(float NewHP)
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("UpdateHP() - %s HP : %f"), *GetName(), hp));
 }
 
+
+
+
+// 전투 시작
+
 void AMyCharacter::FightStart()
 {
-	PlayAnimMontage(FightStartMontage, 1.0f);
+	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
+	if (FightStartMontage)
+	{
+		PlayAnimMontage(FightStartMontage, 1.0f);
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("FightStartMontage Played"));
+	}
+
+	if (EDRAnim != nullptr)
+	{
+		EDRAnim->OnMontageEnded.RemoveAll(this);  // 기존 이벤트 제거
+		EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnFightStartMontageEnded);
+	}
+}
+void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	// FightStart 애니메이션이 끝났을 때 공격 시작
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, FString::Printf(TEXT("bInterrupted: %s"), bInterrupted ? TEXT("True") : TEXT("False")));
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fight Start Animation Ended"));	
+	IsFightStarting = true;
+	OnFightStartEnd.Broadcast();
+
+
 }
 
+
+
+
+// 공격 관련
 void AMyCharacter::Attack()
 {
 
 	// 공격, 스킬 확률
 	RandomValue = FMath::RandRange(0, 100);
-
 	if (Death)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is Death true"));
@@ -137,7 +167,7 @@ void AMyCharacter::Attack()
 				EAttachLocation::KeepRelativeOffset,
 				false,
 				1.0f,  // Volume multiplier
-				0.5f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+				0.5f   // Pitch multiplier
 			);
 		}
 	}
@@ -181,7 +211,7 @@ void AMyCharacter::Attack()
 				EAttachLocation::KeepRelativeOffset,
 				false,
 				1.0f,  // Volume multiplier
-				0.5f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+				0.5f   // Pitch multiplier
 			);
 		}
 	}
@@ -200,6 +230,8 @@ void AMyCharacter::Attack()
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
 }
 
+
+
 // 공격 애니메이션 종료 처리 함수
 void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
@@ -217,10 +249,16 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack Animation Ended"));
-
 	OnAttackEnd.Broadcast();
 }
+
+
+
+
+
 //  공격 판정
+
+
 void AMyCharacter::AttackCheck()
 {
 	// 스킬 판정

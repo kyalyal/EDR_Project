@@ -13,6 +13,9 @@
 // 공격 애니메이션이 끝났는지 확인
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 
+DECLARE_MULTICAST_DELEGATE(FOnFightStartEndDelegate);
+
+
 UCLASS()
 class EDR_API AMyCharacter : public ACharacter
 {
@@ -96,6 +99,8 @@ protected:
 
 
 
+
+
 	// 애니메이션 재생을 위해 공격중인지 확인
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;
@@ -106,6 +111,11 @@ protected:
 	class UAnim_EDR_AnimInstance* EDRAnim;
 
 public:
+
+	// 전투 시작 애니메이션 확인
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsFightStarting = false;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -126,17 +136,31 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void IsDeath();
 
+
+	// 전투 시작 애니메이션 끝났을 때 호출할 델리게이트
+	FOnFightStartEndDelegate OnFightStartEnd;
+
+	// 새로운 함수 추가
+	UFUNCTION()
+	void OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+
 	void FightStart();
 
 
 	// 공격 함수
 	virtual void Attack();
+
+	// 공격 애니메이션 끝났는지 체크
 	FOnAttackEndDelegate OnAttackEnd;
+
+	
 
 	// 공격중 스텝 처리
 	void AttackStep();
 
 	// 공격 히트 체크
+	UFUNCTION()
 	void AttackCheck();
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
