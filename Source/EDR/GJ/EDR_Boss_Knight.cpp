@@ -103,6 +103,23 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	}
 
 
+	// 공격 미스시 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>MISSSOUNDCUE1(TEXT("/Game/Sword_Fighting_SFX/Cues/Sword_Hit_1_Cue.Sword_Hit_1_Cue"));
+	if (MISSSOUNDCUE1.Succeeded())
+	{
+		MissSoundCue.Add(MISSSOUNDCUE1.Object);
+	}	// 공격 미스시 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>MISSSOUNDCUE2(TEXT("/Game/Sword_Fighting_SFX/Cues/Sword_Hit_1_Cue.Sword_Hit_2_Cue"));
+	if (MISSSOUNDCUE2.Succeeded())
+	{
+		MissSoundCue.Add(MISSSOUNDCUE2.Object);
+	}	// 공격 미스시 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>MISSSOUNDCUE3(TEXT("/Game/Sword_Fighting_SFX/Cues/Sword_Hit_1_Cue.Sword_Hit_5_Cue"));
+	if (MISSSOUNDCUE3.Succeeded())
+	{
+		MissSoundCue.Add(MISSSOUNDCUE3.Object);
+	}
+
 }
 void AEDR_Boss_Knight::BeginPlay()
 {

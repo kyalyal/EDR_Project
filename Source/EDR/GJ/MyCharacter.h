@@ -30,6 +30,9 @@ public:
 	// 공격 히트 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	TArray<TObjectPtr<class USoundCue>> HitSoundCue;
+	// 공격 미스 시 재생할 사운드
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	TArray<TObjectPtr<class USoundCue>> MissSoundCue;
 	// 공격 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundCue* AttackSoundCue;  
@@ -165,6 +168,10 @@ public:
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool bCanAttackSmallMove; //공격미세이동여부. 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))FVector ExpectedAttackLocation; //공격미세이동목표값.
 
 
 private:

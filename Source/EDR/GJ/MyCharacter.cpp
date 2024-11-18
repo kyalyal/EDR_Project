@@ -128,7 +128,8 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 // 공격 관련
 void AMyCharacter::Attack()
 {
-
+	bCanAttackSmallMove = true; //미세전진 가능
+	ExpectedAttackLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;//전진시킬 목표위치 지정.
 	// 공격, 스킬 확률
 	RandomValue = FMath::RandRange(0, 100);
 	if (Death)
@@ -386,6 +387,22 @@ void AMyCharacter::AttackCheck()
 				HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
 			}
 		}
+		else
+		{
+			if (MissSoundCue[0] != nullptr)
+			{
+				UGameplayStatics::SpawnSoundAttached(
+					MissSoundCue[0],
+					GetRootComponent(),
+					NAME_None,
+					FVector::ZeroVector,
+					EAttachLocation::KeepRelativeOffset,
+					false,
+					2.5f,  // Volume multiplier
+					0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+				);
+			}
+		}
 	}
 
 
@@ -419,5 +436,20 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 
 void AMyCharacter::AttackStep()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackStepAttackStepAttackStepAttackStepAttackStepAttackStep"));
+	// 디버그 출력
+
+	if (bCanAttackSmallMove) 
+	{ 
+		if (FMath::Abs(ExpectedAttackLocation.X - GetActorLocation().X) > 0.1) 
+		{ 
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackStep AttackStep AttackStep"));
+			FVector temp = FMath::Lerp(GetActorLocation(), ExpectedAttackLocation, 0.05f);		
+			SetActorLocation(temp); 
+		} 
+	else 
+		{ 
+			bCanAttackSmallMove = false;		
+			ExpectedAttackLocation = FVector::ZeroVector; 
+		} 
+	};
 }
