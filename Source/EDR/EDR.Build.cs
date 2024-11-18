@@ -9,5 +9,6 @@ public class EDR : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","UMG", "EnhancedInput", "Niagara", "AIModule", "NavigationSystem", "Slate", "SlateCore" });
-	}
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    }
 }

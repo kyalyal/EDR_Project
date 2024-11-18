@@ -17,7 +17,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	SkillRadius = 200.0f;
 
 
-	GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();

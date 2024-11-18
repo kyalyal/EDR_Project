@@ -44,7 +44,36 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//// 이동 중인지 확인
+	if (GetVelocity().Size() > 0)
+	{
+		IsMoving = true;
+	}
+	else
+	{
+		IsMoving = false;
+	}
+	if(!IsMoving)
+	{
+		CurrentSpeed = 0.0f;
+	}
 
+
+	// 현재 속도 증가
+	if (CurrentSpeed < TargetSpeed)
+	{
+		CurrentSpeed += Acceleration * DeltaTime;
+		if (CurrentSpeed > TargetSpeed)
+		{
+			CurrentSpeed = TargetSpeed; // 최대 속도 제한
+		}
+	}
+
+
+
+
+	// 이동 속도 업데이트
+	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
 }
 
 // Called to bind functionality to input
@@ -56,7 +85,30 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 
 
+// 캐릭터 정지 관련 함수
+void AMyCharacter::StopMovement()
+{
+	// 이동을 멈추기 위해 MaxWalkSpeed를 0으로 설정
+	GetCharacterMovement()->MaxWalkSpeed = 0.0f;
+
+	// 2초 후에 이동을 재개
+	GetWorld()->GetTimerManager().SetTimer(StopMovementTimerHandle, this, &AMyCharacter::ResumeMovement, 2.0f, false);
+}
+
+void AMyCharacter::ResumeMovement()
+{
+	// 원래의 이동 속도로 복원 (예: 200으로 설정)
+	GetCharacterMovement()->MaxWalkSpeed = 200.0f; // 원하는 속도로 설정
+}
+
+
+
+
+
 // 사망 애니메이션
+
+
+
 void AMyCharacter::IsDeath()
 {
 	// 이미 죽어있으면 애니메이션 실행 안함
@@ -117,6 +169,7 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, FString::Printf(TEXT("bInterrupted: %s"), bInterrupted ? TEXT("True") : TEXT("False")));
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fight Start Animation Ended"));	
 	IsFightStarting = true;
+	//StopMovement();
 	OnFightStartEnd.Broadcast();
 
 

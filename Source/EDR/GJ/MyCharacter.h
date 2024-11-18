@@ -44,15 +44,26 @@ public:
 	USoundCue* DeathSoundCue;   
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float TargetSpeed = 200.f; // 목표 속도
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float Acceleration = 50.0f;  // 가속도
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float CurrentSpeed = 0.0f; // 현재 속도
+	// 이동중인지 체크
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Movement")
+	bool IsMoving = false;
 
 	UPROPERTY(VisibleAnywhere, Category = Weapone)
 	// 무기
 	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
 
 
+	// 정지 관련 함수
+	void StopMovement();
 
+	void ResumeMovement();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -175,5 +186,7 @@ public:
 
 
 private:
+
+	FTimerHandle StopMovementTimerHandle;
 	int32 RandomValue;
 };
