@@ -15,13 +15,18 @@ void UBTS_EDR_IsFightStart::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	AEnemy_EDR_AIController* AIController = Cast<AEnemy_EDR_AIController>(OwnerComp.GetOwner());
 	if (AIController)
 	{
+		// 캐스팅
 		AMyCharacter* MyCharacter = Cast<AMyCharacter>(AIController->GetPawn());
+
 		if (MyCharacter)
 		{
+
+			// 공격애니메이션 재생중인지
 			bIsFightStartEnd = MyCharacter->IsFightStarting; 
 			if (bIsFightStartEnd)
 			{
 				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("ASDFADSF"));
+				// 블랙보드 변수에 저장
 				OwnerComp.GetBlackboardComponent()->SetValueAsBool(AEnemy_EDR_AIController::FightStartEnd, bIsFightStartEnd);
 			}
 		}

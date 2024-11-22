@@ -18,11 +18,11 @@ void UAnim_EDR_AnimInstance::AnimNotify_AttackHitCheck()
 	OnAttackHitCheck.Broadcast();
 }
 
-// 공격 스텝 신호
-void UAnim_EDR_AnimInstance::AnimNotify_AttackStep()
-{
-	OnAttackStep.Broadcast();
-}
+//// 공격 스텝 신호
+//void UAnim_EDR_AnimInstance::AnimNotify_AttackStep()
+//{
+//	OnAttackStep.Broadcast();
+//}
 
 
 void UAnim_EDR_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)

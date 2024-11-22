@@ -79,6 +79,8 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 						// EFightMode FightMode로 설정
 						GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FightModeOn!!!!!!!!!!!!!!!!!!"));
 						GameMode->SetFightMode(EFightMode::FightMode);
+
+						// 전투 시작 애니메이션 재생 함수
 						MyCharacter->FightStart();
 
 					}

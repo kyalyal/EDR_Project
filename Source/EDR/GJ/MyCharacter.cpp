@@ -53,6 +53,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	{
 		IsMoving = false;
 	}
+	// 걷다가 멈추면 현재 속도 다시 초기화
 	if(!IsMoving)
 	{
 		CurrentSpeed = 0.0f;
@@ -163,11 +164,15 @@ void AMyCharacter::FightStart()
 		EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnFightStartMontageEnded);
 	}
 }
+
+// 전투 시작 애니메이션 종료 되면 호출
 void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	// FightStart 애니메이션이 끝났을 때 공격 시작
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, FString::Printf(TEXT("bInterrupted: %s"), bInterrupted ? TEXT("True") : TEXT("False")));
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fight Start Animation Ended"));	
+
+	// 애니메이션 종료 확인
 	IsFightStarting = true;
 	//StopMovement();
 	OnFightStartEnd.Broadcast();
@@ -179,6 +184,7 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 
 
 // 공격 관련
+
 void AMyCharacter::Attack()
 {
 	bCanAttackSmallMove = true; //미세전진 가능
@@ -229,7 +235,7 @@ void AMyCharacter::Attack()
 	{
 		int aRandom = FMath::RandRange(0, 100);
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
-		if (aRandom < 30 && aRandom >= 0)
+		if (aRandom < 20 && aRandom >= 0)
 		{
 			if (AttackMontage.IsValidIndex(0))
 			{
@@ -237,7 +243,7 @@ void AMyCharacter::Attack()
 				PlayAnimMontage(AttackMontage[0], 1.0f);
 			}
 		}
-		else if (aRandom < 60 && aRandom > 30)
+		else if (aRandom < 40 && aRandom >= 20)
 		{
 			if (AttackMontage.IsValidIndex(1))
 			{
@@ -245,12 +251,28 @@ void AMyCharacter::Attack()
 				PlayAnimMontage(AttackMontage[1], 1.0f);
 			}
 		}
-		else
+		else if (aRandom < 60 && aRandom >= 40)
 		{
 			if (AttackMontage.IsValidIndex(2))
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
 				PlayAnimMontage(AttackMontage[2], 1.0f);
+			}
+		}
+		else if (aRandom < 80 && aRandom >= 60)
+		{
+			if (AttackMontage.IsValidIndex(3))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				PlayAnimMontage(AttackMontage[3], 1.0f);
+			}
+		}
+		else
+		{
+			if (AttackMontage.IsValidIndex(4))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				PlayAnimMontage(AttackMontage[4], 1.0f);
 			}
 		}
 
@@ -485,24 +507,4 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	}
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-}
-
-void AMyCharacter::AttackStep()
-{
-	// 디버그 출력
-
-	if (bCanAttackSmallMove) 
-	{ 
-		if (FMath::Abs(ExpectedAttackLocation.X - GetActorLocation().X) > 0.1) 
-		{ 
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackStep AttackStep AttackStep"));
-			FVector temp = FMath::Lerp(GetActorLocation(), ExpectedAttackLocation, 0.05f);		
-			SetActorLocation(temp); 
-		} 
-	else 
-		{ 
-			bCanAttackSmallMove = false;		
-			ExpectedAttackLocation = FVector::ZeroVector; 
-		} 
-	};
 }

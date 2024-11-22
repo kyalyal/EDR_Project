@@ -49,7 +49,7 @@ private:
 	void AnimNotify_AttackHitCheck();
 
 
-	// 공격 애니메이션 재생시 스텝이 있을경우
-	UFUNCTION()
-	void AnimNotify_AttackStep();
+	//// 공격 애니메이션 재생시 스텝이 있을경우
+	//UFUNCTION()
+	//void AnimNotify_AttackStep();
 };

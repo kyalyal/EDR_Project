@@ -30,30 +30,41 @@ public:
 	// 공격 히트 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	TArray<TObjectPtr<class USoundCue>> HitSoundCue;
+
 	// 공격 미스 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	TArray<TObjectPtr<class USoundCue>> MissSoundCue;
+
 	// 공격 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundCue* AttackSoundCue;  
+
 	// 스킬 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundCue* SkillSoundCue;   
+
 	// 사망 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundCue* DeathSoundCue;   
 
 protected:
+
+	// 걷는 속도 관련
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float TargetSpeed = 200.f; // 목표 속도
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float Acceleration = 50.0f;  // 가속도
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float CurrentSpeed = 0.0f; // 현재 속도
+
 	// 이동중인지 체크
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Movement")
 	bool IsMoving = false;
+
+
+
 
 	UPROPERTY(VisibleAnywhere, Category = Weapone)
 	// 무기
@@ -141,12 +152,17 @@ public:
 
 
 
+	// hp 반환
 	UFUNCTION(BlueprintPure, category = "Player")
 	float GetHp() { return hp; }
 
+
+	// hp 업데이트
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void UpdateHP(float NewHP);
 
+
+	// 사망 애니메이션 재생
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void IsDeath();
 
@@ -158,7 +174,7 @@ public:
 	UFUNCTION()
 	void OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
-
+	// 전투 시작시 애니메이션 재생하는 함수
 	void FightStart();
 
 
