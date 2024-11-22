@@ -30,7 +30,7 @@ void AMyCharacter::PossessedBy(AController* NewController)
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.f, 0.0f);
 }
 
 // Called when the game starts or when spawned

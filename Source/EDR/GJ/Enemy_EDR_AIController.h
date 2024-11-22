@@ -47,6 +47,7 @@ public:
 	static const FName TargetKey;
 	static const FName Death;
 	static const FName FightStartEnd;
+	static const FName AbleAttack;
 
 	UFUNCTION()
 	void OnUpdated(TArray<AActor*> const& updated_actors);

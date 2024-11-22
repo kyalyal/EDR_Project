@@ -5,6 +5,7 @@
 #include "MyCharacter.h"
 #include "EDR/YS/EDRCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "EDR_Boss_Knight.h"
 #include "EDR_Boss_Giant.h"
 
 
@@ -18,14 +19,14 @@ EBTNodeResult::Type UBTT_EDR_TurnToTarget::ExecuteTask(UBehaviorTreeComponent& O
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	// MyCharacter 캐스팅
-	auto MyCharacter = Cast<AEDR_Boss_Giant>(OwnerComp.GetAIOwner()->GetPawn());
+	auto MyCharacter = Cast<AEDR_Boss_Knight>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == MyCharacter)
 	{
 		return EBTNodeResult::Failed;
 	}
 
 	// target 캐스팅
-	auto Target = Cast<AEDR_Boss_Giant>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
+	auto Target = Cast<AEDR_Boss_Knight>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
 	if (nullptr == Target)
 	{
 		return EBTNodeResult::Failed;
