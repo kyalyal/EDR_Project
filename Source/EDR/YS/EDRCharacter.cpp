@@ -16,6 +16,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EDRPlayerInterface.h"
 #include "EDRWeaponBase.h"
+#include "EDRWeapon_Axe.h"
 #include "EDRGameInstance.h"
 #include "EDRGameViewportClient.h"
 #include "Engine/DamageEvents.h"
@@ -358,19 +359,28 @@ void AEDRCharacter::BeginPlay()
 	//무기 스폰
 	HaveWeaponList.Add(GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator));
 
+	//임시 무기
+	HaveWeaponList.Add(GetWorld()->SpawnActor<AEDRWeapon_Axe>(FVector::ZeroVector, FRotator::ZeroRotator));
+	HaveWeaponList[1]->SetActorHiddenInGame(true);
+
 	CurrentWeaponIndex = 0;
 
 	CurrentWeapon = HaveWeaponList[CurrentWeaponIndex];
 
-	if (IsValid(CurrentWeapon))
+	for (AEDRWeaponBase* i : HaveWeaponList)
 	{
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,TEXT("hand_rSocket"));
-		CurrentWeapon->AddIgnoreActor(this);
-		
+		if (IsValid(i))
+		{
+			i->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_rSocket"));
+			i->AddIgnoreActor(this);
 
-		//공격 초기화
-		InitAttackMontage = CurrentWeapon->WeaponAttackAnim;
+
+			//공격 초기화
+			InitAttackMontage = CurrentWeapon->WeaponAttackAnim;
+		}
 	}
+
+	
 
 	ComboAttackMontage = InitAttackMontage;
 

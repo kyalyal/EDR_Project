@@ -14,5 +14,6 @@ class EDR_API AEDRWeapon_Axe : public AEDRWeaponBase
 {
 	GENERATED_BODY()
 	
-
+public:
+	AEDRWeapon_Axe();
 };
