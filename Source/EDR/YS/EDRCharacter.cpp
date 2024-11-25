@@ -66,12 +66,17 @@ AEDRCharacter::AEDRCharacter()
 
 	//인벤토리 키 생성
 	static ConstructorHelpers::FObjectFinder<UInputAction>IA_EDRInventory(TEXT("/Game/ThirdPerson/Input/Actions/IA_EDRInventory.IA_EDRInventory"));
-	if (IA_LockCamera.Succeeded())
+	if (IA_EDRInventory.Succeeded())
 	{
 		InventoryButton = IA_EDRInventory.Object;
 	}
 
-
+	//LockCamera 키 생성
+	static ConstructorHelpers::FObjectFinder<UInputAction>IA_ChangeWeaponAction(TEXT("/Game/ThirdPerson/Input/Actions/IA_ChangeWeapon.IA_ChangeWeapon"));
+	if (IA_ChangeWeaponAction.Succeeded())
+	{
+		ChangeWeaponAction = IA_ChangeWeaponAction.Object;
+	}
 	
 
 
@@ -351,7 +356,12 @@ void AEDRCharacter::BeginPlay()
 
 
 	//무기 스폰
-	CurrentWeapon = GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator);
+	HaveWeaponList.Add(GetWorld()->SpawnActor<AEDRWeaponBase>(FVector::ZeroVector, FRotator::ZeroRotator));
+
+	CurrentWeaponIndex = 0;
+
+	CurrentWeapon = HaveWeaponList[CurrentWeaponIndex];
+
 	if (IsValid(CurrentWeapon))
 	{
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,TEXT("hand_rSocket"));
@@ -628,6 +638,9 @@ void AEDRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		//Inventory
 		EnhancedInputComponent->BindAction(InventoryButton, ETriggerEvent::Started, this, &AEDRCharacter::ShowPlayerMenu);
+
+		//WeaponChange
+		EnhancedInputComponent->BindAction(ChangeWeaponAction, ETriggerEvent::Started, this, &AEDRCharacter::ChangeWeapon);
 	}
 	else
 	{
@@ -1080,8 +1093,16 @@ void AEDRCharacter::ShowPlayerMenu()
 
 		if (IsValid(CurrentPlayerMenuWidget))
 		{
+
+			//플레이어 메뉴 지우기
 			CurrentPlayerMenuWidget->RemoveFromParent();
 			CurrentPlayerMenuWidget = nullptr;
+
+			//안에 인벤토리도 켰으면 같이 지우자
+			if (IsValid(EDRInventory->As_UMG_Inventory))
+			{
+				ShowInventory();
+			}
 
 			
 			FInputModeGameOnly InputMode;
@@ -1103,6 +1124,25 @@ void AEDRCharacter::ShowPlayerMenu()
 		}
 
 		
+	}
+}
+
+void AEDRCharacter::ChangeWeapon()
+{
+	if (HaveWeaponList.Num() > 1)
+	{
+		if (HaveWeaponList.Num() == CurrentWeaponIndex + 1)
+		{
+			CurrentWeaponIndex = 0;
+		}
+		else
+		{
+			CurrentWeaponIndex++;
+		}
+
+		CurrentWeapon->SetActorHiddenInGame(true);
+		CurrentWeapon = HaveWeaponList[CurrentWeaponIndex];
+		CurrentWeapon->SetActorHiddenInGame(false);
 	}
 }
 

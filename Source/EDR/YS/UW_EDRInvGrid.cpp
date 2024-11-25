@@ -30,8 +30,8 @@ UUW_EDRInvGrid::UUW_EDRInvGrid(const FObjectInitializer& ObjectInitializer)
 	}
 
 	// 그리드의 기본 크기 설정
-	MaxRow = 10;
-	GridSize = 55;
+	MaxRow = 4;
+	GridSize = 24;
 }
 
 
