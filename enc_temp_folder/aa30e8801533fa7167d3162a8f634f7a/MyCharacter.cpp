@@ -485,7 +485,7 @@ void AMyCharacter::AttackCheck()
 
 
 
-// 데미지 받는 함수
+
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (Death)

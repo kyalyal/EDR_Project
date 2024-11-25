@@ -37,15 +37,15 @@ public:
 
 	// 공격 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	USoundCue* AttackSoundCue;
+	USoundCue* AttackSoundCue;  
 
 	// 스킬 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	USoundCue* SkillSoundCue;
+	USoundCue* SkillSoundCue;   
 
 	// 사망 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	USoundCue* DeathSoundCue;
+	USoundCue* DeathSoundCue;   
 
 protected:
 
@@ -54,7 +54,7 @@ protected:
 	float TargetSpeed = 200.f; // 목표 속도
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float Acceleration = 50.0f;  // 가속도
+	float Acceleration = 100.0f;  // 가속도
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float CurrentSpeed = 0.0f; // 현재 속도
@@ -184,8 +184,7 @@ public:
 	// 공격 애니메이션 끝났는지 체크
 	FOnAttackEndDelegate OnAttackEnd;
 
-
-
+	
 	// 공격 히트 체크
 	UFUNCTION()
 	void AttackCheck();
