@@ -185,10 +185,6 @@ public:
 	FOnAttackEndDelegate OnAttackEnd;
 
 	
-
-	// 공격중 스텝 처리
-	void AttackStep();
-
 	// 공격 히트 체크
 	UFUNCTION()
 	void AttackCheck();
