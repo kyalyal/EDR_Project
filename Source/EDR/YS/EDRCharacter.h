@@ -81,6 +81,9 @@ class AEDRCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InventoryButton;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ChangeWeaponAction;
+
 public:
 
 	//모듈형 캐릭터
@@ -291,6 +294,12 @@ public:
 	UFUNCTION()
 	void ShowPlayerMenu();
 
+
+	//무기 변경 시스템
+	void ChangeWeapon();
+
+
+
 	//고유 변수--------------------------------------------------------
 
 
@@ -337,8 +346,14 @@ protected:
 	bool bIsInvincible;
 
 
+	//무기
+	UPROPERTY()
+	TArray<class AEDRWeaponBase*> HaveWeaponList;
+
 	UPROPERTY()
 	TObjectPtr<class AEDRWeaponBase> CurrentWeapon;
+
+	int32 CurrentWeaponIndex;
 
 	
 	//몽타주

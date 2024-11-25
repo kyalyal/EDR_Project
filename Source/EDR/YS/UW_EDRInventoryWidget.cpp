@@ -60,7 +60,7 @@ void UUW_EDRInventoryWidget::NativeConstruct()
 void UUW_EDRInventoryWidget::InvItemRemovedFunc(int32 Key)
 {
 	WidgetInventory.Remove(Key);
-	ItemRemoved.Execute(Key); //나중에 체크 풀어줌
+	//ItemRemoved.Execute(Key); //나중에 체크 풀어줌
 }
 
 void UUW_EDRInventoryWidget::InvItemAddedFunc(int32 Key, FEDR_InventoryStruct Value)

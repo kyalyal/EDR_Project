@@ -15,7 +15,7 @@ UEDRInventory::UEDRInventory()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> InventoryWidgetClass(TEXT("/Game/YS/Blueprint/UMG/UMG_EDRInventory.UMG_EDRInventory_C"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> InventoryWidgetClass(TEXT("/Game/SK/UMG/PlayerMenu/Inventory/WBP_Inventory.WBP_Inventory_C"));
 	if (InventoryWidgetClass.Succeeded())
 	{
 		UMG_InventoryClass = InventoryWidgetClass.Class;
