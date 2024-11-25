@@ -54,7 +54,7 @@ protected:
 	float TargetSpeed = 200.f; // 목표 속도
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float Acceleration = 50.0f;  // 가속도
+	float Acceleration = 120.0f;  // 가속도
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float CurrentSpeed = 0.0f; // 현재 속도

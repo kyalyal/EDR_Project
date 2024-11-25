@@ -82,7 +82,6 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 
 						// 전투 시작 애니메이션 재생 함수
 						MyCharacter->FightStart();
-
 					}
 				}
 				// 디버그 정보 색상 출력
