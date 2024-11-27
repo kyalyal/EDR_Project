@@ -927,7 +927,6 @@ void AEDRCharacter::Interaction()
 		{
 			PlayerInterface->PlayerInteract();
 
-
 		}
 	}
 
