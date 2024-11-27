@@ -2,7 +2,7 @@
 
 
 #include "EDR_Boss_Knight.h"
-#include "EDR_Enemy_Weapon.h"
+#include "EDR_Enemy_BWeapon.h"
 #include "GameFramework/CharacterMovementComponent.h"
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
@@ -135,7 +135,7 @@ void AEDR_Boss_Knight::BeginPlay()
 
 	// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket(TEXT("hand_rSocket"));
-	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_Weapon>(FVector::ZeroVector, FRotator::ZeroRotator);
+	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_BWeapon>(FVector::ZeroVector, FRotator::ZeroRotator);
 	if (nullptr != CurrentWeapon)
 	{
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
