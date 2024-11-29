@@ -16,8 +16,9 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	SkillRange = 300.0f;
 	SkillRadius = 150.0f;
 
-
-	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+	// 속도
+	TargetSpeed = 200.0f;
+	Acceleration = 120.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();
@@ -27,12 +28,30 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	GetCapsuleComponent()->SetCapsuleRadius(34.0f);
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
-
 	// 메시 받아오기
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>MODEL(TEXT("/Game/SKnight_modular/Skeleton_Knight_01/mesh/SK_SKnigh_01_full.SK_SKnigh_01_full"));
 	if (MODEL.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(MODEL.Object);
+	}
+
+
+	// 공격
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Attack/Anim_Sword_1H_Attack_Combo1_Montage.Anim_Sword_1H_Attack_Combo1_Montage"));
+	if (ATTACK_MONTAGE1.Succeeded())
+	{
+		AttackMontage.Add(ATTACK_MONTAGE1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Attack/Anim_Sword_1H_Attack_Slash2_Montage.Anim_Sword_1H_Attack_Slash2_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE2.Object);
+	}
+
+	// 사망 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/GiantGolemIdleDeath01_Montage.GiantGolemIdleDeath01_Montage"));
+	if (DEATHANIM.Succeeded())
+	{
+		DeathMontage = DEATHANIM.Object;
 	}
 }
 void AEDR_Enemy_Skeleton::BeginPlay()
