@@ -9,7 +9,20 @@ AEDR_Enemy_SWeapon::AEDR_Enemy_SWeapon()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/GKnight/Meshes/Weapon/SM_WP_GothicKnight_Sword.SM_WP_GothicKnight_Sword"));
 	if (SK_WEAPON.Succeeded())
 	{
-		Weapon->SetStaticMesh(SK_WEAPON.Object);
+		WeaponMesh->SetStaticMesh(SK_WEAPON.Object);
 	}
-	Weapon->SetCollisionProfileName(TEXT("NoCollision"));
+	WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
+	////TracePoint
+	//AttackPointStart = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTSTART"));
+	//AttackPointEnd = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTEND"));
+
+	//AttackPointStart->SetupAttachment(WeaponMesh);
+	//AttackPointEnd->SetupAttachment(WeaponMesh);
+
+	//AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 10.f));
+	//AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
+
+	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 15.f));
+	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, -60.0f));
 }

@@ -54,7 +54,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 
 
 	// 공격
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_HandAndSwordSwing_RM_Montage.Boss_Attack_HandAndSwordSwing_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo2_1_Montage.Anim_SwordV2_Combo2_1_Montage"));
 	if (ATTACK_MONTAGE1.Succeeded())
 	{
 		AttackMontage.Add(ATTACK_MONTAGE1.Object);
@@ -74,6 +74,22 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE5(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_RM_Montage.Boss_Attack_Uppercut_RM_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE5.Object);
+	}	
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE6(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo2_Montage.Anim_SwordV2_Combo2_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE6.Object);
+	}	
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE7(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_Sword_1H_Attack_Jump3_Montage.Anim_Sword_1H_Attack_Jump3_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE7.Object);
+	}	
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE8(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo1_1_Montage.Anim_SwordV2_Combo1_1_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE8.Object);
+	}	
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE9(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo1_Montage.Anim_SwordV2_Combo1_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE9.Object);
 	}
 
 
@@ -143,7 +159,6 @@ void AEDR_Boss_Knight::BeginPlay()
 		CurrentWeapon->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
 
 
-		// 무기 크기 키우기
-		CurrentWeapon->SetActorScale3D(FVector(2.0f));
+
 	}
 }

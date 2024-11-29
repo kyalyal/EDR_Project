@@ -190,6 +190,8 @@ public:
 	UFUNCTION()
 	void AttackCheck();
 	UFUNCTION()
+	void AttackCheckEnd();
+	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 

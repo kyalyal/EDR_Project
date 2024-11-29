@@ -6,12 +6,25 @@
 AEDR_Enemy_BWeapon::AEDR_Enemy_BWeapon()
 {	
 
-	// 메시 입히기
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/BLACKSUN_BOSSBUNDLE1/Static_Meshes/Weapons/SM_Vanter_Sword.SM_Vanter_Sword"));
-	if (SK_WEAPON.Succeeded())
-	{
-		Weapon->SetStaticMesh(SK_WEAPON.Object);
-	}
-	Weapon->SetCollisionProfileName(TEXT("NoCollision"));
+    // 기본 칼
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/BLACKSUN_BOSSBUNDLE1/Static_Meshes/Weapons/SM_Vanter_Sword.SM_Vanter_Sword"));
+    if (SK_WEAPON.Succeeded())
+    {
+        WeaponMesh->SetStaticMesh(SK_WEAPON.Object);
+    }
+    WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
+	// 무기 크기 키우기
+	SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
+	//TracePoint
+	//AttackPointStart = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTSTART"));
+	//AttackPointEnd = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTEND"));
+
+	//AttackPointStart->SetupAttachment(WeaponMesh);
+	//AttackPointEnd->SetupAttachment(WeaponMesh);
+
+	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 25.f));
+	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, -65.0f));
+
+	Damage = 1.0f;
 }

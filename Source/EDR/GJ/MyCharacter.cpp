@@ -235,44 +235,76 @@ void AMyCharacter::Attack()
 	{
 		int aRandom = FMath::RandRange(0, 100);
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
-		if (aRandom < 20 && aRandom >= 0)
+		if (aRandom < 10 && aRandom >= 0)
 		{
 			if (AttackMontage.IsValidIndex(0))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
-				PlayAnimMontage(AttackMontage[0], 1.0f);
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("0"));
+				PlayAnimMontage(AttackMontage[0], 0.5f);
 			}
 		}
-		else if (aRandom < 40 && aRandom >= 20)
+		else if (aRandom < 20 && aRandom >= 10)
 		{
 			if (AttackMontage.IsValidIndex(1))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("1"));
 				PlayAnimMontage(AttackMontage[1], 1.0f);
 			}
 		}
-		else if (aRandom < 60 && aRandom >= 40)
+		else if (aRandom < 30 && aRandom >= 20)
 		{
 			if (AttackMontage.IsValidIndex(2))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("2"));
 				PlayAnimMontage(AttackMontage[2], 1.0f);
 			}
 		}
-		else if (aRandom < 80 && aRandom >= 60)
+		else if (aRandom < 40 && aRandom >= 30)
 		{
 			if (AttackMontage.IsValidIndex(3))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("3"));
 				PlayAnimMontage(AttackMontage[3], 1.0f);
+			}
+		}		
+		else if (aRandom < 60 && aRandom >= 50)
+		{
+			if (AttackMontage.IsValidIndex(4))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("4"));
+				PlayAnimMontage(AttackMontage[4], 1.0f);
+			}
+		}		
+		else if (aRandom < 70 && aRandom >= 60)
+		{
+			if (AttackMontage.IsValidIndex(5))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("5"));
+				PlayAnimMontage(AttackMontage[5], 1.0f);
+			}
+		}		
+		else if (aRandom < 80 && aRandom >= 70)
+		{
+			if (AttackMontage.IsValidIndex(6))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("6"));
+				PlayAnimMontage(AttackMontage[6], 1.0f);
+			}
+		}		
+		else if (aRandom < 90 && aRandom >= 80)
+		{
+			if (AttackMontage.IsValidIndex(7))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("7"));
+				PlayAnimMontage(AttackMontage[7], 1.0f);
 			}
 		}
 		else
 		{
-			if (AttackMontage.IsValidIndex(4))
+			if (AttackMontage.IsValidIndex(8))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdfasjkdfhslkfjhaslkjh"));
-				PlayAnimMontage(AttackMontage[4], 1.0f);
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("8"));
+				PlayAnimMontage(AttackMontage[8], 1.0f);
 			}
 		}
 
@@ -294,15 +326,25 @@ void AMyCharacter::Attack()
 
 	IsAttacking = true;
 
-	// 공격 판정 이벤트 중복 등록 방지: 기존에 바인딩된 이벤트가 있으면 제거
+	 //공격 판정 이벤트 중복 등록 방지: 기존에 바인딩된 이벤트가 있으면 제거
 	EDRAnim->OnAttackHitCheck.RemoveAll(this);
 
-	// 공격 판정 이벤트 바인딩
+
+
+
+	 //공격 판정 이벤트 바인딩
 	EDRAnim->OnAttackHitCheck.AddUObject(this, &AMyCharacter::AttackCheck);
+
+	EDRAnim->OnMontageEnded.RemoveAll(this);  // 중복 바인딩 방지
+	//공격 판정 끝 이벤트 바인딩
+	EDRAnim->OnAttackEnd.AddUObject(this, &AMyCharacter::AttackCheckEnd);
+
+
 
 	// 애니메이션 종료 시 공격 끝 처리
 	EDRAnim->OnMontageEnded.RemoveAll(this);  // 중복 바인딩 방지
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
+	
 }
 
 
@@ -324,6 +366,7 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack Animation Ended"));
+
 	OnAttackEnd.Broadcast();
 }
 
@@ -336,152 +379,156 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 
 void AMyCharacter::AttackCheck()
 {
-	// 스킬 판정
-	if (RandomValue <= 30)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("SkillCheck~~~~~~~~~~~~~~~~~~"));
-		FHitResult HitResult;
-		FCollisionQueryParams Params(NAME_None, false, this);
-
-		// 구체의 중심을 캐릭터 발 앞에 설정
-		FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
-		FVector ForwardLocation = StartLocation + GetActorForwardVector() * SkillRange;
-
-		bool bResult = GetWorld()->SweepSingleByChannel(
-			HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
-			StartLocation, // 탐색 시작 위치
-			ForwardLocation,
-			FQuat::Identity,
-			ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
-			FCollisionShape::MakeSphere(SkillRadius), // 탐색 사용할  도형
-			Params);
-
-		// 디버그 출력 정보를 담은 변수
-#if ENABLE_DRAW_DEBUG
-		FVector TraceVec = GetActorForwardVector() * SkillRange;
-		FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
-		FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
-		FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-		float DebugLifeTime = 1.0f;
-
-		// 디버그 출력
-		DrawDebugSphere(GetWorld(),
-			ForwardLocation,
-			SkillRadius,
-			12, // 세그먼트 수, 더 많을수록 부드러워짐
-			DrawColor,
-			false,
-			DebugLifeTime);
-
-#endif
-		// 액터 감지시
-		if (bResult)
-		{
-			if (HitResult.GetActor() != nullptr)
-			{
-				// 히트 사운드 재생
-				if (HitSoundCue[1] != nullptr)
-				{
-					UGameplayStatics::SpawnSoundAttached(
-						HitSoundCue[1],
-						GetRootComponent(),
-						NAME_None,
-						FVector::ZeroVector,
-						EAttachLocation::KeepRelativeOffset,
-						false,
-						2.5f,  // Volume multiplier
-						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
-					);
-				}
-				// 데미지 정보 전달
-				FDamageEvent DamageEvent;
-				HitResult.GetActor()->TakeDamage(SkillDamage, DamageEvent, GetController(), this);
-			}
-		}
-	}
-	// 공격판정
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackCheck~~~~~~~~~~~~~~~~~~"));
-		FHitResult HitResult;
-		FCollisionQueryParams Params(NAME_None, false, this);
-
-		// 구체의 중심을 캐릭터 발 앞에 설정
-		FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
-		FVector ForwardLocation = StartLocation + GetActorForwardVector() * AttackRange;
-
-		bool bResult = GetWorld()->SweepSingleByChannel(
-			HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
-			StartLocation, // 탐색 시작 위치
-			ForwardLocation,
-			FQuat::Identity,
-			ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
-			FCollisionShape::MakeSphere(AttackRadius), // 탐색 사용할  도형
-			Params);
-
-		// 디버그 출력 정보를 담은 변수
-#if ENABLE_DRAW_DEBUG
-		FVector TraceVec = GetActorForwardVector() * AttackRange;
-		FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
-		FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
-		FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-		float DebugLifeTime = 1.0f;
-
-		// 디버그 출력
-		DrawDebugSphere(GetWorld(),
-			ForwardLocation,
-			AttackRadius,
-			12, // 세그먼트 수, 더 많을수록 부드러워짐
-			DrawColor,
-			false,
-			DebugLifeTime);
-
-#endif
-		// 액터 감지시
-		if (bResult)
-		{
-			if (HitResult.GetActor() != nullptr)
-			{
-				// 히트 사운드 재생
-				if (HitSoundCue[0] != nullptr)
-				{
-					UGameplayStatics::SpawnSoundAttached(
-						HitSoundCue[0],
-						GetRootComponent(),
-						NAME_None,
-						FVector::ZeroVector,
-						EAttachLocation::KeepRelativeOffset,
-						false,
-						2.5f,  // Volume multiplier
-						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
-					);
-				}
-				// 데미지 정보 전달
-				FDamageEvent DamageEvent;
-				HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
-			}
-		}
-		else
-		{
-			if (MissSoundCue[0] != nullptr)
-			{
-				UGameplayStatics::SpawnSoundAttached(
-					MissSoundCue[0],
-					GetRootComponent(),
-					NAME_None,
-					FVector::ZeroVector,
-					EAttachLocation::KeepRelativeOffset,
-					false,
-					2.5f,  // Volume multiplier
-					0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
-				);
-			}
-		}
-	}
+	CurrentWeapon->StartAttack();
+//	// 스킬 판정
+//	if (RandomValue <= 30)
+//	{
+//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("SkillCheck~~~~~~~~~~~~~~~~~~"));
+//		FHitResult HitResult;
+//		FCollisionQueryParams Params(NAME_None, false, this);
+//
+//		// 구체의 중심을 캐릭터 발 앞에 설정
+//		FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+//		FVector ForwardLocation = StartLocation + GetActorForwardVector() * SkillRange;
+//
+//		bool bResult = GetWorld()->SweepSingleByChannel(
+//			HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
+//			StartLocation, // 탐색 시작 위치
+//			ForwardLocation,
+//			FQuat::Identity,
+//			ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
+//			FCollisionShape::MakeSphere(SkillRadius), // 탐색 사용할  도형
+//			Params);
+//
+//		// 디버그 출력 정보를 담은 변수
+//#if ENABLE_DRAW_DEBUG
+//		FVector TraceVec = GetActorForwardVector() * SkillRange;
+//		FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
+//		FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+//		FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+//		float DebugLifeTime = 1.0f;
+//
+//		// 디버그 출력
+//		DrawDebugSphere(GetWorld(),
+//			ForwardLocation,
+//			SkillRadius,
+//			12, // 세그먼트 수, 더 많을수록 부드러워짐
+//			DrawColor,
+//			false,
+//			DebugLifeTime);
+//
+//#endif
+//		// 액터 감지시
+//		if (bResult)
+//		{
+//			if (HitResult.GetActor() != nullptr)
+//			{
+//				// 히트 사운드 재생
+//				if (HitSoundCue[1] != nullptr)
+//				{
+//					UGameplayStatics::SpawnSoundAttached(
+//						HitSoundCue[1],
+//						GetRootComponent(),
+//						NAME_None,
+//						FVector::ZeroVector,
+//						EAttachLocation::KeepRelativeOffset,
+//						false,
+//						2.5f,  // Volume multiplier
+//						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+//					);
+//				}
+//				// 데미지 정보 전달
+//				FDamageEvent DamageEvent;
+//				HitResult.GetActor()->TakeDamage(SkillDamage, DamageEvent, GetController(), this);
+//			}
+//		}
+//	}
+//	// 공격판정
+//	else
+//	{
+//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("AttackCheck~~~~~~~~~~~~~~~~~~"));
+//		FHitResult HitResult;
+//		FCollisionQueryParams Params(NAME_None, false, this);
+//
+//		// 구체의 중심을 캐릭터 발 앞에 설정
+//		FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, -GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+//		FVector ForwardLocation = StartLocation + GetActorForwardVector() * AttackRange;
+//
+//		bool bResult = GetWorld()->SweepSingleByChannel(
+//			HitResult, // 물리적 충돌이 탐지된 경우 관련 정보를 담을 구조체
+//			StartLocation, // 탐색 시작 위치
+//			ForwardLocation,
+//			FQuat::Identity,
+//			ECollisionChannel::ECC_GameTraceChannel2, // 물리 충돌 감지에 사용할 트레이스 채널
+//			FCollisionShape::MakeSphere(AttackRadius), // 탐색 사용할  도형
+//			Params);
+//
+//		// 디버그 출력 정보를 담은 변수
+//#if ENABLE_DRAW_DEBUG
+//		FVector TraceVec = GetActorForwardVector() * AttackRange;
+//		FVector Center = StartLocation + TraceVec * 0.5f;  // 구체의 중심을 설정
+//		FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+//		FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+//		float DebugLifeTime = 1.0f;
+//
+//		// 디버그 출력
+//		DrawDebugSphere(GetWorld(),
+//			ForwardLocation,
+//			AttackRadius,
+//			12, // 세그먼트 수, 더 많을수록 부드러워짐
+//			DrawColor,
+//			false,
+//			DebugLifeTime);
+//
+//#endif
+//		// 액터 감지시
+//		if (bResult)
+//		{
+//			if (HitResult.GetActor() != nullptr)
+//			{
+//				// 히트 사운드 재생
+//				if (HitSoundCue[0] != nullptr)
+//				{
+//					UGameplayStatics::SpawnSoundAttached(
+//						HitSoundCue[0],
+//						GetRootComponent(),
+//						NAME_None,
+//						FVector::ZeroVector,
+//						EAttachLocation::KeepRelativeOffset,
+//						false,
+//						2.5f,  // Volume multiplier
+//						0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+//					);
+//				}
+//				// 데미지 정보 전달
+//				FDamageEvent DamageEvent;
+//				HitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
+//			}
+//		}
+//		else
+//		{
+//			if (MissSoundCue[0] != nullptr)
+//			{
+//				UGameplayStatics::SpawnSoundAttached(
+//					MissSoundCue[0],
+//					GetRootComponent(),
+//					NAME_None,
+//					FVector::ZeroVector,
+//					EAttachLocation::KeepRelativeOffset,
+//					false,
+//					2.5f,  // Volume multiplier
+//					0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+//				);
+//			}
+//		}
+//	}
 
 
 }
-
+void AMyCharacter::AttackCheckEnd()
+{
+	CurrentWeapon->StopAttack();
+}
 
 
 

@@ -7,6 +7,7 @@
 #include "Anim_EDR_AnimInstance.generated.h"
 // 공격이 맞았는지 확인하는 델리게이트
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnAttackStepDelegate);
 /**
  * 
@@ -29,6 +30,9 @@ public:
 	// 공격이 맞았는지 확인하는 델리게이트
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
 
+	// 데미지 타이밍 끝을 체크 하는 델리게이트
+	FOnAttackHitCheckDelegate OnAttackEnd;
+
 	// 공격이 맞았는지 확인하는 델리게이트
 	FOnAttackStepDelegate OnAttackStep;
 
@@ -47,6 +51,9 @@ private:
 	// 공격 히트 타이밍을 노티파이로 설정
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
+
+	UFUNCTION()
+	void AnimNotify_AttackEnd();
 
 
 	//// 공격 애니메이션 재생시 스텝이 있을경우
