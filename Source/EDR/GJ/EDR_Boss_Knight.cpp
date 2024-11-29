@@ -6,16 +6,22 @@
 #include "GameFramework/CharacterMovementComponent.h"
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
+
+	IsBoss = true;
 	// hp 재정의
 	hp = 100.0f;
 	AttackDamage = 40.0f;
-	AttackRange = 400.0f;
+	AttackRange = 500.0f;
 	AttackRadius = 200.0f;
 
 	SkillDamage = 40.0f;
 	SkillRange = 400.0f;
 	SkillRadius = 200.0f;
 
+
+	// 속도
+	TargetSpeed = 200.0f;
+	Acceleration = 120.0f;
 
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 

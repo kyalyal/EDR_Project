@@ -6,14 +6,20 @@
 
 AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 {
+	IsBoss = false;
+
+
+	IsFightStarting = true;
+
+
 	// hp 재정의
 	hp = 100.0f;
 	AttackDamage = 20.0f;
-	AttackRange = 300.0f;
+	AttackRange = 200.0f;
 	AttackRadius = 150.0f;
 
 	SkillDamage = 20.0f;
-	SkillRange = 300.0f;
+	SkillRange =300.0f;
 	SkillRadius = 150.0f;
 
 	// 속도
@@ -48,7 +54,7 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	}
 
 	// 사망 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/GiantGolemIdleDeath01_Montage.GiantGolemIdleDeath01_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Deaths_Hit_Head_Spinning_Montage.Deaths_Hit_Head_Spinning_Montage"));
 	if (DEATHANIM.Succeeded())
 	{
 		DeathMontage = DEATHANIM.Object;

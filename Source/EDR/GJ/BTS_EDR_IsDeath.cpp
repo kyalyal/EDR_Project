@@ -4,6 +4,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "MyCharacter.h"
 #include "Enemy_EDR_AIController.h"
+#include "Enemy_EDR_JAIController.h"
 #include "EDR/YS/EDRGameMode.h"
 UBTS_EDR_IsDeath::UBTS_EDR_IsDeath()
 {
@@ -12,6 +13,7 @@ UBTS_EDR_IsDeath::UBTS_EDR_IsDeath()
 void UBTS_EDR_IsDeath::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
     Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
+
     APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
     UWorld* World = ControllingPawn->GetWorld();
     if (nullptr == ControllingPawn)
@@ -23,16 +25,16 @@ void UBTS_EDR_IsDeath::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
         return;
     }
 
+    auto MyCharacter = Cast<AMyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+    if (nullptr == MyCharacter)
+    {
+        return;
+    }
+
     // 게임모드 캐스팅
     AEDRGameMode* GameMode = Cast<AEDRGameMode>(World->GetAuthGameMode());
 
 
-    // AIController 가져오기
-    AEnemy_EDR_AIController* AIController = Cast<AEnemy_EDR_AIController>(OwnerComp.GetOwner());
-    if (AIController)
-    {
-        // Pawn을 MyCharacter로 캐스팅
-        AMyCharacter* MyCharacter = Cast<AMyCharacter>(AIController->GetPawn());
         if (MyCharacter)
         {
             // Death 변수가 true인지 확인
@@ -50,7 +52,6 @@ void UBTS_EDR_IsDeath::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
                     bDeathCheck = true;
                 }
             }
-        }
     }
 }
 

@@ -25,7 +25,6 @@ void UBTS_EDR_IsFightStart::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 			bIsFightStartEnd = MyCharacter->IsFightStarting; 
 			if (bIsFightStartEnd)
 			{
-				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("ASDFADSF"));
 				// 블랙보드 변수에 저장
 				OwnerComp.GetBlackboardComponent()->SetValueAsBool(AEnemy_EDR_AIController::FightStartEnd, bIsFightStartEnd);
 			}

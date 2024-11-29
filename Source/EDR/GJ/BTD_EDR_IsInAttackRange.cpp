@@ -3,6 +3,7 @@
 
 #include "BTD_EDR_IsInAttackRange.h"
 #include "Enemy_EDR_AIController.h"
+#include "Enemy_EDR_JAIController.h"
 #include "MyCharacter.h"
 #include "DrawDebugHelpers.h"
 #include "EDR/YS/EDRCharacter.h"
@@ -37,7 +38,11 @@ bool UBTD_EDR_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent
 	{
 		return false;
 	}
-
+	auto MyCharacter = Cast<AMyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	if (nullptr == MyCharacter)
+	{
+		return false;
+	}
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
 	if (nullptr == World)
@@ -45,20 +50,41 @@ bool UBTD_EDR_IsInAttackRange::CalculateRawConditionValue(UBehaviorTreeComponent
 		return false;
 	}
 
-
-	// 블랙보드의 Target 플레이어 캐스팅
-	auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
-	if (nullptr == Target)
+	if (MyCharacter->IsBoss)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("over"));
-		return false;
+		// 블랙보드의 Target 플레이어 캐스팅
+		auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
+		if (nullptr == Target)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("over"));
+			return false;
+		}
+
+		// 거리 조건 계산
+		float Range = 400.0f;
+		bResult = (Target->GetDistanceTo(ControllingPawn) <= Range);
+
+		DrawDebugSphere(World, Center, 400.0f, 16, FColor::Red, false, 10.2f);
+
+	}
+	else
+	{
+		// 블랙보드의 Target 플레이어 캐스팅
+		auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_JAIController::TargetKey));
+		if (nullptr == Target)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("over"));
+			return false;
+		}
+
+		// 거리 조건 계산
+		float Range = 400.0f;
+		bResult = (Target->GetDistanceTo(ControllingPawn) <= Range);
+
+		DrawDebugSphere(World, Center, 400.0f, 16, FColor::Red, false, 10.2f);
+
 	}
 
-	// 거리 조건 계산
-	float Range = 400.0f;
-	bResult = (Target->GetDistanceTo(ControllingPawn) <= Range);
-
-	DrawDebugSphere(World, Center, 400.0f, 16, FColor::Red, false, 10.2f);
-	
 	return bResult;
+
 }

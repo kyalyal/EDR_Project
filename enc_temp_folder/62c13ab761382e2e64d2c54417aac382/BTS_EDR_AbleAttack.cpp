@@ -59,11 +59,11 @@ void UBTS_EDR_AbleAttack::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Nod
     // 구체 그리기
     if (AbleAttack)
     {
-        DrawDebugSphere(World, Center + (ForwardVector * 200.0f), Range, 16, FColor::Blue, false, 0.2f);
+        DrawDebugSphere(World, Center + (ForwardVector * 200.0f), 400.0f, 16, FColor::Blue, false, 0.2f);
     }
     else
     {
-        DrawDebugSphere(World, Center + (ForwardVector * 200.0f), Range, 16, FColor::Red, false, 0.2f);
+        DrawDebugSphere(World, Center + (ForwardVector * 200.0f), 400.0f, 16, FColor::Red, false, 0.2f);
     }
 
 

@@ -2,6 +2,7 @@
 #include "BTS_EDR_Detect.h"
 #include "EDR/YS/EDRCharacter.h"
 #include "MyCharacter.h"
+#include "Enemy_EDR_JAIController.h"
 #include "Enemy_EDR_AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -29,7 +30,7 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	{
 		return;
 	}
-
+	bool Boss = MyCharacter->IsBoss;
 
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
@@ -68,51 +69,61 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 			// 감지된 액터가 플레이어일경우
 			if (EDRCharacter && EDRCharacter->GetController()->IsPlayerController())
 			{
-				
-				// 게임모드가 널이 아닐때
-				if (GameMode)
+
+				if (Boss)
 				{
 
-					// 캐릭터 발견시 실행
-					if (GameMode->GetFightMode() != EFightMode::FightMode)
+					// 게임모드가 널이 아닐때
+					if (GameMode)
 					{
-						// EFightMode FightMode로 설정
-						GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FightModeOn!!!!!!!!!!!!!!!!!!"));
-						GameMode->SetFightMode(EFightMode::FightMode);
+						// 캐릭터 발견시 실행
+						if (GameMode->GetFightMode() != EFightMode::FightMode)
+						{
+							GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FightModeOn!!!!!!!!!!!!!!!!!!"));
+							// EFightMode FightMode로 설정
+							GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FightModeOn!!!!!!!!!!!!!!!!!!"));
+							GameMode->SetFightMode(EFightMode::FightMode);
 
-						// 전투 시작 애니메이션 재생 함수
-						MyCharacter->FightStart();
+							// 전투 시작 애니메이션 재생 함수
+							MyCharacter->FightStart();
+						}
 					}
 				}
-				// 디버그 정보 색상 출력
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AEnemy_EDR_AIController::TargetKey, EDRCharacter);
-				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
-				DrawDebugPoint(World, EDRCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				DrawDebugLine(World, ControllingPawn->GetActorLocation(), EDRCharacter->GetActorLocation(), FColor::Blue, false, 0.2f);
-				World->GetTimerManager().ClearTimer(ResetFightModeTimerHandle);
-				return;
+					// 디버그 정보 색상 출력
+					OwnerComp.GetBlackboardComponent()->SetValueAsObject(AEnemy_EDR_AIController::TargetKey, EDRCharacter);
+					DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
+					DrawDebugPoint(World, EDRCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
+					DrawDebugLine(World, ControllingPawn->GetActorLocation(), EDRCharacter->GetActorLocation(), FColor::Blue, false, 0.2f);
+					World->GetTimerManager().ClearTimer(ResetFightModeTimerHandle);
+					return;
+
 			}
+
 		}
 	}
 
-
-	// FightMode가 None이 아닐경우에 == 추적에서 놓친 상태면 실행
-	if (GameMode->GetFightMode() != EFightMode::None)
+	if (Boss)
 	{
-		if (GameMode && !World->GetTimerManager().IsTimerActive(ResetFightModeTimerHandle))
+		// FightMode가 None이 아닐경우에 == 추적에서 놓친 상태면 실행
+		if (GameMode->GetFightMode() != EFightMode::None)
 		{
-			// 5초 후에 FightMode를 None으로 변경하는 타이머 설정
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, TEXT("Wait 5sec"));
-			World->GetTimerManager().SetTimer(ResetFightModeTimerHandle, [GameMode]() 
-				{
-				// EFightMode None으로 설정
-					GameMode->SetFightMode(EFightMode::None);
-					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("FightMode Off~~~~~~~~~~~ "));
-				}, 5.0f, false);			
+			if (GameMode && !World->GetTimerManager().IsTimerActive(ResetFightModeTimerHandle))
+			{
+				// 5초 후에 FightMode를 None으로 변경하는 타이머 설정
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, TEXT("Wait 5sec"));
+				World->GetTimerManager().SetTimer(ResetFightModeTimerHandle, [GameMode]()
+					{
+						// EFightMode None으로 설정
+						GameMode->SetFightMode(EFightMode::None);
+						GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("FightMode Off~~~~~~~~~~~ "));
+					}, 5.0f, false);
+			}
+
 		}
-		// 추적 놓쳤을때 Target 초기화
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject(AEnemy_EDR_AIController::TargetKey, nullptr);
 	}
+	// 추적 놓쳤을때 Target 초기화
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject(AEnemy_EDR_AIController::TargetKey, nullptr);
 	// 탐지가 안되었을때 디버그 출력
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
+
 }

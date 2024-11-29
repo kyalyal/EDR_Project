@@ -48,10 +48,10 @@ public:
 	USoundCue* DeathSoundCue;
 
 	// 공격 사거리
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float AttackRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float AttackRadius;
 protected:
 
@@ -66,7 +66,7 @@ protected:
 	float CurrentSpeed = 0.0f; // 현재 속도
 
 	// 이동중인지 체크
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Movement")
 	bool IsMoving = false;
 
 
@@ -99,11 +99,12 @@ protected:
 
 
 
+
 	// 스킬 사거리
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float SkillRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float SkillRadius;
 
 	// 공격 애니메이션
@@ -137,11 +138,11 @@ protected:
 
 public:
 	// 보스 인지 확인
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(BluePrintReadWrite)
 	bool IsBoss;
 
 	// 전투 시작 애니메이션 확인
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsFightStarting = false;
 
 	// Called every frame

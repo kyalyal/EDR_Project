@@ -3,6 +3,7 @@
 #include "BTT_EDR_TurnToTarget.h"
 #include "Enemy_EDR_AIController.h"
 #include "MyCharacter.h"
+#include "Enemy_EDR_JAIController.h"
 #include "EDR/YS/EDRCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 

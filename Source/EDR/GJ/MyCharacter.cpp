@@ -151,6 +151,11 @@ void AMyCharacter::UpdateHP(float NewHP)
 
 void AMyCharacter::FightStart()
 {
+	if (IsFightStarting)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("ASDFADSF"));
+		return;
+	}
 	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
 	if (FightStartMontage)
 	{
@@ -187,8 +192,7 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 
 void AMyCharacter::Attack()
 {
-	bCanAttackSmallMove = true; //미세전진 가능
-	ExpectedAttackLocation = GetActorLocation() + GetActorForwardVector() * 1000.0f;//전진시킬 목표위치 지정.
+
 	// 공격, 스킬 확률
 	RandomValue = FMath::RandRange(0, 100);
 	if (Death)
@@ -202,48 +206,145 @@ void AMyCharacter::Attack()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
 		return;
 	}
+	
+
 
 	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
-
 	if (nullptr == EDRAnim)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("CallAttack"));
 		return;
 	}
-
-	// 20%확률로 스킬 발동
-	if (RandomValue <= 20)
+	// 보스 공격 로직
+	if (IsBoss)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill!!!!!!!!!!!!!!!!!"));
-		PlayAnimMontage(SkillMontage, 1.3f);
-
-		// 스킬 사운드 재생
-		if (SkillSoundCue != nullptr)
+		// 20%확률로 스킬 발동
+		if (RandomValue <= 20)
 		{
-			UGameplayStatics::SpawnSoundAttached(
-				SkillSoundCue,
-				GetRootComponent(),
-				NAME_None,
-				FVector::ZeroVector,
-				EAttachLocation::KeepRelativeOffset,
-				false,
-				1.0f,  // Volume multiplier
-				0.5f   // Pitch multiplier
-			);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill!!!!!!!!!!!!!!!!!"));
+			PlayAnimMontage(SkillMontage, 1.3f);
+
+			// 스킬 사운드 재생
+			if (SkillSoundCue != nullptr)
+			{
+				UGameplayStatics::SpawnSoundAttached(
+					SkillSoundCue,
+					GetRootComponent(),
+					NAME_None,
+					FVector::ZeroVector,
+					EAttachLocation::KeepRelativeOffset,
+					false,
+					1.0f,  // Volume multiplier
+					0.5f   // Pitch multiplier
+				);
+			}
+		}
+		else
+		{
+			int aRandom = FMath::RandRange(0, 100);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
+			if (aRandom < 10 && aRandom >= 0)
+			{
+				if (AttackMontage.IsValidIndex(0))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("0"));
+					PlayAnimMontage(AttackMontage[0], 0.5f);
+				}
+			}
+			else if (aRandom < 20 && aRandom >= 10)
+			{
+				if (AttackMontage.IsValidIndex(1))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("1"));
+					PlayAnimMontage(AttackMontage[1], 1.0f);
+				}
+			}
+			else if (aRandom < 30 && aRandom >= 20)
+			{
+				if (AttackMontage.IsValidIndex(2))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("2"));
+					PlayAnimMontage(AttackMontage[2], 1.0f);
+				}
+			}
+			else if (aRandom < 40 && aRandom >= 30)
+			{
+				if (AttackMontage.IsValidIndex(3))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("3"));
+					PlayAnimMontage(AttackMontage[3], 1.0f);
+				}
+			}
+			else if (aRandom < 60 && aRandom >= 50)
+			{
+				if (AttackMontage.IsValidIndex(4))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("4"));
+					PlayAnimMontage(AttackMontage[4], 1.0f);
+				}
+			}
+			else if (aRandom < 70 && aRandom >= 60)
+			{
+				if (AttackMontage.IsValidIndex(5))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("5"));
+					PlayAnimMontage(AttackMontage[5], 1.0f);
+				}
+			}
+			else if (aRandom < 80 && aRandom >= 70)
+			{
+				if (AttackMontage.IsValidIndex(6))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("6"));
+					PlayAnimMontage(AttackMontage[6], 1.0f);
+				}
+			}
+			else if (aRandom < 90 && aRandom >= 80)
+			{
+				if (AttackMontage.IsValidIndex(7))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("7"));
+					PlayAnimMontage(AttackMontage[7], 1.0f);
+				}
+			}
+			else
+			{
+				if (AttackMontage.IsValidIndex(8))
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("8"));
+					PlayAnimMontage(AttackMontage[8], 1.0f);
+				}
+			}
+
+			// 공격 사운드 재생
+			if (AttackSoundCue != nullptr)
+			{
+				UGameplayStatics::SpawnSoundAttached(
+					AttackSoundCue,
+					GetRootComponent(),
+					NAME_None,
+					FVector::ZeroVector,
+					EAttachLocation::KeepRelativeOffset,
+					false,
+					1.0f,  // Volume multiplier
+					0.5f   // Pitch multiplier
+				);
+			}
 		}
 	}
 	else
 	{
-		int aRandom = FMath::RandRange(0, 100);
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack!@!@!@!@!@"));
-		if (aRandom < 10 && aRandom >= 0)
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("asdkjfyhasdfijhgi"));
+		// 공격 2개 
+		if (RandomValue <= 50)
 		{
 			if (AttackMontage.IsValidIndex(0))
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("0"));
-				PlayAnimMontage(AttackMontage[0], 0.5f);
+				PlayAnimMontage(AttackMontage[0], 1.0f);
 			}
 		}
-		else if (aRandom < 20 && aRandom >= 10)
+		else
 		{
 			if (AttackMontage.IsValidIndex(1))
 			{
@@ -251,78 +352,8 @@ void AMyCharacter::Attack()
 				PlayAnimMontage(AttackMontage[1], 1.0f);
 			}
 		}
-		else if (aRandom < 30 && aRandom >= 20)
-		{
-			if (AttackMontage.IsValidIndex(2))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("2"));
-				PlayAnimMontage(AttackMontage[2], 1.0f);
-			}
-		}
-		else if (aRandom < 40 && aRandom >= 30)
-		{
-			if (AttackMontage.IsValidIndex(3))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("3"));
-				PlayAnimMontage(AttackMontage[3], 1.0f);
-			}
-		}		
-		else if (aRandom < 60 && aRandom >= 50)
-		{
-			if (AttackMontage.IsValidIndex(4))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("4"));
-				PlayAnimMontage(AttackMontage[4], 1.0f);
-			}
-		}		
-		else if (aRandom < 70 && aRandom >= 60)
-		{
-			if (AttackMontage.IsValidIndex(5))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("5"));
-				PlayAnimMontage(AttackMontage[5], 1.0f);
-			}
-		}		
-		else if (aRandom < 80 && aRandom >= 70)
-		{
-			if (AttackMontage.IsValidIndex(6))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("6"));
-				PlayAnimMontage(AttackMontage[6], 1.0f);
-			}
-		}		
-		else if (aRandom < 90 && aRandom >= 80)
-		{
-			if (AttackMontage.IsValidIndex(7))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("7"));
-				PlayAnimMontage(AttackMontage[7], 1.0f);
-			}
-		}
-		else
-		{
-			if (AttackMontage.IsValidIndex(8))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("8"));
-				PlayAnimMontage(AttackMontage[8], 1.0f);
-			}
-		}
-
-		// 공격 사운드 재생
-		if (AttackSoundCue != nullptr)
-		{
-			UGameplayStatics::SpawnSoundAttached(
-				AttackSoundCue,
-				GetRootComponent(),
-				NAME_None,
-				FVector::ZeroVector,
-				EAttachLocation::KeepRelativeOffset,
-				false,
-				1.0f,  // Volume multiplier
-				0.5f   // Pitch multiplier
-			);
-		}
 	}
+
 
 	IsAttacking = true;
 
