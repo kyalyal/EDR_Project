@@ -102,36 +102,14 @@ void AEDR_Enemy_Weapon::StartAttack()
 void AEDR_Enemy_Weapon::TraceAttack()
 {
 
-bool Trace;
-FHitResult OutHit;
-TArray<AActor*> ignores;
+    bool Trace;
+    FHitResult OutHit;
+    TArray<AActor*> ignores;
 
-FVector StartLocation = AttackPointStart->GetComponentLocation();
-FVector EndLocation = AttackPointEnd->GetComponentLocation();
+    FVector StartLocation = AttackPointStart->GetComponentLocation();
+    FVector EndLocation = AttackPointEnd->GetComponentLocation();
 
-//float CapsuleRadius = 20.0f; // Ä¸½¶ÀÇ ¹ÝÁö¸§
-//float CapsuleHalfHeight = FVector::Distance(StartLocation, EndLocation) / 2.0f; // Ä®ÀÇ ±æÀÌ¿¡ ¸ÂÃá Ä¸½¶ ³ôÀÌ
-//
-//// Ä¸½¶ÀÇ Áß½ÉÀ» Start¿Í EndÀÇ Áß°£À¸·Î ¼³Á¤
-//FVector CapsuleCenter = (StartLocation + EndLocation) / 2.0f;
-//
-//// Ä¸½¶ Æ®·¹ÀÌ½º ½ÇÇà
-//Trace = UKismetSystemLibrary::CapsuleTraceSingle(
-//    GetWorld(),
-//    CapsuleCenter, // Ä¸½¶ Áß½É
-//    CapsuleCenter,
-//    CapsuleRadius, // Ä¸½¶ ¹ÝÁö¸§
-//    CapsuleHalfHeight, // Ä¸½¶ ³ôÀÌÀÇ Àý¹Ý
-//    UEngineTypes::ConvertToTraceType(ECC_PhysicsBody),
-//    false,
-//    ignores,
-//    EDrawDebugTrace::ForDuration,
-//    OutHit,
-//    true,
-//    FLinearColor::Red,
-//    FLinearColor::Green,
-//    3.f
-//);
+
     Trace = UKismetSystemLibrary::LineTraceSingle
     (
         GetWorld(),
@@ -148,7 +126,6 @@ FVector EndLocation = AttackPointEnd->GetComponentLocation();
         3.f
 
     );
-
 
 
     if (IgnoreActors.Contains(OutHit.GetActor())) return;
