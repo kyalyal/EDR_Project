@@ -101,54 +101,56 @@ void AEDR_Enemy_Weapon::StartAttack()
 
 void AEDR_Enemy_Weapon::TraceAttack()
 {
+    bool Trace;
+    FHitResult OutHit;
+    TArray<AActor*> ignores;
 
-bool Trace;
-FHitResult OutHit;
-TArray<AActor*> ignores;
+    // 스피어 트레이스 설정
+    FVector StartLocation = AttackPointStart->GetComponentLocation(); // 칼날 시작 지점 (손잡이)
+    FVector EndLocation = AttackPointEnd->GetComponentLocation(); // 칼날 끝 지점
+    FVector SphereCenter = (StartLocation + EndLocation) / 2.0f; // 스피어 중심: 칼날의 중간
+    float SphereRadius = FVector::Distance(StartLocation, EndLocation); // 스피어 반지름: 칼날 길이의 절반
 
-FVector StartLocation = AttackPointStart->GetComponentLocation();
-FVector EndLocation = AttackPointEnd->GetComponentLocation();
-
-//float CapsuleRadius = 20.0f; // 캡슐의 반지름
-//float CapsuleHalfHeight = FVector::Distance(StartLocation, EndLocation) / 2.0f; // 칼의 길이에 맞춘 캡슐 높이
-//
-//// 캡슐의 중심을 Start와 End의 중간으로 설정
-//FVector CapsuleCenter = (StartLocation + EndLocation) / 2.0f;
-//
-//// 캡슐 트레이스 실행
-//Trace = UKismetSystemLibrary::CapsuleTraceSingle(
-//    GetWorld(),
-//    CapsuleCenter, // 캡슐 중심
-//    CapsuleCenter,
-//    CapsuleRadius, // 캡슐 반지름
-//    CapsuleHalfHeight, // 캡슐 높이의 절반
-//    UEngineTypes::ConvertToTraceType(ECC_PhysicsBody),
-//    false,
-//    ignores,
-//    EDrawDebugTrace::ForDuration,
-//    OutHit,
-//    true,
-//    FLinearColor::Red,
-//    FLinearColor::Green,
-//    3.f
-//);
-    Trace = UKismetSystemLibrary::LineTraceSingle
-    (
+    // 스피어 트레이스 실행
+    Trace = UKismetSystemLibrary::SphereTraceSingle(
         GetWorld(),
-        StartLocation,
-        EndLocation,
-        UEngineTypes::ConvertToTraceType(ECC_PhysicsBody),
-        false,
-        ignores,
-        EDrawDebugTrace::ForDuration,
-        OutHit,
-        true,
-        FLinearColor::Red,
-        FLinearColor::Green,
-        3.f
-
+        SphereCenter,             // 스피어 중심
+        SphereCenter,             // 시작과 끝을 동일하게 설정
+        SphereRadius,             // 스피어 반지름
+        UEngineTypes::ConvertToTraceType(ECC_PhysicsBody), // 충돌 채널
+        false,                    // 복잡한 트레이스 사용 여부
+        ignores,                  // 무시할 액터 목록
+        EDrawDebugTrace::ForDuration, // 디버그 시각화 설정
+        OutHit,                   // 충돌 결과
+        true,                     // 자신 무시 여부
+        FLinearColor::Red,        // 트레이스 색상
+        FLinearColor::Green,      // 히트 색상
+        3.f                       // 디버그 표시 시간
     );
-
+//bool Trace;
+//FHitResult OutHit;
+//TArray<AActor*> ignores;
+//
+//FVector StartLocation = AttackPointStart->GetComponentLocation();
+//FVector EndLocation = AttackPointEnd->GetComponentLocation();
+//
+//    Trace = UKismetSystemLibrary::LineTraceSingle
+//    (
+//        GetWorld(),
+//        StartLocation,
+//        EndLocation,
+//        UEngineTypes::ConvertToTraceType(ECC_PhysicsBody),
+//        false,
+//        ignores,
+//        EDrawDebugTrace::ForDuration,
+//        OutHit,
+//        true,
+//        FLinearColor::Red,
+//        FLinearColor::Green,
+//        3.f
+//
+//    );
+//
 
 
     if (IgnoreActors.Contains(OutHit.GetActor())) return;
