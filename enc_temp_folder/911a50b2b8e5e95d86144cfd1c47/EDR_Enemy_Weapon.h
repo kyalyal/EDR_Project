@@ -65,6 +65,5 @@ protected:
 
 	bool bAttacking;
 public:
-	AActor* WeaponOwner;
 	AActor* Player;
 };
