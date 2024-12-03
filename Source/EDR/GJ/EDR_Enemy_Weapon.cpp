@@ -48,12 +48,17 @@ AEDR_Enemy_Weapon::AEDR_Enemy_Weapon()
 
 }
 
-// Called when the game starts or when spawned
+
 void AEDR_Enemy_Weapon::BeginPlay()
 {
     Super::BeginPlay();
-
     Player = Cast<AActor>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+    // 소유자 설정 (GetOwner는 무기를 소유한 액터를 반환)
+    WeaponOwner = GetOwner();
+    if (WeaponOwner)
+    {
+        IgnoreActors.Add(WeaponOwner);
+    }
 }
 
 // Called every frame
@@ -97,6 +102,13 @@ void AEDR_Enemy_Weapon::StartAttack()
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("AttackStart"));
 	bAttacking = true;
 
+   
+    WeaponOwner = GetOwner();
+    if (WeaponOwner && !IgnoreActors.Contains(WeaponOwner))
+    {
+        IgnoreActors.Add(WeaponOwner);
+    }
+
 }
 
 void AEDR_Enemy_Weapon::TraceAttack()
@@ -109,7 +121,7 @@ void AEDR_Enemy_Weapon::TraceAttack()
     FVector StartLocation = AttackPointStart->GetComponentLocation(); // 칼날 시작 지점 (손잡이)
     FVector EndLocation = AttackPointEnd->GetComponentLocation(); // 칼날 끝 지점
     FVector SphereCenter = (StartLocation + EndLocation) / 2.0f; // 스피어 중심: 칼날의 중간
-    float SphereRadius = FVector::Distance(StartLocation, EndLocation); // 스피어 반지름: 칼날 길이의 절반
+    float SphereRadius = FVector::Distance(StartLocation, EndLocation)/2.0f; // 스피어 반지름: 칼날 길이의 절반
 
     // 스피어 트레이스 실행
     Trace = UKismetSystemLibrary::SphereTraceSingle(
@@ -119,7 +131,7 @@ void AEDR_Enemy_Weapon::TraceAttack()
         SphereRadius,             // 스피어 반지름
         UEngineTypes::ConvertToTraceType(ECC_PhysicsBody), // 충돌 채널
         false,                    // 복잡한 트레이스 사용 여부
-        ignores,                  // 무시할 액터 목록
+        IgnoreActors,                  // 무시할 액터 목록
         EDrawDebugTrace::ForDuration, // 디버그 시각화 설정
         OutHit,                   // 충돌 결과
         true,                     // 자신 무시 여부

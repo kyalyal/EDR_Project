@@ -23,8 +23,8 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	SkillRadius = 150.0f;
 
 	// ¼Óµµ
-	TargetSpeed = 200.0f;
-	Acceleration = 120.0f;
+	TargetSpeed = 250.0f;
+	Acceleration = 150.0f;
 
 	// Ä³¸¯ÅÍ ¸Þ½Ã¶û Ä¸½¶ÄÝ¸®Àü
 	RootComponent = GetCapsuleComponent();
