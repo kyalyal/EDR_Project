@@ -199,7 +199,7 @@ public:
 
 	// 공격 히트 체크
 	UFUNCTION()
-	void AttackCheck();
+	void AttackCheck(int32 x);
 	UFUNCTION()
 	void AttackCheckEnd();
 	UFUNCTION()

@@ -13,6 +13,6 @@ AEDR_Enemy_WeaponLDragon::AEDR_Enemy_WeaponLDragon()
 	}
 	WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
-	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 0.0f));
+	AttackPointStart->SetRelativeLocation(FVector(0.f, -50.f, 0.f));
+	AttackPointEnd->SetRelativeLocation(FVector(0.f, 200.f, 0.0f));
 }

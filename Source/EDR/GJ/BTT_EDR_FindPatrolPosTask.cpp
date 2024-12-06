@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "BlackBoardKeys.h"
+#include "MyCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTT_EDR_FindPatrolPosTask::UBTT_EDR_FindPatrolPosTask(FObjectInitializer const& object_initializer)
@@ -21,7 +22,13 @@ EBTNodeResult::Type UBTT_EDR_FindPatrolPosTask::ExecuteTask(UBehaviorTreeCompone
 
 	auto Controller = Cast<AEnemy_EDR_AIController>(OwnerComp.GetAIOwner());
 	auto Enemy = Controller->GetPawn();
-
+	// MyCharacter 캐스팅
+	auto MyCharacter = Cast<AMyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	if (nullptr == MyCharacter)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("MyCharacter NULL"));
+		return EBTNodeResult::Failed;
+	}
 	if (nullptr == Enemy) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Enemy Initialize faild!"));
 		return EBTNodeResult::Failed;
@@ -46,6 +53,14 @@ EBTNodeResult::Type UBTT_EDR_FindPatrolPosTask::ExecuteTask(UBehaviorTreeCompone
 
 	//그 다음 이동할 곳을 확인하기 위한 디버그메시지
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s"), *NextPatrol.Location.ToString()));
+
+	// target과 mycharacter의 차이 벡터값
+	FVector LookVecter = NextPatrol.Location - MyCharacter->GetActorLocation();
+
+	// 로케이션 변경
+	LookVecter.Z = 0.0f;
+	FRotator TargetRot = FRotationMatrix::MakeFromX(LookVecter).Rotator();
+	MyCharacter->SetActorRotation(FMath::RInterpTo(MyCharacter->GetActorRotation(), TargetRot, GetWorld()->GetDeltaSeconds(), 2.0f));
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

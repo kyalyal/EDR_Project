@@ -6,9 +6,9 @@
 #include "Animation/AnimInstance.h"
 #include "Anim_EDR_AnimInstance.generated.h"
 // 공격이 맞았는지 확인하는 델리게이트
-DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
-DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheck2Delegate);
-DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheck3Delegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttackHitCheckDelegate, int32, x);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttackHitCheck2Delegate, int32, x);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttackHitCheck3Delegate, int32, x);
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnAttackStepDelegate);
 /**
@@ -32,8 +32,12 @@ public:
 	// 공격이 맞았는지 확인하는 델리게이트
 	FOnAttackHitCheckDelegate OnAttackHitCheck;
 
+	FOnAttackHitCheckDelegate OnAttackHitCheck2;
+
+	FOnAttackHitCheckDelegate OnAttackHitCheck3;
+
 	// 데미지 타이밍 끝을 체크 하는 델리게이트
-	FOnAttackHitCheckDelegate OnAttackEnd;
+	FOnAttackEndDelegate OnAttackEnd;
 
 	// 공격이 맞았는지 확인하는 델리게이트
 	FOnAttackStepDelegate OnAttackStep;

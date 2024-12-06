@@ -59,6 +59,27 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	{
 		DeathMontage = DEATHANIM.Object;
 	}
+
+
+	// 공격 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>ATTACKSOUNDCUE1(TEXT("/Game/Voices_Of_Battle_FURIOUS_P1/Cue/03_Low_Pitch/Low_Furious_VOB_P2_1_Cue.Low_Furious_VOB_P2_1_Cue"));
+	if (ATTACKSOUNDCUE1.Succeeded())
+	{
+		AttackSoundCue.Add(ATTACKSOUNDCUE1.Object);
+	}
+	// 공격 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>ATTACKSOUNDCUE2(TEXT("/Game/Voices_Of_Battle_FURIOUS_P1/Cue/03_Low_Pitch/Low_Furious_VOB_P2_54_Cue.Low_Furious_VOB_P2_54_Cue"));
+	if (ATTACKSOUNDCUE2.Succeeded())
+	{
+		AttackSoundCue.Add(ATTACKSOUNDCUE2.Object);
+	}
+	// 공격 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>ATTACKSOUNDCUE3(TEXT("/Game/Voices_Of_Battle_FURIOUS_P1/Cue/03_Low_Pitch/Low_Furious_VOB_P2_2_Cue.Low_Furious_VOB_P2_2_Cue"));
+	if (ATTACKSOUNDCUE3.Succeeded())
+	{
+		AttackSoundCue.Add(ATTACKSOUNDCUE3.Object);
+	}
+
 }
 void AEDR_Enemy_Skeleton::BeginPlay()
 {

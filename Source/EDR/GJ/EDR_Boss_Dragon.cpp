@@ -15,7 +15,7 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 	hp = 100.0f;
 	AttackDamage = 40.0f;
 	AttackRange = 800.0f;
-	AttackRadius = 200.0f;
+	AttackRadius = 500.0f;
 
 	SkillDamage = 40.0f;
 	SkillRange = 400.0f;
@@ -104,7 +104,24 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 		SkillMontage = SKILL_MONTAGE.Object;
 	}
 
-
+	// 공격 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>ATTACKSOUNDCUE1(TEXT("/Game/Monster_Sounds_Volume_01/Cues/LionMonster_Attack_01_Cue.LionMonster_Attack_01_Cue"));
+	if (ATTACKSOUNDCUE1.Succeeded())
+	{
+		AttackSoundCue.Add(ATTACKSOUNDCUE1.Object);
+	}
+	// 공격 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>ATTACKSOUNDCUE2(TEXT("/Game/Monster_Sounds_Volume_01/Cues/LionMonster_Attack_02_Cue.LionMonster_Attack_02_Cue"));
+	if (ATTACKSOUNDCUE2.Succeeded())
+	{
+		AttackSoundCue.Add(ATTACKSOUNDCUE2.Object);
+	}
+	// 공격 사운드 저장
+	static ConstructorHelpers::FObjectFinder<USoundCue>ATTACKSOUNDCUE3(TEXT("/Game/Monster_Sounds_Volume_01/Cues/LionMonster_Attack_03_Cue.LionMonster_Attack_03_Cue"));
+	if (ATTACKSOUNDCUE3.Succeeded())
+	{
+		AttackSoundCue.Add(ATTACKSOUNDCUE3.Object);
+	}
 
 
 
