@@ -13,6 +13,7 @@
 AMyCharacter::AMyCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	CurrentSpeed = 0.0f;
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
 	IsFightStarting = false;
@@ -40,11 +41,10 @@ void AMyCharacter::BeginPlay()
 
 }
 
-// Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//// 이동 중인지 확인
+	// 이동 중인지 확인
 	if (GetVelocity().Size() > 0)
 	{
 		IsMoving = true;
@@ -53,12 +53,12 @@ void AMyCharacter::Tick(float DeltaTime)
 	{
 		IsMoving = false;
 	}
+
 	// 걷다가 멈추면 현재 속도 다시 초기화
 	if (!IsMoving)
 	{
 		CurrentSpeed = 0.0f;
 	}
-
 
 	// 현재 속도 증가
 	if (CurrentSpeed < TargetSpeed)
@@ -70,12 +70,18 @@ void AMyCharacter::Tick(float DeltaTime)
 		}
 	}
 
-
-
-
 	// 이동 속도 업데이트
 	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+
+	//// target과 mycharacter의 차이 벡터값
+	//FVector LookVecter = TargetLocation - GetActorLocation();
+
+	//// 로케이션 변경
+	//LookVecter.Z = 0.0f;
+	//FRotator TargetRot = FRotationMatrix::MakeFromX(LookVecter).Rotator();
+	//SetActorRotation(FMath::RInterpTo(GetActorRotation(), TargetRot, GetWorld()->GetDeltaSeconds(), 3.0f));
 }
+
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -118,7 +124,7 @@ void AMyCharacter::IsDeath()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Death true"));
 		return;
 	}
-
+	AttackCheckEnd();
 	// 애니메이션 몽타주 실행
 	PlayAnimMontage(DeathMontage, 1.0f);
 	Death = true;
@@ -180,9 +186,7 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 	// 애니메이션 종료 확인
 	IsFightStarting = true;
 	//StopMovement();
-	CurrentWeapon->StopAttack();
-	CurrentWeapon2->StopAttack();
-	CurrentWeapon3->StopAttack();
+
 	OnFightStartEnd.Broadcast();
 
 
@@ -408,17 +412,17 @@ void AMyCharacter::AttackCheck(int32 x)
 {
 	if (x == 0)
 	{
-		CurrentWeapon->StartAttack();
+		CurrentWeapon[0] ->StartAttack();
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("RightHand"));
 	}
 	if (x == 1)
 	{
-		CurrentWeapon2->StartAttack();
+		CurrentWeapon[1]->StartAttack();
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("LeftHand"));
 	}
 	if (x == 2)
 	{
-		CurrentWeapon3->StartAttack();
+		CurrentWeapon[2]->StartAttack();
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Head"));
 	}
 	int RandomSound = FMath::RandRange(0,2);
@@ -619,9 +623,14 @@ void AMyCharacter::AttackCheck(int32 x)
 }
 void AMyCharacter::AttackCheckEnd()
 {
-	CurrentWeapon->StopAttack();
-	CurrentWeapon2->StopAttack();
-	CurrentWeapon3->StopAttack();
+	for (auto Weapon : CurrentWeapon)
+	{
+		if (Weapon != nullptr)
+		{
+			Weapon->StopAttack();
+			UE_LOG(LogTemp, Warning, TEXT("StopAttack called for weapon: %s"), *Weapon->GetName());
+		}
+	}
 }
 
 

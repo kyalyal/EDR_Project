@@ -15,15 +15,18 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	AttackRange = 400.0f;
 	AttackRadius = 200.0f;
 
+
 	SkillDamage = 40.0f;
 	SkillRange = 400.0f;
 	SkillRadius = 200.0f;
 
 
 	// 속도
-	TargetSpeed = 200.0f;
-	Acceleration = 120.0f;
-
+	TargetSpeed = 300.0f;
+	Acceleration = 100.0f;
+	RotationSpeed = 5.0f;
+	Deceleration = 280.0f;
+	StopDistance = 100.0f;
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전
@@ -178,12 +181,12 @@ void AEDR_Boss_Knight::BeginPlay()
 
 	// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket(TEXT("hand_rSocket"));
-	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_BWeapon>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != CurrentWeapon)
+	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_BWeapon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	if (nullptr != CurrentWeapon[0])
 	{
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		CurrentWeapon[0]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 		//CurrentWeapon->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 180.0f)); // 180도 회전
-		CurrentWeapon->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
+		CurrentWeapon[0]->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
 
 
 
