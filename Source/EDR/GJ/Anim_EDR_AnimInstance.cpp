@@ -19,6 +19,18 @@ void UAnim_EDR_AnimInstance::AnimNotify_AttackHitCheck()
 }
 
 // 공격지점 신호
+void UAnim_EDR_AnimInstance::AnimNotify_AttackHitCheck2()
+{
+	OnAttackHitCheck.Broadcast();
+}
+
+// 공격지점 신호
+void UAnim_EDR_AnimInstance::AnimNotify_AttackHitCheck3()
+{
+	OnAttackHitCheck.Broadcast();
+}
+
+// 공격지점 신호
 void UAnim_EDR_AnimInstance::AnimNotify_AttackEnd()
 {
 	OnAttackEnd.Broadcast();

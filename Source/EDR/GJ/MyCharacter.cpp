@@ -248,7 +248,7 @@ void AMyCharacter::Attack()
 				if (AttackMontage.IsValidIndex(0))
 				{
 					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("0"));
-					PlayAnimMontage(AttackMontage[0], 0.5f);
+					PlayAnimMontage(AttackMontage[0], 1.0f);
 				}
 			}
 			else if (aRandom < 20 && aRandom >= 10)

@@ -76,6 +76,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapone)
 	// 무기
 	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
+	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon2;
+	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon3;
 
 
 	// 정지 관련 함수

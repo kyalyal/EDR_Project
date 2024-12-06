@@ -16,7 +16,7 @@ class EDR_API AEDR_Boss_Dragon : public AMyCharacter
 	AEDR_Boss_Dragon();
 
 protected:
-	// Called when the game starts or when spawned
-	//virtual void BeginPlay() override;
+	 //Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 };

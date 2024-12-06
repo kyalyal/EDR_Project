@@ -7,6 +7,8 @@
 #include "Anim_EDR_AnimInstance.generated.h"
 // 공격이 맞았는지 확인하는 델리게이트
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheck2Delegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheck3Delegate);
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnAttackStepDelegate);
 /**
@@ -52,6 +54,10 @@ private:
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
 
+	UFUNCTION()
+	void AnimNotify_AttackHitCheck2();
+	UFUNCTION()
+	void AnimNotify_AttackHitCheck3();
 	UFUNCTION()
 	void AnimNotify_AttackEnd();
 
