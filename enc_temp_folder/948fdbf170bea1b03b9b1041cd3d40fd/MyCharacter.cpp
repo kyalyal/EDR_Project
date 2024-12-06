@@ -409,8 +409,8 @@ void AMyCharacter::AttackCheck()
 				FVector::ZeroVector,
 				EAttachLocation::KeepRelativeOffset,
 				false,
-				1.0f,  // Volume multiplier
-				1.0f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+				2.5f,  // Volume multiplier
+				0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
 			);
 		}
 	//}

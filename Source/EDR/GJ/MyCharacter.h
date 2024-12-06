@@ -27,6 +27,7 @@ public:
 	AMyCharacter();
 	virtual void PossessedBy(AController* NewController)override;
 
+
 	// 공격 히트 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	TArray<TObjectPtr<class USoundCue>> HitSoundCue;
@@ -37,7 +38,7 @@ public:
 
 	// 공격 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	USoundCue* AttackSoundCue;
+	TArray<TObjectPtr<class USoundCue>> AttackSoundCue;
 
 	// 스킬 시 재생할 사운드
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
