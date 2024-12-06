@@ -138,6 +138,11 @@ protected:
 public:
 	// 보스 인지 확인
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DetectRange;
+
+
+	// 보스 인지 확인
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsBoss;
 
 	// 전투 시작 애니메이션 확인

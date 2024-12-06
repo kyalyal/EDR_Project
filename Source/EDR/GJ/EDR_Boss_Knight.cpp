@@ -7,11 +7,12 @@
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
 
+	DetectRange = 1500.0f;
 	IsBoss = true;
 	// hp ¿Á¡§¿«
 	hp = 100.0f;
 	AttackDamage = 40.0f;
-	AttackRange = 500.0f;
+	AttackRange = 400.0f;
 	AttackRadius = 200.0f;
 
 	SkillDamage = 40.0f;

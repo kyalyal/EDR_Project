@@ -7,7 +7,7 @@
 AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 {
 	IsBoss = false;
-
+	DetectRange = 1500.0f;
 
 	IsFightStarting = true;
 
@@ -15,7 +15,7 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	// hp ¿Á¡§¿«
 	hp = 100.0f;
 	AttackDamage = 20.0f;
-	AttackRange = 200.0f;
+	AttackRange = 300.0f;
 	AttackRadius = 150.0f;
 
 	SkillDamage = 20.0f;

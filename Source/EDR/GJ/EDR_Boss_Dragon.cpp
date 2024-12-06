@@ -8,10 +8,11 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 {
 
 	IsBoss = true;
+	DetectRange = 2500.0f;
 	// hp 재정의
 	hp = 100.0f;
 	AttackDamage = 40.0f;
-	AttackRange = 500.0f;
+	AttackRange = 800.0f;
 	AttackRadius = 200.0f;
 
 	SkillDamage = 40.0f;
@@ -20,8 +21,8 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 
 
 	// 속도
-	TargetSpeed = 200.0f;
-	Acceleration = 120.0f;
+	TargetSpeed = 500.0f;
+	Acceleration = 300.0f;
 
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
@@ -40,5 +41,72 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 	{
 		GetMesh()->SetSkeletalMesh(MODEL.Object);
 	}
+
+	// 애니메이션 관련
+
+// 전투 시작 애니메이션
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> FIGHTSTART_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/ANIM_DesertDragon_FlyStationaryToLanding_Montage.ANIM_DesertDragon_FlyStationaryToLanding_Montage"));
+	if (FIGHTSTART_MONTAGE.Succeeded())
+	{
+		FightStartMontage = FIGHTSTART_MONTAGE.Object;
+	}
+
+
+	// 공격
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_2HitComboClawsAttackForward_Montage.ANIM_DesertDragon_2HitComboClawsAttackForward_Montage"));
+	if (ATTACK_MONTAGE1.Succeeded())
+	{
+		AttackMontage.Add(ATTACK_MONTAGE1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_2HitComboClawsAttackForward_RM_Montage.ANIM_DesertDragon_2HitComboClawsAttackForward_RM_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE3(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_BiteAttack_RM_Montage.ANIM_DesertDragon_BiteAttack_RM_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE3.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE4(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_ClawsAttackLeftForward_RM_Montage.ANIM_DesertDragon_ClawsAttackLeftForward_RM_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE4.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE5(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_ClawsAttackRightForward_RM_Montage.ANIM_DesertDragon_ClawsAttackRightForward_RM_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE5.Object);
+	}
+
+	// 나중에 추가
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE6(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_2HitComboClawsAttackForward_Montage.ANIM_DesertDragon_2HitComboClawsAttackForward_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE6.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE7(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_2HitComboClawsAttackForward_Montage.ANIM_DesertDragon_2HitComboClawsAttackForward_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE7.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE8(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_2HitComboClawsAttackForward_Montage.ANIM_DesertDragon_2HitComboClawsAttackForward_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE8.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE9(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/Attack/ANIM_DesertDragon_2HitComboClawsAttackForward_Montage.ANIM_DesertDragon_2HitComboClawsAttackForward_Montage"));
+	{
+		AttackMontage.Add(ATTACK_MONTAGE9.Object);
+	}
+
+
+
+
+
+
+
+
+	// 사망 애니메이션 몽타주 저장
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/DragonEnemy/ANIM_DesertDragon_Death_Montage.ANIM_DesertDragon_Death_Montage"));
+	if (DEATHANIM.Succeeded())
+	{
+		DeathMontage = DEATHANIM.Object;
+	}
+
 
 }
