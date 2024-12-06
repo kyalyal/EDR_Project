@@ -63,8 +63,14 @@ protected:
 	float Damage;
 	TArray<TObjectPtr<AActor>> IgnoreActors;
 
-	bool bAttacking;
+
+
+
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = "Weapon")
+	bool bAttacking;
+
+
 	AActor* WeaponOwner;
 	AActor* Player;
 };

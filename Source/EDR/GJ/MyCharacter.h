@@ -72,7 +72,7 @@ protected:
 
 
 
-	UPROPERTY(VisibleAnywhere, Category = Weapone)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapone)
 	// ¹«±â
 	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
 
