@@ -3,21 +3,15 @@
 
 #include "BTT_EDR_MoveToTarget.h"
 #include "Enemy_EDR_AIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
-#include "BehaviorTree/BehaviorTree.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "BehaviorTree/BlackboardData.h"
-#include "BlackBoardKeys.h"
 #include "MyCharacter.h"
-#include "EDR/YS/EDRCharacter.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/Actor.h"
 
 UBTT_EDR_MoveToTarget::UBTT_EDR_MoveToTarget()
 {
     bNotifyTick = true;
 }
-
 EBTNodeResult::Type UBTT_EDR_MoveToTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
@@ -25,9 +19,7 @@ EBTNodeResult::Type UBTT_EDR_MoveToTarget::ExecuteTask(UBehaviorTreeComponent& O
 }
 void UBTT_EDR_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-    GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, TEXT("MoveToTargetOn"));
     Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-
     auto AIController = OwnerComp.GetAIOwner();
     auto ControlledPawn = AIController ? AIController->GetPawn() : nullptr;
     if (!ControlledPawn) return;
@@ -41,13 +33,7 @@ void UBTT_EDR_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
     FVector TargetLocation = BlackboardComp->GetValueAsVector(AEnemy_EDR_AIController::TargetLocation);
     FVector CurrentLocation = ControlledPawn->GetActorLocation();
     FVector Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
-    float DistanceToTarget = FVector::Dist(TargetLocation, CurrentLocation);
-
-    // 디버깅 메시지
-    GEngine->AddOnScreenDebugMessage(5, 2.f, FColor::Cyan, FString::Printf(TEXT("DistanceToTarget: %f"), DistanceToTarget));
-    GEngine->AddOnScreenDebugMessage(6, 2.f, FColor::Orange, FString::Printf(TEXT("StopDistance: %f"), MyCharacter->StopDistance));
-    GEngine->AddOnScreenDebugMessage(7, 2.f, FColor::Purple, FString::Printf(TEXT("TargetLocation: %s"), *TargetLocation.ToString()));
-    GEngine->AddOnScreenDebugMessage(8, 2.f, FColor::Purple, FString::Printf(TEXT("CurrentLocation: %s"), *CurrentLocation.ToString()));
+    float DistanceToTarget = FVector::Dist(TargetLocation, CurrentLocation);    
 
     // 목표 지점에 도달한 경우
     if (DistanceToTarget <= MyCharacter->StopDistance)
@@ -56,7 +42,6 @@ void UBTT_EDR_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
         FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded); // 태스크 종료
         return; // 종료 후 추가 처리 방지
     }
-
     // 캐릭터 이동 처리
     if (MyCharacter->GetCharacterMovement())
     {
