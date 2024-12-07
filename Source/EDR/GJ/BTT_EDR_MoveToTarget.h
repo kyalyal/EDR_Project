@@ -7,7 +7,7 @@
 #include "BTT_EDR_MoveToTarget.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class EDR_API UBTT_EDR_MoveToTarget : public UBTTaskNode

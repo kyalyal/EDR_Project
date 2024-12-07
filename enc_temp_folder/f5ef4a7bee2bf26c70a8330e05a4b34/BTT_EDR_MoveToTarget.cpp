@@ -4,7 +4,7 @@
 #include "BTT_EDR_MoveToTarget.h"
 #include "Enemy_EDR_AIController.h"
 #include "MyCharacter.h"
-#include "EDR/YS/EDRCharacter.h"
+//#include "EDR/YS/EDRCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
