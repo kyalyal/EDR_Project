@@ -26,7 +26,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	Acceleration = 100.0f;
 	RotationSpeed = 5.0f;
 	Deceleration = 280.0f;
-	StopDistance = 100.0f;
+	StopDistance = 200.0f;
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전

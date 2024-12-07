@@ -44,34 +44,34 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	// 이동 중인지 확인
-	if (GetVelocity().Size() > 0)
-	{
-		IsMoving = true;
-	}
-	else
-	{
-		IsMoving = false;
-	}
+	//// 이동 중인지 확인
+	//if (GetVelocity().Size() > 0)
+	//{
+	//	IsMoving = true;
+	//}
+	//else
+	//{
+	//	IsMoving = false;
+	//}
 
-	// 걷다가 멈추면 현재 속도 다시 초기화
-	if (!IsMoving)
-	{
-		CurrentSpeed = 0.0f;
-	}
+	//// 걷다가 멈추면 현재 속도 다시 초기화
+	//if (!IsMoving)
+	//{
+	//	CurrentSpeed = 0.0f;
+	//}
 
-	// 현재 속도 증가
-	if (CurrentSpeed < TargetSpeed)
-	{
-		CurrentSpeed += Acceleration * DeltaTime;
-		if (CurrentSpeed > TargetSpeed)
-		{
-			CurrentSpeed = TargetSpeed; // 최대 속도 제한
-		}
-	}
+	//// 현재 속도 증가
+	//if (CurrentSpeed < TargetSpeed)
+	//{
+	//	CurrentSpeed += Acceleration * DeltaTime;
+	//	if (CurrentSpeed > TargetSpeed)
+	//	{
+	//		CurrentSpeed = TargetSpeed; // 최대 속도 제한
+	//	}
+	//}
 
-	// 이동 속도 업데이트
-	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+	//// 이동 속도 업데이트
+	//GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
 
 	//// target과 mycharacter의 차이 벡터값
 	//FVector LookVecter = TargetLocation - GetActorLocation();
