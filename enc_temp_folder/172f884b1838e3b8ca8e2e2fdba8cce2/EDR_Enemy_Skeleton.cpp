@@ -23,7 +23,7 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	SkillRadius = 150.0f;
 
 	// ¼Óµµ
-	TargetSpeed = 0.0f;
+	TargetSpeed = 250.0f;
 	Acceleration = 100.0f;
 	Deceleration = 300.0f;
 	RotationSpeed = 5.0f;

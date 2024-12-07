@@ -23,7 +23,7 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 
 
 	// ¼Óµµ
-	TargetSpeed = 0.0f;
+	TargetSpeed = 500.0f;
 	Acceleration = 150.0f;
 	Deceleration = 300.0f;
 	RotationSpeed = 7.0f;

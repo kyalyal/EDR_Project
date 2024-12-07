@@ -22,12 +22,12 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 
 
 	// 속도
-	TargetSpeed = 0.0f;
-	Acceleration = 1.0f;
+	TargetSpeed = 300.0f;
+	Acceleration = 100.0f;
 	RotationSpeed = 5.0f;
 	Deceleration = 280.0f;
 	StopDistance = 200.0f;
-	MaxWalkSpeed = 300.0f;
+	MaxWalkSpeed = 280.0f;
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전

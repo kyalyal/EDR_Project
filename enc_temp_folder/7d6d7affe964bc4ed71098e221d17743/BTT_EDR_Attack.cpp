@@ -29,7 +29,7 @@ EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	}
 
 	// 공격함수 호출
-	MyCharacter->TargetSpeed = 0.0f;
+
 	MyCharacter->Attack();
 	IsAttacking = true;
 	// 공격 끝났음을 알림

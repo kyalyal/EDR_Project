@@ -64,7 +64,8 @@ public:
 	// 걷는 속도 관련
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float TargetSpeed = 200.f; // 목표 속도
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float MaxWalkSpeed = 200.0f;  // 가속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float Acceleration = 120.0f;  // 가속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)

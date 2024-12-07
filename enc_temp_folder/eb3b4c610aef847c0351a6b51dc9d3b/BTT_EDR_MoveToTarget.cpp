@@ -4,7 +4,7 @@
 #include "BTT_EDR_MoveToTarget.h"
 #include "Enemy_EDR_AIController.h"
 #include "MyCharacter.h"
-//#include "EDR/YS/EDRCharacter.h"
+#include "EDR/YS/EDRCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -30,27 +30,36 @@ void UBTT_EDR_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 
     auto BlackboardComp = OwnerComp.GetBlackboardComponent();
     if (!BlackboardComp) return;
-
     FVector TargetLocation = BlackboardComp->GetValueAsVector(AEnemy_EDR_AIController::TargetLocation);
+    auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
+    if (nullptr != Target)
+    {
+        TargetLocation = Target->GetActorLocation();
+    }
+    // 목표 지점에 도달한 경우
     FVector CurrentLocation = ControlledPawn->GetActorLocation();
     FVector Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
     float DistanceToTarget = FVector::Dist(TargetLocation, CurrentLocation);
-    //auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
-    //if (nullptr != Target)
-    //{
-    //    TargetLocation = Target->GetActorLocation();
-    //}
-    // 목표 지점에 도달한 경우
+
     if (DistanceToTarget <= MyCharacter->StopDistance)
     {
-        GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, TEXT("asdfjabsdkjnabsdkmasbdfkasdgkjamsdbaksjdfbakjhb"));
+        MyCharacter->TargetSpeed = 0.0f; // 목표 속도를 0으로 설정
+        GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, TEXT("Reached Target."));
         FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded); // 태스크 종료
         return; // 종료 후 추가 처리 방지
     }
+    else
+    {
+        MyCharacter->GetCharacterMovement()->MaxWalkSpeed = MyCharacter->TargetSpeed;
+    }
+
+    // 속도 보간
+    MyCharacter->CurrentSpeed = FMath::FInterpTo(MyCharacter->CurrentSpeed, MyCharacter->TargetSpeed, DeltaSeconds, MyCharacter->Acceleration); // Acceleration는 적절한 값으로 설정
+
     // 캐릭터 이동 처리
     if (MyCharacter->GetCharacterMovement())
     {
-        MyCharacter->GetCharacterMovement()->MaxWalkSpeed = MyCharacter->TargetSpeed;
+        MyCharacter->GetCharacterMovement()->MaxWalkSpeed = MyCharacter->CurrentSpeed;
     }
 
     MyCharacter->AddMovementInput(Direction, 1.0f);
