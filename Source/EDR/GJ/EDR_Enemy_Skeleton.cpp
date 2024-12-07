@@ -24,8 +24,8 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 
 	// ¼Óµµ
 	TargetSpeed = 0.0f;
-	Acceleration = 100.0f;
-	Deceleration = 300.0f;
+	Acceleration = 1.0f;
+	Deceleration = 200.0f;
 	RotationSpeed = 5.0f;
 	StopDistance = 100.0f;
 	MaxWalkSpeed = 250.0f;

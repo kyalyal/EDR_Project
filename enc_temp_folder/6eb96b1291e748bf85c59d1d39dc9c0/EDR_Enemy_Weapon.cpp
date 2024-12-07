@@ -121,13 +121,13 @@ void AEDR_Enemy_Weapon::TraceAttack()
     FVector StartLocation = AttackPointStart->GetComponentLocation(); // 칼날 시작 지점 (손잡이)
     FVector EndLocation = AttackPointEnd->GetComponentLocation(); // 칼날 끝 지점
     FVector SphereCenter = (StartLocation + EndLocation) / 2.0f; // 스피어 중심: 칼날의 중간
-    float SphereRadius = FVector::Distance(StartLocation, EndLocation); // 스피어 반지름: 칼날 길이의 절반
+    float SphereRadius = FVector::Distance(StartLocation, EndLocation)/2.0f +10.0f; // 스피어 반지름: 칼날 길이의 절반
 
     // 스피어 트레이스 실행
     Trace = UKismetSystemLibrary::SphereTraceSingle(
         GetWorld(),
-        EndLocation,             // 스피어 중심
-        EndLocation,             // 시작과 끝을 동일하게 설정
+        SphereCenter,             // 스피어 중심
+        SphereCenter,             // 시작과 끝을 동일하게 설정
         SphereRadius,             // 스피어 반지름
         UEngineTypes::ConvertToTraceType(ECC_PhysicsBody), // 충돌 채널
         false,                    // 복잡한 트레이스 사용 여부

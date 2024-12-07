@@ -25,5 +25,5 @@ AEDR_Enemy_SWeapon::AEDR_Enemy_SWeapon()
 	//AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
 
 	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 15.f));
-	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 150.0f));
+	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 140.0f));
 }
