@@ -35,11 +35,11 @@ void UBTT_EDR_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
     FVector CurrentLocation = ControlledPawn->GetActorLocation();
     FVector Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
     float DistanceToTarget = FVector::Dist(TargetLocation, CurrentLocation);    
-    auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
-    if (nullptr != Target)
-    {
-        TargetLocation = Target->GetActorLocation();
-    }
+    //auto Target = Cast<AEDRCharacter>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(AEnemy_EDR_AIController::TargetKey));
+    //if (nullptr != Target)
+    //{
+    //    TargetLocation = Target->GetActorLocation();
+    //}
     // 목표 지점에 도달한 경우
     if (DistanceToTarget <= MyCharacter->StopDistance)
     {
