@@ -7,22 +7,28 @@
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
 
-	DetectRange = 1500.0f;
+	DetectRange = 2000.0f;
 	IsBoss = true;
 	// hp 재정의
-	hp = 100.0f;
+	hp = 1000.0f;
 	AttackDamage = 40.0f;
 	AttackRange = 400.0f;
 	AttackRadius = 200.0f;
+
 
 	SkillDamage = 40.0f;
 	SkillRange = 400.0f;
 	SkillRadius = 200.0f;
 
-
+	
 	// 속도
-	TargetSpeed = 200.0f;
-	Acceleration = 120.0f;
+	TargetSpeed = 0.0f;
+	Acceleration = 10.0f;
+	RotationSpeed = 1.0f;
+	Deceleration = 280.0f;
+	StopDistance = 300.0f;
+	MaxWalkSpeed = 300.0f;
+
 
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
@@ -40,15 +46,15 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	if (MODEL.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(MODEL.Object);
-	}	
-	
+	}
+
 
 	// 크기 1.6배 키우기
-	SetActorScale3D(FVector(1.6f, 1.6f, 1.6f));	
-	
-	
-	
-	
+	SetActorScale3D(FVector(1.6f, 1.6f, 1.6f));
+
+
+
+
 	// 애니메이션 관련
 
 	// 전투 시작 애니메이션
@@ -81,19 +87,19 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE5(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_RM_Montage.Boss_Attack_Uppercut_RM_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE5.Object);
-	}	
+	}
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE6(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo2_Montage.Anim_SwordV2_Combo2_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE6.Object);
-	}	
+	}
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE7(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_Sword_1H_Attack_Jump3_Montage.Anim_Sword_1H_Attack_Jump3_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE7.Object);
-	}	
+	}
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE8(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo1_1_Montage.Anim_SwordV2_Combo1_1_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE8.Object);
-	}	
+	}
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE9(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo1_Montage.Anim_SwordV2_Combo1_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE9.Object);
@@ -178,12 +184,12 @@ void AEDR_Boss_Knight::BeginPlay()
 
 	// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket(TEXT("hand_rSocket"));
-	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_BWeapon>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != CurrentWeapon)
+	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_BWeapon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	if (nullptr != CurrentWeapon[0])
 	{
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		CurrentWeapon[0]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 		//CurrentWeapon->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 180.0f)); // 180도 회전
-		CurrentWeapon->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
+		CurrentWeapon[0]->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
 
 
 

@@ -13,12 +13,13 @@
 AMyCharacter::AMyCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	CurrentSpeed = 0.0f;
 	PrimaryActorTick.bCanEverTick = true;
 	IsAttacking = false;
 	IsFightStarting = false;
 	// 캡슐컴포넌트가 MyCharacter프리셋을 사용하도록 함
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
-
+	TargetLocation = GetActorLocation();
 
 }
 
@@ -40,42 +41,40 @@ void AMyCharacter::BeginPlay()
 
 }
 
-// Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//// 이동 중인지 확인
-	if (GetVelocity().Size() > 0)
+	FVector CurrentLocation = GetActorLocation();
+	Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
+	float DistanceToTarget = FVector::Dist(TargetLocation, CurrentLocation);
+
+	if (DistanceToTarget <= StopDistance)
 	{
-		IsMoving = true;
+		TargetSpeed = 0.0f;
 	}
 	else
 	{
-		IsMoving = false;
+		TargetSpeed = MaxWalkSpeed;
 	}
-	// 걷다가 멈추면 현재 속도 다시 초기화
-	if (!IsMoving)
+	
+	//// 속도 보간
+	CurrentSpeed = FMath::FInterpTo(CurrentSpeed, TargetSpeed, DeltaTime, Acceleration); // Acceleration는 적절한 값으로 설정
+	if (CurrentSpeed <= 10.0f)
 	{
 		CurrentSpeed = 0.0f;
 	}
-
-
-	// 현재 속도 증가
-	if (CurrentSpeed < TargetSpeed)
+	// 캐릭터 이동 처리
+	if (GetCharacterMovement())
 	{
-		CurrentSpeed += Acceleration * DeltaTime;
-		if (CurrentSpeed > TargetSpeed)
-		{
-			CurrentSpeed = TargetSpeed; // 최대 속도 제한
-		}
+		GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
 	}
 
-
-
-
-	// 이동 속도 업데이트
-	GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+	Direction.Z = 0.0f;
+	FRotator TargetRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, 2.0f);
+	SetActorRotation(NewRotation);
 }
+
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -118,7 +117,7 @@ void AMyCharacter::IsDeath()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Death true"));
 		return;
 	}
-
+	AttackCheckEnd();
 	// 애니메이션 몽타주 실행
 	PlayAnimMontage(DeathMontage, 1.0f);
 	Death = true;
@@ -176,16 +175,12 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 	// FightStart 애니메이션이 끝났을 때 공격 시작
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, FString::Printf(TEXT("bInterrupted: %s"), bInterrupted ? TEXT("True") : TEXT("False")));
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fight Start Animation Ended"));
-
+	TargetSpeed = 0.0f;
+	CurrentSpeed = 0.0f;
 	// 애니메이션 종료 확인
 	IsFightStarting = true;
 	//StopMovement();
-	CurrentWeapon->StopAttack();
-	CurrentWeapon2->StopAttack();
-	CurrentWeapon3->StopAttack();
 	OnFightStartEnd.Broadcast();
-
-
 }
 
 
@@ -209,7 +204,7 @@ void AMyCharacter::Attack()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("is attacking true"));
 		return;
 	}
-	
+
 
 
 	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
@@ -355,7 +350,7 @@ void AMyCharacter::Attack()
 
 
 
-	 //공격 판정 이벤트 바인딩
+	//공격 판정 이벤트 바인딩
 	EDRAnim->OnAttackHitCheck.AddDynamic(this, &AMyCharacter::AttackCheck);
 	//공격 판정 이벤트 바인딩
 	EDRAnim->OnAttackHitCheck2.AddDynamic(this, &AMyCharacter::AttackCheck);
@@ -371,7 +366,8 @@ void AMyCharacter::Attack()
 	// 애니메이션 종료 시 공격 끝 처리
 	EDRAnim->OnMontageEnded.RemoveAll(this);  // 중복 바인딩 방지
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
-	
+
+
 }
 
 
@@ -391,7 +387,8 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 	{
 		EDRAnim->OnAttackHitCheck.RemoveAll(this);  // 중복 호출 방지
 	}
-
+	//TargetSpeed = 0.0f;
+	//CurrentSpeed = 0.0f;
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack Animation Ended"));
 
 	OnAttackEnd.Broadcast();
@@ -408,36 +405,36 @@ void AMyCharacter::AttackCheck(int32 x)
 {
 	if (x == 0)
 	{
-		CurrentWeapon->StartAttack();
+		CurrentWeapon[0]->StartAttack();
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("RightHand"));
 	}
 	if (x == 1)
 	{
-		CurrentWeapon2->StartAttack();
+		CurrentWeapon[1]->StartAttack();
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("LeftHand"));
 	}
 	if (x == 2)
 	{
-		CurrentWeapon3->StartAttack();
+		CurrentWeapon[2]->StartAttack();
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Head"));
 	}
-	int RandomSound = FMath::RandRange(0,2);
+	int RandomSound = FMath::RandRange(0, 2);
 	// 공격 사운드 재생		
 	//if (RandomSound < 33)
 	//{
-		if (AttackSoundCue[RandomSound] != nullptr)
-		{
-			UGameplayStatics::SpawnSoundAttached(
-				AttackSoundCue[RandomSound],
-				GetRootComponent(),
-				NAME_None,
-				FVector::ZeroVector,
-				EAttachLocation::KeepRelativeOffset,
-				false,
-				1.0f,  // Volume multiplier
-				1.0f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
-			);
-		}
+	if (AttackSoundCue[RandomSound] != nullptr)
+	{
+		UGameplayStatics::SpawnSoundAttached(
+			AttackSoundCue[RandomSound],
+			GetRootComponent(),
+			NAME_None,
+			FVector::ZeroVector,
+			EAttachLocation::KeepRelativeOffset,
+			false,
+			1.0f,  // Volume multiplier
+			1.0f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
+		);
+	}
 	//}
 	//else if (RandomSound < 66)
 	//{
@@ -619,9 +616,14 @@ void AMyCharacter::AttackCheck(int32 x)
 }
 void AMyCharacter::AttackCheckEnd()
 {
-	CurrentWeapon->StopAttack();
-	CurrentWeapon2->StopAttack();
-	CurrentWeapon3->StopAttack();
+	for (auto Weapon : CurrentWeapon)
+	{
+		if (Weapon != nullptr)
+		{
+			Weapon->StopAttack();
+			UE_LOG(LogTemp, Warning, TEXT("StopAttack called for weapon: %s"), *Weapon->GetName());
+		}
+	}
 }
 
 

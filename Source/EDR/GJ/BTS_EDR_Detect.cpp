@@ -91,6 +91,7 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 				}
 					// 디버그 정보 색상 출력
 					OwnerComp.GetBlackboardComponent()->SetValueAsObject(AEnemy_EDR_AIController::TargetKey, EDRCharacter);
+					MyCharacter->TargetLocation = EDRCharacter->GetActorLocation();
 					DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
 					DrawDebugPoint(World, EDRCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 					DrawDebugLine(World, ControllingPawn->GetActorLocation(), EDRCharacter->GetActorLocation(), FColor::Blue, false, 0.2f);
