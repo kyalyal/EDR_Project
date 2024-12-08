@@ -24,11 +24,11 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 
 	// ¼Óµµ
 	TargetSpeed = 0.0f;
-	Acceleration = 20.0f;
+	Acceleration = 150.0f;
 	Deceleration = 300.0f;
-	RotationSpeed = 2.0f;
+	RotationSpeed = 7.0f;
 	Deceleration = 320.0f;
-	StopDistance = 500.0f;
+	StopDistance = 150.0f;
 	MaxWalkSpeed = 500.0f;
 
 	// Ä³¸¯ÅÍ ¸Þ½Ã¶û Ä¸½¶ÄÝ¸®Àü

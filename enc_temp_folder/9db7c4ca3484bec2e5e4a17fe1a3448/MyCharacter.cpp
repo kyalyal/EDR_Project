@@ -19,7 +19,7 @@ AMyCharacter::AMyCharacter()
 	IsFightStarting = false;
 	// 캡슐컴포넌트가 MyCharacter프리셋을 사용하도록 함
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
-
+	TargetLocation = GetActorLocation();
 
 }
 
@@ -44,8 +44,20 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	FVector CurrentLocation = GetActorLocation();
+	Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
+	float DistanceToTarget = FVector::Dist(TargetLocation, CurrentLocation);
 
-	// 속도 보간
+	if (DistanceToTarget <= StopDistance)
+	{
+		TargetSpeed = 0.0f;
+	}
+	else
+	{
+		TargetSpeed = MaxWalkSpeed;
+	}
+	
+	//// 속도 보간
 	CurrentSpeed = FMath::FInterpTo(CurrentSpeed, TargetSpeed, DeltaTime, Acceleration); // Acceleration는 적절한 값으로 설정
 
 	// 캐릭터 이동 처리
@@ -54,7 +66,10 @@ void AMyCharacter::Tick(float DeltaTime)
 		GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
 	}
 
-	AddMovementInput(Direction, 1.0f);
+	Direction.Z = 0.0f;
+	FRotator TargetRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, RotationSpeed);
+	SetActorRotation(NewRotation);
 }
 
 
@@ -161,10 +176,9 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 	// 애니메이션 종료 확인
 	IsFightStarting = true;
 	//StopMovement();
-
+	TargetSpeed = 0.0f;
+	CurrentSpeed = 0.0f;
 	OnFightStartEnd.Broadcast();
-
-
 }
 
 

@@ -24,10 +24,10 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 
 	// ¼Óµµ
 	TargetSpeed = 0.0f;
-	Acceleration = 10.0f;
+	Acceleration = 1.0f;
 	Deceleration = 200.0f;
-	RotationSpeed = 1.0f;
-	StopDistance = 250.0f;
+	RotationSpeed = 5.0f;
+	StopDistance = 100.0f;
 	MaxWalkSpeed = 250.0f;
 	// Ä³¸¯ÅÍ ¸Þ½Ã¶û Ä¸½¶ÄÝ¸®Àü
 	RootComponent = GetCapsuleComponent();
