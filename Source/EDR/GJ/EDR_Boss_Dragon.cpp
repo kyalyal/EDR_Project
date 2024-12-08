@@ -23,10 +23,13 @@ AEDR_Boss_Dragon::AEDR_Boss_Dragon()
 
 
 	// 속도
-	TargetSpeed = 500.0f;
-	Acceleration = 300.0f;
-
-	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+	TargetSpeed = 0.0f;
+	Acceleration = 150.0f;
+	Deceleration = 300.0f;
+	RotationSpeed = 7.0f;
+	Deceleration = 320.0f;
+	StopDistance = 150.0f;
+	MaxWalkSpeed = 500.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();
@@ -144,28 +147,28 @@ void AEDR_Boss_Dragon::BeginPlay()
 
 	// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket(TEXT("RHandSocket"));
-	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_WeaponRDragon>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != CurrentWeapon)
+	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponRDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	if (nullptr != CurrentWeapon[0])
 	{
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		CurrentWeapon[0]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 
 	}
 
 	//// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket2(TEXT("LHandSocket"));
-	CurrentWeapon2 = GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != CurrentWeapon)
+	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	if (nullptr != CurrentWeapon[1])
 	{
-		CurrentWeapon2->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket2);
+		CurrentWeapon[1]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket2);
 
 	}
 
 	//// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket3(TEXT("HeadSocket"));
-	CurrentWeapon3 = GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != CurrentWeapon)
+	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	if (nullptr != CurrentWeapon[2])
 	{
-		CurrentWeapon3->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket3);
+		CurrentWeapon[2]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket3);
 
 	}
 }

@@ -54,30 +54,43 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
 	float AttackRadius;
-protected:
 
+	// 목표 방향 계산
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	FVector TargetLocation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	FVector Direction;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float RotationSpeed = 5.0f; // 원하는 회전 속도
 	// 걷는 속도 관련
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float TargetSpeed = 200.f; // 목표 속도
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float MaxWalkSpeed = 200.0f;  // 가속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float Acceleration = 120.0f;  // 가속도
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float Deceleration = 200.0f; // 감속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float CurrentSpeed = 0.0f; // 현재 속도
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float StopDistance = 100.0f;
 	// 이동중인지 체크
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	bool IsMoving = false;
+
+protected:
+
 
 
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapone)
 	// 무기
-	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
-	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon2;
-	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon3;
+	TArray<TObjectPtr<class AEDR_Enemy_Weapon>> CurrentWeapon;
+	//TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
+	//TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon2;
+	//TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon3;
 
 
 	// 정지 관련 함수

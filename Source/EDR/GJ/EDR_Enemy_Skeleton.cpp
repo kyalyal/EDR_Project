@@ -19,13 +19,16 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	AttackRadius = 150.0f;
 
 	SkillDamage = 20.0f;
-	SkillRange =300.0f;
+	SkillRange = 300.0f;
 	SkillRadius = 150.0f;
 
 	// 속도
-	TargetSpeed = 250.0f;
-	Acceleration = 150.0f;
-
+	TargetSpeed = 0.0f;
+	Acceleration = 1.0f;
+	Deceleration = 200.0f;
+	RotationSpeed = 5.0f;
+	StopDistance = 100.0f;
+	MaxWalkSpeed = 250.0f;
 	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();
 	GetMesh()->SetupAttachment(GetCapsuleComponent());
@@ -87,10 +90,10 @@ void AEDR_Enemy_Skeleton::BeginPlay()
 
 	// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket(TEXT("hand_rSocket"));
-	CurrentWeapon = GetWorld()->SpawnActor<AEDR_Enemy_SWeapon>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (nullptr != CurrentWeapon)
+	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_SWeapon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	if (nullptr != CurrentWeapon[0])
 	{
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		CurrentWeapon[0]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 		//CurrentWeapon->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 180.0f)); // 180도 회전
 		//CurrentWeapon->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
 

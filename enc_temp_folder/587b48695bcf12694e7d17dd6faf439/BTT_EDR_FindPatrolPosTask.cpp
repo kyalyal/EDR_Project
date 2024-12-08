@@ -53,7 +53,7 @@ EBTNodeResult::Type UBTT_EDR_FindPatrolPosTask::ExecuteTask(UBehaviorTreeCompone
 
 	//그 다음 이동할 곳을 확인하기 위한 디버그메시지
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s"), *NextPatrol.Location.ToString()));
-	MyCharacter->TargetLocation = NextPatrol.Location;
+
 	// target과 mycharacter의 차이 벡터값
 	FVector LookVecter = NextPatrol.Location - MyCharacter->GetActorLocation();
 

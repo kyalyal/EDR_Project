@@ -20,7 +20,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	SkillRange = 400.0f;
 	SkillRadius = 200.0f;
 
-	
+
 	// ¼Óµµ
 	TargetSpeed = 0.0f;
 	Acceleration = 1.0f;
