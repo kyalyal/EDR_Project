@@ -1152,6 +1152,9 @@ void AEDRCharacter::ChangeWeapon()
 		CurrentWeapon->SetActorHiddenInGame(true);
 		CurrentWeapon = HaveWeaponList[CurrentWeaponIndex];
 		CurrentWeapon->SetActorHiddenInGame(false);
+
+		InitAttackMontage = CurrentWeapon->WeaponAttackAnim;
+		ComboAttackMontage = InitAttackMontage;
 	}
 }
 
