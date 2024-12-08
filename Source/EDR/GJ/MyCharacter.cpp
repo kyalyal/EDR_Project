@@ -59,7 +59,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	
 	//// 속도 보간
 	CurrentSpeed = FMath::FInterpTo(CurrentSpeed, TargetSpeed, DeltaTime, Acceleration); // Acceleration는 적절한 값으로 설정
-	if (CurrentSpeed <= 10S.0f)
+	if (CurrentSpeed <= 10.0f)
 	{
 		CurrentSpeed = 0.0f;
 	}
