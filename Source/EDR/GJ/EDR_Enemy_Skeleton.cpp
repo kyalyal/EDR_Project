@@ -27,8 +27,8 @@ AEDR_Enemy_Skeleton::AEDR_Enemy_Skeleton()
 	Acceleration = 10.0f;
 	Deceleration = 200.0f;
 	RotationSpeed = 1.0f;
-	StopDistance = 250.0f;
-	MaxWalkSpeed = 250.0f;
+	StopDistance = 300.0f;
+	MaxWalkSpeed = 300.0f;
 	// Ä³¸¯ÅÍ ¸Þ½Ã¶û Ä¸½¶ÄÝ¸®Àü
 	RootComponent = GetCapsuleComponent();
 	GetMesh()->SetupAttachment(GetCapsuleComponent());

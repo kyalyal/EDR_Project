@@ -64,7 +64,7 @@ public:
 	float RotationSpeed = 5.0f; // 원하는 회전 속도
 	// 걷는 속도 관련
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float TargetSpeed = 200.f; // 목표 속도
+	float TargetSpeed = 0.0f; // 목표 속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float MaxWalkSpeed = 200.0f;  // 가속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")

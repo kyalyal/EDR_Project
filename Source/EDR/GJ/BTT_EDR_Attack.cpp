@@ -35,8 +35,6 @@ EBTNodeResult::Type UBTT_EDR_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	// 공격 끝났음을 알림
 	MyCharacter->OnAttackEnd.AddLambda([this]() -> void { IsAttacking = false; });
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("over"));
-	MyCharacter->TargetSpeed = 0.0f;
-	MyCharacter->CurrentSpeed = 0.0f;
 	return EBTNodeResult::InProgress;
 }
 

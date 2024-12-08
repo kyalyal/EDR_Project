@@ -7,10 +7,10 @@
 AEDR_Boss_Knight::AEDR_Boss_Knight()
 {
 
-	DetectRange = 1500.0f;
+	DetectRange = 2000.0f;
 	IsBoss = true;
 	// hp 재정의
-	hp = 100.0f;
+	hp = 1000.0f;
 	AttackDamage = 40.0f;
 	AttackRange = 400.0f;
 	AttackRadius = 200.0f;
@@ -23,11 +23,13 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	
 	// 속도
 	TargetSpeed = 0.0f;
-	Acceleration = 1.0f;
-	RotationSpeed = 10.0f;
+	Acceleration = 10.0f;
+	RotationSpeed = 1.0f;
 	Deceleration = 280.0f;
 	StopDistance = 300.0f;
 	MaxWalkSpeed = 300.0f;
+
+
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
 
 	// 캐릭터 메시랑 캡슐콜리전

@@ -59,7 +59,10 @@ void AMyCharacter::Tick(float DeltaTime)
 	
 	//// 속도 보간
 	CurrentSpeed = FMath::FInterpTo(CurrentSpeed, TargetSpeed, DeltaTime, Acceleration); // Acceleration는 적절한 값으로 설정
-
+	if (CurrentSpeed <= 1.0f)
+	{
+		CurrentSpeed = 0.0f;
+	}
 	// 캐릭터 이동 처리
 	if (GetCharacterMovement())
 	{
@@ -68,7 +71,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 	Direction.Z = 0.0f;
 	FRotator TargetRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
-	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, RotationSpeed);
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, 2.0f);
 	SetActorRotation(NewRotation);
 }
 
@@ -172,12 +175,11 @@ void AMyCharacter::OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterru
 	// FightStart 애니메이션이 끝났을 때 공격 시작
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, FString::Printf(TEXT("bInterrupted: %s"), bInterrupted ? TEXT("True") : TEXT("False")));
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fight Start Animation Ended"));
-
+	TargetSpeed = 0.0f;
+	CurrentSpeed = 0.0f;
 	// 애니메이션 종료 확인
 	IsFightStarting = true;
 	//StopMovement();
-	TargetSpeed = 0.0f;
-	CurrentSpeed = 0.0f;
 	OnFightStartEnd.Broadcast();
 }
 
@@ -365,6 +367,7 @@ void AMyCharacter::Attack()
 	EDRAnim->OnMontageEnded.RemoveAll(this);  // 중복 바인딩 방지
 	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnAttackMontageEnded);
 
+
 }
 
 
@@ -384,7 +387,8 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 	{
 		EDRAnim->OnAttackHitCheck.RemoveAll(this);  // 중복 호출 방지
 	}
-
+	//TargetSpeed = 0.0f;
+	//CurrentSpeed = 0.0f;
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Attack Animation Ended"));
 
 	OnAttackEnd.Broadcast();
