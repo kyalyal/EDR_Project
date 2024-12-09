@@ -139,8 +139,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> FightStartMontage;
 
-	UPROPERTY(EditAnywhere, BluePrintReadWrite)
-	bool IsHpZero;
 
 
 
