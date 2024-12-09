@@ -6,14 +6,23 @@
 AEDR_Enemy_SWeaponAxe::AEDR_Enemy_SWeaponAxe()
 {
 	// 메시 입히기
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/FlexibleCombatSystem/DemoRoom/Meshes/SM_Axe.SM_Axes"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/GKnight/Meshes/Weapon/SM_WP_GothicKnight_Sword.SM_WP_GothicKnight_Sword"));
 	if (SK_WEAPON.Succeeded())
 	{
 		WeaponMesh->SetStaticMesh(SK_WEAPON.Object);
 	}
 	WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
-	Damage = 15.0f;
+	//SphereRadius = 20.0f; // 원하는 스피어의 반지름
+	Damage = 10.0f;
+	////TracePoint
+	//AttackPointStart = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTSTART"));
+	//AttackPointEnd = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTEND"));
 
+	//AttackPointStart->SetupAttachment(WeaponMesh);
+	//AttackPointEnd->SetupAttachment(WeaponMesh);
+
+	//AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 10.f));
+	//AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
 
 	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 15.f));
 	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 140.0f));
