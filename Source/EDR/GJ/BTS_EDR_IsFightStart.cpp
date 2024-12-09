@@ -20,7 +20,7 @@ void UBTS_EDR_IsFightStart::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 
 		if (MyCharacter)
 		{
-
+			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("ASDFADSF"));
 			// 공격애니메이션 재생중인지
 			bIsFightStartEnd = MyCharacter->IsFightStarting; 
 			if (bIsFightStartEnd)

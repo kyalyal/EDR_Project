@@ -6,7 +6,7 @@
 AEDR_Boss_Giant::AEDR_Boss_Giant()
 {
 	DetectRange = 2000.0f;
-	IsBoss = true;
+	IsBoss = true; 
 	// hp 재정의
 	hp = 1000.0f;
 	AttackDamage = 40.0f;
@@ -33,10 +33,10 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	// 캐릭터 메시랑 캡슐콜리전
 	RootComponent = GetCapsuleComponent();
 	GetMesh()->SetupAttachment(GetCapsuleComponent());
-	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(80.0f);
 
 	GetCapsuleComponent()->SetCapsuleRadius(34.0f);
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -80.0f), FRotator(0.0f, -90.0f, 0.0f));
 
 
 	// 메시 받아오기
@@ -56,7 +56,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 
 	// 전투 시작 애니메이션
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> FIGHTSTART_MONTAGE(TEXT("/Script/Engine.AnimMontage'/Game/GJ/Animation/Enemy_Anim/KnighEnemy/NoneBattle/Boss_BattleEntrance_RM_Montage.Boss_BattleEntrance_RM_Montage'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> FIGHTSTART_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/NoneBattle/Boss_BattleEntrance_RM_Montage.Boss_BattleEntrance_RM_Montage"));
 	if (FIGHTSTART_MONTAGE.Succeeded())
 	{
 		FightStartMontage = FIGHTSTART_MONTAGE.Object;
@@ -64,47 +64,47 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 
 
 	// 공격
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo2_1_Montage.Anim_SwordV2_Combo2_1_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossAirSlashAttack_Montage.BossAirSlashAttack_Montage"));
 	if (ATTACK_MONTAGE1.Succeeded())
 	{
 		AttackMontage.Add(ATTACK_MONTAGE1.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Running_Simple_RM_Montage.Boss_Attack_Running_Simple_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossJumpingAttack_Montage.BossJumpingAttack_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE2.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE3(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Swing_RM_Montage.Boss_Attack_Swing_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE3(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossAirSlashAttackCombo_Montage.BossAirSlashAttackCombo_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE3.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE4(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_SwingAndSlam_RM_Montage.Boss_Attack_SwingAndSlam_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE4(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossSpearComboAttack_Montage.BossSpearComboAttack_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE4.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE5(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_Uppercut_RM_Montage.Boss_Attack_Uppercut_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE5(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossTurningAttackSingle_Montage.BossTurningAttackSingle_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE5.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE6(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo2_Montage.Anim_SwordV2_Combo2_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE6(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossTurningAttack1_Montage.BossTurningAttack1_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE6.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE7(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_Sword_1H_Attack_Jump3_Montage.Anim_Sword_1H_Attack_Jump3_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE7(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossDodgeAttack_Montage.BossDodgeAttack_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE7.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE8(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo1_1_Montage.Anim_SwordV2_Combo1_1_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE8(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossDodgeB_Montage.BossDodgeB_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE8.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE9(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Anim_SwordV2_Combo1_Montage.Anim_SwordV2_Combo1_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE9(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossSpearStab_Montage.BossSpearStab_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE9.Object);
 	}
 
 
 	// 스킬 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/Attack/Boss_Attack_ChargedComboAttack_RM_Montage.Boss_Attack_ChargedComboAttack_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossSpinAttack_Montage.BossSpinAttack_Montage"));
 	if (SKILL_MONTAGE.Succeeded())
 	{
 		SkillMontage = SKILL_MONTAGE.Object;
@@ -181,7 +181,7 @@ void AEDR_Boss_Giant::BeginPlay()
 	Super::BeginPlay();
 
 	// 게임 실행시 캐릭터 손에 무기 장착
-	FName WeaponSocket(TEXT("hand_rSocket"));
+	FName WeaponSocket(TEXT("hand_rSpear"));
 	CurrentWeapon = (GetWorld()->SpawnActor<AEDR_Enemy_WeaponSpear>(FVector::ZeroVector, FRotator::ZeroRotator));
 	if (nullptr != CurrentWeapon)
 	{
