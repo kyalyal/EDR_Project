@@ -22,7 +22,7 @@ public:
 
 
 	//Get
-	UFUNCTION(BlueprintPure)
+	//(BlueprintPure)
 	FEDRClothing GetEDRClothing() { return EDRClothing; }
 
 	FVector GetPlayerStartLocation() { return PlayerStartLocation; }
@@ -47,10 +47,11 @@ public:
 public:
 
 
-private:
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FEDRClothing EDRClothing;
+
+private:
 
 	UPROPERTY()
 	FVector PlayerStartLocation;
