@@ -8,7 +8,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	DetectRange = 2000.0f;
 	IsBoss = true; 
 	// hp 재정의
-	hp = 1000.0f;
+	hp = 10.0f;
 	AttackDamage = 40.0f;
 	AttackRange = 450.0f;
 	AttackRadius = 200.0f;
@@ -111,7 +111,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	}
 
 	// 사망 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/BossDeathLong_Montage.BossDeathLong_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/BossDeath_Montage.BossDeath_Montage"));
 	if (DEATHANIM.Succeeded())
 	{
 		DeathMontage = DEATHANIM.Object;
