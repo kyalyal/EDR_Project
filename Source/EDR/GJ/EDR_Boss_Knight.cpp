@@ -26,7 +26,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	Acceleration = 10.0f;
 	RotationSpeed = 1.0f;
 	Deceleration = 280.0f;
-	StopDistance = 300.0f;
+	StopDistance = 200.0f;
 	MaxWalkSpeed = 300.0f;
 
 

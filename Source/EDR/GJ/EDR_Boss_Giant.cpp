@@ -21,10 +21,10 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 
 	// 속도
 	TargetSpeed = 0.0f;
-	Acceleration = 15.0f;
+	Acceleration = 10.0f;
 	RotationSpeed = 1.0f;
 	Deceleration = 280.0f;
-	StopDistance = 400.0f;
+	StopDistance = 250.0f;
 	MaxWalkSpeed = 400.0f;
 
 
@@ -56,7 +56,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 
 	// 전투 시작 애니메이션
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> FIGHTSTART_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/NoneBattle/Boss_BattleEntrance_RM_Montage.Boss_BattleEntrance_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> FIGHTSTART_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossDodgeB_Montage.BossDodgeB_Montage"));
 	if (FIGHTSTART_MONTAGE.Succeeded())
 	{
 		FightStartMontage = FIGHTSTART_MONTAGE.Object;
@@ -93,7 +93,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	{
 		AttackMontage.Add(ATTACK_MONTAGE7.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE8(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossDodgeB_Montage.BossDodgeB_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE8(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossSpinAttack_Montage.BossSpinAttack_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE8.Object);
 	}
@@ -104,14 +104,14 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 
 
 	// 스킬 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossSpinAttack_Montage.BossSpinAttack_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SKILL_MONTAGE(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/Attack/BossLongComboAttack_Montage.BossLongComboAttack_Montage"));
 	if (SKILL_MONTAGE.Succeeded())
 	{
 		SkillMontage = SKILL_MONTAGE.Object;
 	}
 
 	// 사망 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/KnighEnemy/GiantGolemIdleDeath01_Montage.GiantGolemIdleDeath01_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/GiantEnemy/BossDeathLong_Montage.BossDeathLong_Montage"));
 	if (DEATHANIM.Succeeded())
 	{
 		DeathMontage = DEATHANIM.Object;
