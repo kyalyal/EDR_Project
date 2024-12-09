@@ -49,10 +49,10 @@ public:
 	USoundCue* DeathSoundCue;
 
 	// 공격 사거리
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	float AttackRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	float AttackRadius;
 
 	// 목표 방향 계산
@@ -86,9 +86,10 @@ protected:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapone")
+	TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
 	// 무기
-	TArray<TObjectPtr<class AEDR_Enemy_Weapon>> CurrentWeapon;
-	//TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
+	//TArray<TObjectPtr<class AEDR_Enemy_Weapon>> CurrentWeapon;
+	
 	//TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon2;
 	//TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon3;
 
@@ -116,10 +117,10 @@ protected:
 
 
 	// 스킬 사거리
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	float SkillRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	float SkillRadius;
 
 	// 공격 애니메이션
@@ -162,7 +163,7 @@ public:
 	bool IsBoss;
 
 	// 전투 시작 애니메이션 확인
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool IsFightStarting = false;
 
 	// Called every frame
@@ -212,7 +213,7 @@ public:
 
 	// 공격 히트 체크
 	UFUNCTION()
-	void AttackCheck(int32 x);
+	void AttackCheck();
 	UFUNCTION()
 	void AttackCheckEnd();
 	UFUNCTION()

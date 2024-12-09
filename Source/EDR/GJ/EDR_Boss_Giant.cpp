@@ -21,11 +21,11 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 
 	// 속도
 	TargetSpeed = 0.0f;
-	Acceleration = 10.0f;
+	Acceleration = 15.0f;
 	RotationSpeed = 1.0f;
 	Deceleration = 280.0f;
-	StopDistance = 300.0f;
-	MaxWalkSpeed = 300.0f;
+	StopDistance = 400.0f;
+	MaxWalkSpeed = 400.0f;
 
 
 	//GetCharacterMovement()->MaxWalkSpeed = 200.0f;
@@ -45,7 +45,6 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	{
 		GetMesh()->SetSkeletalMesh(MODEL.Object);
 	}
-
 
 	// 크기 1.6배 키우기
 	SetActorScale3D(FVector(1.6f, 1.6f, 1.6f));
@@ -183,12 +182,12 @@ void AEDR_Boss_Giant::BeginPlay()
 
 	// 게임 실행시 캐릭터 손에 무기 장착
 	FName WeaponSocket(TEXT("hand_rSocket"));
-	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponSpear>(FVector::ZeroVector, FRotator::ZeroRotator));
-	if (nullptr != CurrentWeapon[0])
+	CurrentWeapon = (GetWorld()->SpawnActor<AEDR_Enemy_WeaponSpear>(FVector::ZeroVector, FRotator::ZeroRotator));
+	if (nullptr != CurrentWeapon)
 	{
-		CurrentWeapon[0]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 		//CurrentWeapon->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 180.0f)); // 180도 회전
-		CurrentWeapon[0]->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
+		CurrentWeapon->SetActorRelativeLocation(FVector(0.0f, 0.0f, -10.0f)); // 무기이동
 
 
 

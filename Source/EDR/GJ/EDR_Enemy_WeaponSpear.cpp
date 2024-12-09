@@ -12,7 +12,7 @@ AEDR_Enemy_WeaponSpear::AEDR_Enemy_WeaponSpear()
 		WeaponMesh->SetStaticMesh(SK_WEAPON.Object);
 	}
 	WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
-
-	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, -10.0f));
-	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f,-80.0f));
+	SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
+	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, -20.0f));
+	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f,-160.0f));
 }

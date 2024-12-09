@@ -342,20 +342,12 @@ void AMyCharacter::Attack()
 
 	//공격 판정 이벤트 중복 등록 방지: 기존에 바인딩된 이벤트가 있으면 제거
 	EDRAnim->OnAttackHitCheck.RemoveAll(this);
-	//공격 판정 이벤트 중복 등록 방지: 기존에 바인딩된 이벤트가 있으면 제거
-	EDRAnim->OnAttackHitCheck2.RemoveAll(this);
-	//공격 판정 이벤트 중복 등록 방지: 기존에 바인딩된 이벤트가 있으면 제거
-	EDRAnim->OnAttackHitCheck3.RemoveAll(this);
 
 
 
 
 	//공격 판정 이벤트 바인딩
-	EDRAnim->OnAttackHitCheck.AddDynamic(this, &AMyCharacter::AttackCheck);
-	//공격 판정 이벤트 바인딩
-	EDRAnim->OnAttackHitCheck2.AddDynamic(this, &AMyCharacter::AttackCheck);
-	//공격 판정 이벤트 바인딩
-	EDRAnim->OnAttackHitCheck3.AddDynamic(this, &AMyCharacter::AttackCheck);
+	EDRAnim->OnAttackHitCheck.AddUObject(this, &AMyCharacter::AttackCheck);
 
 	EDRAnim->OnMontageEnded.RemoveAll(this);  // 중복 바인딩 방지
 	//공격 판정 끝 이벤트 바인딩
@@ -401,23 +393,10 @@ void AMyCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 //  공격 판정
 
 
-void AMyCharacter::AttackCheck(int32 x)
+void AMyCharacter::AttackCheck()
 {
-	if (x == 0)
-	{
-		CurrentWeapon[0]->StartAttack();
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("RightHand"));
-	}
-	if (x == 1)
-	{
-		CurrentWeapon[1]->StartAttack();
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("LeftHand"));
-	}
-	if (x == 2)
-	{
-		CurrentWeapon[2]->StartAttack();
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Head"));
-	}
+	CurrentWeapon->StartAttack();
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("RightHand"));
 	int RandomSound = FMath::RandRange(0, 2);
 	// 공격 사운드 재생		
 	//if (RandomSound < 33)
@@ -616,14 +595,7 @@ void AMyCharacter::AttackCheck(int32 x)
 }
 void AMyCharacter::AttackCheckEnd()
 {
-	for (auto Weapon : CurrentWeapon)
-	{
-		if (Weapon != nullptr)
-		{
-			Weapon->StopAttack();
-			UE_LOG(LogTemp, Warning, TEXT("StopAttack called for weapon: %s"), *Weapon->GetName());
-		}
-	}
+		CurrentWeapon->StopAttack();
 }
 
 

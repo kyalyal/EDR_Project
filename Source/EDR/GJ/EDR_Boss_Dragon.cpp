@@ -145,30 +145,30 @@ void AEDR_Boss_Dragon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// 게임 실행시 캐릭터 손에 무기 장착
-	FName WeaponSocket(TEXT("RHandSocket"));
-	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponRDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
-	if (nullptr != CurrentWeapon[0])
-	{
-		CurrentWeapon[0]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
-
-	}
-
 	//// 게임 실행시 캐릭터 손에 무기 장착
-	FName WeaponSocket2(TEXT("LHandSocket"));
-	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
-	if (nullptr != CurrentWeapon[1])
-	{
-		CurrentWeapon[1]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket2);
+	//FName WeaponSocket(TEXT("RHandSocket"));
+	//CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponRDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	//if (nullptr != CurrentWeapon[0])
+	//{
+	//	CurrentWeapon[0]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 
-	}
+	//}
 
-	//// 게임 실행시 캐릭터 손에 무기 장착
-	FName WeaponSocket3(TEXT("HeadSocket"));
-	CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
-	if (nullptr != CurrentWeapon[2])
-	{
-		CurrentWeapon[2]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket3);
+	////// 게임 실행시 캐릭터 손에 무기 장착
+	//FName WeaponSocket2(TEXT("LHandSocket"));
+	//CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	//if (nullptr != CurrentWeapon[1])
+	//{
+	//	CurrentWeapon[1]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket2);
 
-	}
+	//}
+
+	////// 게임 실행시 캐릭터 손에 무기 장착
+	//FName WeaponSocket3(TEXT("HeadSocket"));
+	//CurrentWeapon.Add(GetWorld()->SpawnActor<AEDR_Enemy_WeaponLDragon>(FVector::ZeroVector, FRotator::ZeroRotator));
+	//if (nullptr != CurrentWeapon[2])
+	//{
+	//	CurrentWeapon[2]->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket3);
+
+	//}
 }
