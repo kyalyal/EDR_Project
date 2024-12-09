@@ -12,7 +12,7 @@
 
 // 공격 애니메이션이 끝났는지 확인
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
-
+DECLARE_MULTICAST_DELEGATE(FOnDeathEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnFightStartEndDelegate);
 
 
@@ -139,6 +139,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> FightStartMontage;
 
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
+	bool IsHpZero;
 
 
 
@@ -191,11 +193,18 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void IsDeath();
 
+	// 사망 애니메이션 종료 확인
+	FOnDeathEndDelegate OnDeathEnd;
 
 	// 전투 시작 애니메이션 끝났을 때 호출할 델리게이트
 	FOnFightStartEndDelegate OnFightStartEnd;
 
+	void DestroyCharacter();
+
 	// 새로운 함수 추가
+
+	UFUNCTION()
+	void OnDeathMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 	UFUNCTION()
 	void OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 

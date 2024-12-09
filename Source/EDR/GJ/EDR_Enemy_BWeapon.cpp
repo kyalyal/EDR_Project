@@ -27,5 +27,5 @@ AEDR_Enemy_BWeapon::AEDR_Enemy_BWeapon()
 	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, -65.0f));
 	//SphereRadius = 40.0f; // 원하는 스피어의 반지름
 
-	Damage = 1.0f;
+	Damage = 30.0f;
 }

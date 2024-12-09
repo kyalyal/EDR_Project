@@ -10,7 +10,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	DetectRange = 2000.0f;
 	IsBoss = true;
 	// hp ¿Á¡§¿«
-	hp = 1000.0f;
+	hp = 10.0f;
 	AttackDamage = 40.0f;
 	AttackRange = 400.0f;
 	AttackRadius = 200.0f;
@@ -26,7 +26,7 @@ AEDR_Boss_Knight::AEDR_Boss_Knight()
 	Acceleration = 10.0f;
 	RotationSpeed = 1.0f;
 	Deceleration = 280.0f;
-	StopDistance = 300.0f;
+	StopDistance = 150.0f;
 	MaxWalkSpeed = 300.0f;
 
 
