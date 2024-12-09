@@ -13,7 +13,7 @@ AEDR_Enemy_SWeapon::AEDR_Enemy_SWeapon()
 	}
 	WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
 	//SphereRadius = 20.0f; // 원하는 스피어의 반지름
-
+	Damage = 10.0f;
 	////TracePoint
 	//AttackPointStart = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTSTART"));
 	//AttackPointEnd = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTEND"));

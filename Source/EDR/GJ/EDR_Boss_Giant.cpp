@@ -10,7 +10,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	// hp ¿Á¡§¿«
 	hp = 1000.0f;
 	AttackDamage = 40.0f;
-	AttackRange = 400.0f;
+	AttackRange = 450.0f;
 	AttackRadius = 200.0f;
 
 
@@ -24,7 +24,7 @@ AEDR_Boss_Giant::AEDR_Boss_Giant()
 	Acceleration = 10.0f;
 	RotationSpeed = 1.0f;
 	Deceleration = 280.0f;
-	StopDistance = 250.0f;
+	StopDistance = 200.0f;
 	MaxWalkSpeed = 400.0f;
 
 
