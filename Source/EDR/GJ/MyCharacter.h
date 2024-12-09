@@ -56,11 +56,11 @@ public:
 	float AttackRadius;
 
 	// 목표 방향 계산
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	FVector TargetLocation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	FVector Direction;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float RotationSpeed = 5.0f; // 원하는 회전 속도
 	// 걷는 속도 관련
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
@@ -69,7 +69,7 @@ public:
 	float MaxWalkSpeed = 200.0f;  // 가속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float Acceleration = 120.0f;  // 가속도
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float Deceleration = 200.0f; // 감속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float CurrentSpeed = 0.0f; // 현재 속도
@@ -85,7 +85,7 @@ protected:
 
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapone)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapone")
 	// 무기
 	TArray<TObjectPtr<class AEDR_Enemy_Weapon>> CurrentWeapon;
 	//TObjectPtr<class AEDR_Enemy_Weapon> CurrentWeapon;
@@ -143,7 +143,7 @@ protected:
 
 
 	// 애니메이션 재생을 위해 공격중인지 확인
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;
 
 
@@ -219,9 +219,9 @@ public:
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	bool bCanAttackSmallMove; //공격미세이동여부. 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))FVector ExpectedAttackLocation; //공격미세이동목표값.
+	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	//bool bCanAttackSmallMove; //공격미세이동여부. 
+	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))FVector ExpectedAttackLocation; //공격미세이동목표값.
 
 
 private:

@@ -13,5 +13,5 @@ UCLASS()
 class EDR_API AEDR_Enemy_WeaponSpear : public AEDR_Enemy_Weapon
 {
 	GENERATED_BODY()
-	
+	AEDR_Enemy_WeaponSpear();
 };
