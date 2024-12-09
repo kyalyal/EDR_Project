@@ -22,6 +22,7 @@ public:
 
 
 	//Get
+	UFUNCTION(BlueprintPure)
 	FEDRClothing GetEDRClothing() { return EDRClothing; }
 
 	FVector GetPlayerStartLocation() { return PlayerStartLocation; }
