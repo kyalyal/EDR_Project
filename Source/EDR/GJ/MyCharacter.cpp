@@ -137,26 +137,26 @@ void AMyCharacter::IsDeath()
 			0.7f   // Pitch multiplier, 0.5로 설정하면 재생 속도가 절반으로 느려짐
 		);
 	}
-	if (EDRAnim != nullptr)
-	{
-		EDRAnim->OnMontageEnded.RemoveAll(this);  // 기존 이벤트 제거
-		EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnDeathMontageEnded);
-		//DestroyCharacter();
-	}
+	//if (EDRAnim != nullptr)
+	//{
+	//	EDRAnim->OnMontageEnded.RemoveAll(this);  // 기존 이벤트 제거
+	//	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnDeathMontageEnded);
+	//	//DestroyCharacter();
+	//}
 }
 
-// 사망 애니메이션 종료 되면 호출
-void AMyCharacter::OnDeathMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, TEXT("asdkfja;sdkfjasdl;kf"));
-	DestroyCharacter();
-	OnDeathEnd.Broadcast();
-}
+//// 사망 애니메이션 종료 되면 호출
+//void AMyCharacter::OnDeathMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+//{
+//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, TEXT("asdkfja;sdkfjasdl;kf"));
+//	DestroyCharacter();
+//	OnDeathEnd.Broadcast();
+//}
 
 void AMyCharacter::DestroyCharacter()
 {
-	Destroy();
-	CurrentWeapon->Destroy();
+	//Destroy();
+	//CurrentWeapon->Destroy();
 }
 
 void AMyCharacter::UpdateHP(float NewHP)

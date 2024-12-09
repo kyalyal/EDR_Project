@@ -6,7 +6,7 @@
 #include "MyCharacter.h"
 #include "EDR_Enemy_Skeleton.generated.h"
 
-/**
+/*
  * 
  */
 UCLASS()
