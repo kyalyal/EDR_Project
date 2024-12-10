@@ -39,7 +39,7 @@ AEDR_Enemy_AxeSkeleton::AEDR_Enemy_AxeSkeleton()
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
 	// 메시 받아오기
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>MODEL(TEXT("/Game/SKnight_modular/Skeleton_Knight_01/mesh/SK_SKnigh_01_full.SK_SKnigh_01_full"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>MODEL(TEXT("/Game/SKnight_modular/Skeleton_Knight_04/mesh/SK_SKnight_full_04.SK_SKnight_full_04"));
 	if (MODEL.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(MODEL.Object);
@@ -47,18 +47,18 @@ AEDR_Enemy_AxeSkeleton::AEDR_Enemy_AxeSkeleton()
 
 
 	// 공격
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Attack/Anim_Sword_1H_Attack_Combo1_Montage.Anim_Sword_1H_Attack_Combo1_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE1(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Axe/Attack/Anim_DK_Combo_A03_RM_Montage.Anim_DK_Combo_A03_RM_Montage"));
 	if (ATTACK_MONTAGE1.Succeeded())
 	{
 		AttackMontage.Add(ATTACK_MONTAGE1.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Attack/Anim_Sword_1H_Attack_Slash2_Montage.Anim_Sword_1H_Attack_Slash2_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Axe/Attack/Anim_DK_Combo_A03_RM_Montage.Anim_DK_Combo_A03_RM_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE2.Object);
 	}
 
 	// 사망 애니메이션 몽타주 저장
-	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Deaths_Hit_Head_Spinning_Montage.Deaths_Hit_Head_Spinning_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage>DEATHANIM(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Axe/Deaths_Hit_Head_Spinning_Montage.Deaths_Hit_Head_Spinning_Montage"));
 	if (DEATHANIM.Succeeded())
 	{
 		DeathMontage = DEATHANIM.Object;
