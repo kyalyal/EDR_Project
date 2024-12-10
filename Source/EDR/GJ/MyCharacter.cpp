@@ -119,7 +119,10 @@ void AMyCharacter::IsDeath()
 	}
 	AttackCheckEnd();
 	EDRAnim = Cast<UAnim_EDR_AnimInstance>(GetMesh()->GetAnimInstance());
-
+	if (DeathMontage == nullptr)
+	{
+		return;
+	}
 	// 애니메이션 몽타주 실행
 	PlayAnimMontage(DeathMontage, 1.0f);
 	Death = true;
@@ -141,24 +144,24 @@ void AMyCharacter::IsDeath()
 	//{
 	//	EDRAnim->OnMontageEnded.RemoveAll(this);  // 기존 이벤트 제거
 	//	EDRAnim->OnMontageEnded.AddDynamic(this, &AMyCharacter::OnDeathMontageEnded);
-	//	//DestroyCharacter();
 	//}
+
 }
 
-//// 사망 애니메이션 종료 되면 호출
-//void AMyCharacter::OnDeathMontageEnded(UAnimMontage* Montage, bool bInterrupted)
-//{
-//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Purple, TEXT("asdkfja;sdkfjasdl;kf"));
-//	DestroyCharacter();
-//	OnDeathEnd.Broadcast();
-//}
+
 
 void AMyCharacter::DestroyCharacter()
 {
 	//Destroy();
 	//CurrentWeapon->Destroy();
 }
-
+//void AMyCharacter::OnDeathMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+//{
+	//// FightStart 애니메이션이 끝났을 때 공격 시작
+	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, TEXT("asdfasdasdfsdf"));
+	//DestroyCharacter();
+	//OnDeathEnd.Broadcast();
+//}
 void AMyCharacter::UpdateHP(float NewHP)
 {
 	hp += NewHP;
