@@ -52,7 +52,7 @@ AEDR_Enemy_AxeSkeleton::AEDR_Enemy_AxeSkeleton()
 	{
 		AttackMontage.Add(ATTACK_MONTAGE1.Object);
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Axe/Attack/Anim_DK_Combo_A03_RM_Montage.Anim_DK_Combo_A03_RM_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE2(TEXT("/Game/GJ/Animation/Enemy_Anim/SkeletonEnemy/Axe/Attack/Anim_Katana_Attack_Slash1_Montage.Anim_Katana_Attack_Slash1_Montage"));
 	{
 		AttackMontage.Add(ATTACK_MONTAGE2.Object);
 	}
