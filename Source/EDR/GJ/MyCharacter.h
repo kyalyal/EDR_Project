@@ -13,6 +13,7 @@
 // 공격 애니메이션이 끝났는지 확인
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnFightStartEndDelegate);
+//DECLARE_MULTICAST_DELEGATE(FOnDeathEndDelegate);
 
 
 UCLASS()
@@ -192,13 +193,16 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Player")
 	virtual void IsDeath();
 
+	// 공격 애니메이션 끝났는지 체크
+	//FOnDeathEndDelegate OnDeathEnd;
 
 	// 전투 시작 애니메이션 끝났을 때 호출할 델리게이트
 	FOnFightStartEndDelegate OnFightStartEnd;
 
 	void DestroyCharacter();
 
-
+	//UFUNCTION()
+	//void OnDeathMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 	UFUNCTION()
 	void OnFightStartMontageEnded(UAnimMontage* Montage, bool bInterrupted);
