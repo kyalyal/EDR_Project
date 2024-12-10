@@ -7,7 +7,7 @@ AEDR_Enemy_BWeapon::AEDR_Enemy_BWeapon()
 {	
 
     // 기본 칼
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/BLACKSUN_BOSSBUNDLE1/Static_Meshes/Weapons/SM_Vanter_Sword.SM_Vanter_Sword"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/GreatSword/SM_MERGED_StaticMeshActor_16.SM_MERGED_StaticMeshActor_16"));
     if (SK_WEAPON.Succeeded())
     {
         WeaponMesh->SetStaticMesh(SK_WEAPON.Object);
@@ -15,7 +15,7 @@ AEDR_Enemy_BWeapon::AEDR_Enemy_BWeapon()
     WeaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
 	// 무기 크기 키우기
-	SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
+	SetActorScale3D(FVector(1.6f, 1.6f, 1.6f));
 	//TracePoint
 	//AttackPointStart = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTSTART"));
 	//AttackPointEnd = CreateDefaultSubobject<USceneComponent>(TEXT("ATTACKPOINTEND"));
@@ -23,8 +23,8 @@ AEDR_Enemy_BWeapon::AEDR_Enemy_BWeapon()
 	//AttackPointStart->SetupAttachment(WeaponMesh);
 	//AttackPointEnd->SetupAttachment(WeaponMesh);
 
-	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 25.f));
-	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, -65.0f));
+	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 115.0f));
+	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 5.0f));
 	//SphereRadius = 40.0f; // 원하는 스피어의 반지름
 
 	Damage = 30.0f;

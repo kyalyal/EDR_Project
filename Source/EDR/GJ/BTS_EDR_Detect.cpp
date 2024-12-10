@@ -67,7 +67,7 @@ void UBTS_EDR_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 			// 플레이어 캐릭터 캐스팅
 			AEDRCharacter* EDRCharacter = Cast<AEDRCharacter>(OverlapResult.GetActor());
 			// 감지된 액터가 플레이어일경우
-			if (EDRCharacter && EDRCharacter->GetController()->IsPlayerController())
+			if (EDRCharacter && UGameplayStatics::GetPlayerController(GetWorld(),0))
 			{
 
 				if (Boss)
