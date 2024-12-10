@@ -6,7 +6,7 @@
 AEDR_Enemy_SWeaponAxe::AEDR_Enemy_SWeaponAxe()
 {
 	// 메시 입히기
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/GKnight/Meshes/Weapon/SM_WP_GothicKnight_Sword.SM_WP_GothicKnight_Sword"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SK_WEAPON(TEXT("/Game/Axe/Axe.Axe"));
 	if (SK_WEAPON.Succeeded())
 	{
 		WeaponMesh->SetStaticMesh(SK_WEAPON.Object);
@@ -24,6 +24,6 @@ AEDR_Enemy_SWeaponAxe::AEDR_Enemy_SWeaponAxe()
 	//AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 10.f));
 	//AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
 
-	AttackPointStart->SetRelativeLocation(FVector(0.f, 0.f, 15.f));
-	AttackPointEnd->SetRelativeLocation(FVector(0.f, 0.f, 140.0f));
+	AttackPointStart->SetRelativeLocation(FVector(10.0f, 0.f, -5.0f));
+	AttackPointEnd->SetRelativeLocation(FVector(-30.f, 0.f, -5.0f));
 }
